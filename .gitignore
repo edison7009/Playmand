@@ -1,5 +1,6 @@
 /work/
 /dist/
+**/target/
 /Playmand_*.md
 __pycache__/
 *.py[cod]

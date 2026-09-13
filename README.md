@@ -1,20 +1,23 @@
 # Playmand
 
-Playmand 是面向 **Codex 和 Claude Code** 的独立游戏开发 Skill，帮助 AI 完成需求拆解、代码实现、运行试玩、问题修复与验证交付。
+**Playmand 是 Rust + Bevy 游戏开发 Skill，目标是让 AI 更熟练地使用这套技术栈，把游戏设计实现为可玩的 2D / 3D 游戏。**
 
-**目标是让 AI 更高效地把游戏想法变成可试玩、可验证、可持续迭代的游戏，减少重复探索、无效重试和人工接管。**
+核心是 Rust + Bevy 的具体开发能力：正确使用当前版本的 API、组织 ECS 与玩法状态、接入模型动画、实现 UI 和渲染、定位性能问题并构建游戏。Codex、Claude Code 及其他支持技能的工具是使用它的宿主。
 
-用户提出创作方向和反馈，AI 使用项目现有工具推进开发，并通过实际操作、画面与运行状态检查结果。Playmand 将这套工作方式整理成可复用的指令和按需阅读的手册。
+新建游戏默认 Rust + Bevy；已有 Bevy 工程保留其版本和结构。用户明确选用其他引擎时尊重选择，不自动迁移已有项目。技能不规定固定开发循环，也不把用户要求缩减成最小演示。
 
-## 帮助 AI 做什么
+## 提供什么
 
-- [开发流程](skills/playmand/SKILL.md)：明确需求和验收标准，先打通最小可玩流程，再逐步扩展功能。
-- [排错手册](skills/playmand/references/troubleshooting.md)：导航、草稿覆盖、焦点、布局、模型显示、资源释放和运行异常。
-- [Bevy 经验](skills/playmand/references/bevy.md)：按实际版本查 API、调度/资产就绪和原生打包。
-- [验证方法](skills/playmand/references/verification.md)：区分代码、输入、GPU、系统窗口与性能证据。
-- [持续积累](skills/playmand/references/learning.md)：记录有效的启动、复现和修复方法，让后续开发复用已验证的做法。
+| 内容 | 具体帮助 |
+| --- | --- |
+| [Rust / Bevy 工具链](skills/playmand/references/bevy.md) | 新工程配置、版本/API 定位、feature 与插件兼容、编译及 Windows 链接 |
+| [ECS 与玩法状态](skills/playmand/references/ecs.md) | Query 借用冲突、延迟命令、系统顺序、固定时间步输入、暂停与重开 |
+| [资源与动画](skills/playmand/references/assets-animation.md) | GLB 子场景、实例就绪、动画图/播放器接线、材质与骨骼实例隔离 |
+| [渲染、UI 与性能](skills/playmand/references/rendering.md) | 2D/3D 相机、灯光、图层、UI 布局、截图与预览相机生命周期 |
+| [版本检查脚本](skills/playmand/scripts/inspect_bevy.py) | 从 Cargo 实际解析图报告 Bevy 版本、features、源码位置和文档入口 |
+| [可运行 Rust 示例](skills/playmand/examples/ecs-patterns/src/lib.rs) | 四项真实 Bevy ECS 行为测试，可用于理解 API 或缩小故障 |
 
-适用于新建游戏、迭代玩法、调整 UI、接入模型与动画、排查性能和准备交付。当前专项指南侧重 Windows Rust/Bevy；已有项目沿用自己的技术栈。
+技术示例基线为 **Bevy 0.19.1 / Rust 1.95.0**。其他版本需查对应源码，已有项目不应为套用示例而升级。辅助资料按问题读取，完整入口见 [SKILL.md](skills/playmand/SKILL.md)。
 
 ## 安装
 
@@ -41,23 +44,30 @@ python scripts/install_skill.py --project "已有游戏项目的绝对路径" --
 
 两个范围二选一，避免同名重复安装。项目安装只复制到指定目录内；安装器不会改动游戏源码或宿主配置文件。普通文件占用安装路径、同名不同内容或指向项目外的路径会被拒绝。
 
-目录规则参照 [Codex 官方 Skill 文档](https://learn.chatgpt.com/docs/build-skills) 与 [Claude Code 官方 Skill 文档](https://code.claude.com/docs/en/skills)，2026-09-13 核对。共享正文只使用通用 `name` / `description` 和相对路径，不依赖宿主专有指令语法；`agents/openai.yaml` 是 Codex 附加显示信息。
+目录规则参照 [Codex 官方 Skill 文档](https://learn.chatgpt.com/docs/build-skills) 与 [Claude Code 官方 Skill 文档](https://code.claude.com/docs/en/skills)，2026-09-13 核对。共享正文使用 `name` / `description`、MIT 许可标记和相对路径，不依赖宿主专有指令语法；`agents/openai.yaml` 是 Codex 附加显示信息。
 
 安装后打开游戏项目的新会话，检查技能是否被发现，再显式调用。更旧或受组织策略限制的宿主需按其实际版本确认加载行为；文件复制成功不等于宿主已加载。这里指本地 Codex / Claude Code，云端任务还需将技能带入其实际执行环境。
 
-安装器遇到相同内容会跳过，遇到同名但不同内容的目录会退出且不覆盖。更新时先 `git pull`，检查新旧差异并把旧安装目录移到技能发现目录之外留存，再重新安装；安装副本不自动同步。源文件统一维护在本仓库 `skills/playmand`。
+安装器遇到相同内容会跳过，遇到同名但不同内容的目录会退出且不覆盖。示例构建产生的 `target` 和 Python 缓存不复制，也不作为内容冲突。更新时先 `git pull`，检查新旧差异并把旧安装目录移到技能发现目录之外留存，再重新安装；安装副本不自动同步。源文件统一维护在本仓库 `skills/playmand`。
 
-## 从一个小任务开始
+## 使用
 
-Codex 示例：
+Codex 新游戏示例：
 
 ```text
-$playmand 在当前游戏加入一个可收集道具及计数 UI。
-沿用已有引擎和美术风格。通过玩家输入完成收集，计数只增加一次，重置后恢复。
-请先说明假设与验收方式，完成实现、实际运行和必要验证，并记录可复用的新经验。
+$playmand 用 Rust + Bevy 开发一个俯视角 2D 动作游戏。
+需要冲刺、近战攻击、敌人追踪、掉落和升级，以及完整的开始、暂停和结算界面。
+画面采用明亮的像素风格，重点做好打击反馈和操作手感。
 ```
 
-Claude Code 将首行开头换成 `/playmand` 即可。也可直接请求修复现有游戏问题，技能允许按相关描述自动匹配，实际是否触发以宿主为准。
+现有工程示例：
+
+```text
+$playmand 修复当前 Bevy 工程：GLB 角色已经显示，但动画不播放。
+沿用 Cargo.lock 的版本，检查场景实例、AnimationPlayer 和动画图的接线。
+```
+
+Claude Code 将 `$playmand` 换成 `/playmand`。其他宿主按其技能加载方式使用整个 `skills/playmand` 目录；本仓库安装器只提供 Codex 和 Claude Code 的目录适配，不宣称所有工具已测试兼容。
 
 ## 验证与维护
 
@@ -71,7 +81,14 @@ python -B -m unittest discover -s tests -v
 python scripts/build_package.py
 ```
 
-打包脚本使用明确的公开文件清单，生成 `dist/playmand-0.1.0.zip` 和 SHA-256 清单。GitHub Actions 在 Windows 与 Linux 上运行相同测试。宿主行为验证和引擎/GPU 验证的范围分别记录在 [VALIDATION.md](VALIDATION.md)，不以安装通过宣称任意游戏都能自动完成。
+真实 Bevy 示例另行运行（需 Rust 1.95.0 工具链）：
+
+```sh
+cd skills/playmand/examples/ecs-patterns
+cargo test --locked
+```
+
+打包脚本使用明确的公开文件清单，生成 `dist/playmand-0.2.0.zip` 和 SHA-256 清单。GitHub Actions 在 Windows 与 Linux 上运行相同测试。宿主行为验证和引擎/GPU 验证的范围分别记录在 [VALIDATION.md](VALIDATION.md)，不以安装通过宣称任意游戏都能自动完成。
 
 ## 许可证
 

@@ -1,4 +1,4 @@
 interface:
   display_name: "Playmand"
-  short_description: "复用游戏开发经验，指导 AI 完成运行、试玩、排错与验证交付"
-  default_prompt: "使用 $playmand 完成本次游戏开发任务，先确认范围和玩家验收标准，再实现、试玩并记录证据。"
+  short_description: "Rust + Bevy 游戏开发专项：ECS、动画、渲染、调试与构建"
+  default_prompt: "使用 $playmand 帮我用 Rust + Bevy 实现游戏玩法与画面，按项目版本处理引擎 API、资源和调度问题。"

@@ -10,7 +10,8 @@ def snapshot(root):
     return {
         path.relative_to(root): path.read_bytes()
         for path in root.rglob("*")
-        if path.is_file()
+        if path.is_file() and not {"target", "__pycache__"}.intersection(path.relative_to(root).parts)
+        and path.suffix not in (".pyc", ".pyo")
     }
 
 
@@ -47,7 +48,8 @@ def install(project, target):
         if destination.exists():
             print(f"Unchanged: {destination}")
         else:
-            shutil.copytree(source, destination)
+            shutil.copytree(source, destination,
+                            ignore=shutil.ignore_patterns("target", "__pycache__", "*.pyc", "*.pyo"))
             print(f"Installed: {destination}")
 
 

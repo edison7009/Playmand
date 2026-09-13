@@ -1,40 +1,34 @@
-# Playmand Skill 0.1.0 验证
+# Playmand 0.2.0 验证
 
-日期：2026-09-13。发布对象是技能、安装器和经验手册。测试范围不包含引擎中间件或全自动游戏生产平台。
+日期：2026-09-13。新版重点为 Rust + Bevy 专项指导、版本定位脚本与可执行 ECS 用法。
 
-## 本地发布检查
+## 已执行的本地检查
 
-| 检查 | 结果 | 可复现入口 |
+| 检查 | 结果与范围 | 复现入口 |
 | --- | --- | --- |
-| Skill frontmatter、命名与未完成占位符 | 通过 | 使用 skill-creator 的 `quick_validate.py skills/playmand`，输出 `Skill is valid!` |
-| 双宿主复制、中文/空格路径、重复安装 | 通过 | `python -B -m unittest discover -s tests -v` |
-| 同名不同内容及父路径普通文件冲突 | 通过 | 同上；在复制任何宿主前拒绝，原内容保持 |
-| 非 UTF-8 输出 | 通过 | 同上；cp1252 输出环境下中文路径不会中断双宿主安装 |
-| 个人安装、单独宿主、无效项目 | 通过 | 同上；个人目录用临时目录替身验证，不改真实用户设置 |
-| 分发包完整性与解压后安装 | 通过 | 同上；ZIP 校验、文件字节比对、SHA-256、包内相对引用、许可证与双宿主安装 |
+| Skill 格式 | 命名、frontmatter、占位符检查通过 | skill-creator 的 `quick_validate.py skills/playmand` |
+| Python 回归 | 13 项通过：双宿主安装、冲突保护、中文路径/旧编码、包完整性、版本图解析、构建缓存排除 | `python -B -m unittest discover -s tests -v` |
+| Rust / Bevy 真实执行 | Windows MSVC、Rust 1.95.0、Bevy 0.19.1，4 项 ECS 测试通过 | 在 `skills/playmand/examples/ecs-patterns` 执行 `cargo test --locked` |
+| 版本定位脚本 | 对真实示例执行成功，报告 Bevy 0.19.1、启用 features、源码目录及对应版本文档 | `python -B skills/playmand/scripts/inspect_bevy.py --manifest-path skills/playmand/examples/ecs-patterns/Cargo.toml --filter-platform x86_64-pc-windows-msvc` |
+| 分发内容 | ZIP 校验、SHA-256、包内相对链接与解压后双宿主安装通过；Cargo target / Python 缓存不进入安装和分发 | 包测试及 `python scripts/build_package.py` |
 
-共 8 项自动测试通过。本轮在 Windows 本地运行；Windows/Linux × Python 3.9/3.13 的远程结果见仓库 Actions，不把本地语法检查当跨平台运行证明。
+Python 版本图测试覆盖传递依赖、同名不同版本、同版本不同来源、无解析图的错误输入。脚本以 Cargo 元数据为依据，匹配 bevy / bevy_ 名称，其中可能包含第三方 crate；报告整个工作区，不冒充单个游戏二进制的精确依赖列表。path/git 修改版应优先看报告中的源码，发布版文档可能与其不同。
 
-另由独立审阅发现并修复两处真实问题：非 UTF-8 输出中断安装、父目录被普通文件占用造成可预知的部分安装。新增回归均已通过。安装器仍不是跨目录事务：磁盘或权限 I/O 故障可能留下部分复制内容；会报告失败，不自动清理用户目录。
+四项 Bevy 测试检查系统执行后的 World：
 
-执行 `python scripts/build_package.py` 可生成公开包及包含文件清单和 SHA-256 的 `dist/verification.json`。原始规划、机器日志、模型轨迹和隔离测试工作区不进入公开包。
+- 同时具有 Player / Enemy 标记的实体仍按明确互斥规则更新，不发生查询别名冲突。
+- 链式后续系统在同一次 Update 看到 Commands 创建的实体。
+- 同值写入不重复触发下游变化处理，真正改变值会触发。
+- 连续三次进入/退出游玩状态，关卡实体每次创建一个、退出归零。
 
-## 真实 AI 宿主检查
+示例使用真实 Bevy、精简 features 和无窗口 App，未启动 GPU。GLB、动画、UI 与截图指南的 API 已对照 0.19.1 官方 crate 源码/示例，尚未在本版独立图形工程中逐项运行。
 
-| 宿主 | 任务与结果 | 限制 |
-| --- | --- | --- |
-| Codex CLI 0.153.4 | 读取项目级 Skill；复现重复收集 Bug；一行修复后 3 项原测试通过；新进程经 stdin 验收 17 条操作；保存交付记录，正常退出 0 | 显式提示下的 Python 文字游戏；无无技能对照组 |
-| Claude Code 2.1.220 | 初始化列出 Skill，实际读取参考；修复双页存档覆盖；2 项磁盘保存/重载测试及独立复核通过；调整测试轮数预算后补全交付记录，最终文档会话退出 0 | 本机使用第三方模型；前两次会话触及轮数上限，多次调用完成，不能称一轮全自动通过 |
+CI 配置覆盖 Windows / Linux 的 Python 3.9 / 3.13，以及两平台的 Rust 1.95.0 ECS 示例；远程实际结果以对应提交的 Actions 为准。本地 Windows 通过不替代 Linux 实测。
 
-详见 [宿主验证摘要](docs/host-validation.md)。Claude Code 在保留既有 Hook 的情况下按要求核验事实并正常重试，最终完成；此测试包含执行者调整预算，不能写成无人干预完成。第二次 Claude 调用曾超出测试约定范围做只读检查，已记录，未发现范围外写入。
+## 历史宿主测试与尚未证明的收益
 
-实测 Skill 主文件 SHA-256 为 `a964eb046ea7a4a42875ab44251b27f0d9821f0f4819e31cd098925f3d8e3169`。发布版随后只增加 `license: MIT` 与许可证文件；字节比对确认工作流正文和参考未因此改变，发布入口哈希为 `00e8591c3c92356b964f8093eedd703964a3982cb3fc6064360026dc51918080`。
+[0.1.0 宿主记录](docs/host-validation.md) 保留此前 Codex / Claude Code 在 Python 小样中的技能发现与执行结果。它们使用旧正文，不是 0.2.0 的行为验证，也不能证明 Rust + Bevy 游戏开发能力。
 
-## 尚未验证
+本次尚未完成：新正文的跨模型宿主行为复测、GPU 画面/动画/操作手感与完整玩家包验收，以及有无技能的同条件 A/B 实验。没有“开发质量一定更高”“提效比例”或“100% 全自动”的结论。后续用 [Bevy 评估任务](docs/evaluation.md) 衡量实际游戏结果。
 
-- 不显式提醒流程时的自动触发/自主行为，以及不同模型的稳定通过率。
-- Codex 云端或其他远程宿主、所有版本/组织策略下的发现与安装。
-- Bevy/Godot 实际游戏中的 GPU 画面、原生输入/IME、模型动画、性能与玩家包完整流程。
-- 同模型 A/B 对照中的耗时、成本、重试或人工接管改善；没有提效比例。
-
-本轮只读参考过 WithYou 的历史记录，没有重跑其历史 78 项游戏测试。原项目成绩与本 Skill 测试分别记录。下一轮按 [评估用例](docs/evaluation.md) 在独立引擎小样验证实际游戏流程。
+安装器保持不覆盖差异内容；磁盘或权限 I/O 故障仍可能留下部分复制内容，不具有跨目录事务保证。原始规划、机器日志、宿主轨迹及构建产物保留本地，不进入公开包。

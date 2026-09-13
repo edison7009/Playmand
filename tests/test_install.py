@@ -1,6 +1,7 @@
 """Exercise installation in disposable projects, without changing host settings."""
 
 import subprocess
+import shutil
 import os
 import sys
 import tempfile
@@ -14,6 +15,12 @@ SCRIPT = ROOT / "scripts" / "install_skill.py"
 
 def files(root):
     return {p.relative_to(root): p.read_bytes() for p in root.rglob("*") if p.is_file()}
+
+
+def source_files():
+    return {path: data for path, data in files(ROOT / "skills" / "playmand").items()
+            if not {"target", "__pycache__"}.intersection(path.parts)
+            and path.suffix not in (".pyc", ".pyo")}
 
 
 class InstallTests(unittest.TestCase):
@@ -35,7 +42,7 @@ class InstallTests(unittest.TestCase):
         original.write_text("player work", encoding="utf-8")
         result = self.run_install()
         self.assertEqual(result.returncode, 0, result.stderr)
-        expected = files(ROOT / "skills" / "playmand")
+        expected = source_files()
         for host in (".agents", ".claude"):
             self.assertEqual(files(self.project / host / "skills" / "playmand"), expected)
         before = files(self.project)
@@ -83,7 +90,7 @@ class InstallTests(unittest.TestCase):
             env={**os.environ, "PYTHONIOENCODING": "cp1252"},
         )
         self.assertEqual(result.returncode, 0, result.stderr)
-        expected = files(ROOT / "skills" / "playmand")
+        expected = source_files()
         for host in (".agents", ".claude"):
             self.assertEqual(files(self.project / host / "skills" / "playmand"), expected)
 
@@ -101,9 +108,32 @@ class InstallTests(unittest.TestCase):
             cwd=self.sandbox.name, capture_output=True, encoding="utf-8",
         )
         self.assertEqual(result.returncode, 0, result.stderr)
-        expected = files(ROOT / "skills" / "playmand")
+        expected = source_files()
         for host in (".agents", ".claude"):
             self.assertEqual(files(self.project / host / "skills" / "playmand"), expected)
+
+    def test_example_build_outputs_are_not_installed_or_treated_as_edits(self):
+        distribution = Path(self.sandbox.name) / "source"
+        source = distribution / "skills" / "playmand"
+        source.mkdir(parents=True)
+        (source / "SKILL.md").write_text("skill", encoding="utf-8")
+        generated = source / "examples" / "ecs-patterns" / "target" / "debug"
+        generated.mkdir(parents=True)
+        (generated / "large-build.exe").write_bytes(b"generated")
+        (distribution / "scripts").mkdir()
+        installer = distribution / "scripts" / SCRIPT.name
+        shutil.copyfile(SCRIPT, installer)
+        command = [sys.executable, str(installer), "--project", str(self.project)]
+        result = subprocess.run(command, capture_output=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        installed = self.project / ".agents" / "skills" / "playmand"
+        self.assertFalse((installed / "examples/ecs-patterns/target").exists())
+        local_build = installed / "examples/ecs-patterns/target"
+        local_build.mkdir(parents=True)
+        (local_build / "output").write_text("local build", encoding="utf-8")
+        result = subprocess.run(command, capture_output=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual((local_build / "output").read_text(encoding="utf-8"), "local build")
 
 
 if __name__ == "__main__":

@@ -7,7 +7,7 @@ import zipfile
 
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 
 
 def public_files():
@@ -15,7 +15,7 @@ def public_files():
     for folder in ("skills", "docs", "scripts", "tests"):
         paths.extend(sorted(
             path for path in (ROOT / folder).rglob("*")
-            if path.is_file() and "__pycache__" not in path.parts
+            if path.is_file() and not {"__pycache__", "target"}.intersection(path.relative_to(ROOT).parts)
             and path.suffix not in (".pyc", ".pyo")
         ))
     return paths

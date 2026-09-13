@@ -10,6 +10,7 @@ import sys
 import tempfile
 import unittest
 import zipfile
+from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -19,6 +20,18 @@ spec.loader.exec_module(builder)
 
 
 class PackageTests(unittest.TestCase):
+    def test_cargo_outputs_are_excluded_from_public_files(self):
+        with tempfile.TemporaryDirectory() as scratch:
+            root = Path(scratch)
+            example = root / "skills/playmand/examples/ecs-patterns"
+            (example / "target/debug").mkdir(parents=True)
+            (example / "target/debug/game.exe").write_bytes(b"generated")
+            (example / "Cargo.toml").write_text("manifest", encoding="utf-8")
+            with patch.object(builder, "ROOT", root):
+                listed = builder.public_files()
+            self.assertIn(example / "Cargo.toml", listed)
+            self.assertNotIn(example / "target/debug/game.exe", listed)
+
     def test_archive_is_self_contained_and_installs_both_hosts(self):
         with tempfile.TemporaryDirectory(prefix="playmand-package-") as scratch:
             scratch = Path(scratch)
@@ -32,6 +45,7 @@ class PackageTests(unittest.TestCase):
                     self.assertNotIn("..", Path(name).parts)
                     self.assertNotIn("work", Path(name).parts)
                     self.assertNotIn("__pycache__", Path(name).parts)
+                    self.assertNotIn("target", Path(name).parts)
                     self.assertFalse(Path(name).name.startswith("Playmand_"))
                 archive.extractall(scratch / "unpacked")
             extracted = scratch / "unpacked" / f"playmand-{builder.VERSION}"
