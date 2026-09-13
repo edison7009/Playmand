@@ -1,18 +1,20 @@
 # Playmand
 
-把 WithYou 中有依据的游戏开发经验，整理成 Codex、Claude Code 可读取的技能，让 AI 少重复摸索，并把改动推进到可试玩、可验证的结果。
+Playmand 是面向 **Codex 和 Claude Code** 的独立游戏开发 Skill，帮助 AI 完成需求拆解、代码实现、运行试玩、问题修复与验证交付。
 
-当前是 **Skill 0.1.0**：一个共享技能、按需阅读的经验手册和安装脚本，采用 [MIT 许可证](LICENSE)。CLI 执行核心、MCP 和自动环境安装仍属于后续方向。
+**目标是让 AI 更高效地把游戏想法变成可试玩、可验证、可持续迭代的游戏，减少重复探索、无效重试和人工接管。**
 
-## 内容与范围
+用户提出创作方向和反馈，AI 使用项目现有工具推进开发，并通过实际操作、画面与运行状态检查结果。Playmand 将这套工作方式整理成可复用的指令和按需阅读的手册。
 
-- [技能入口](skills/playmand/SKILL.md)：明确任务、发现已有工具、实施、运行、观察、保存和交付。
+## 帮助 AI 做什么
+
+- [开发流程](skills/playmand/SKILL.md)：明确需求和验收标准，先打通最小可玩流程，再逐步扩展功能。
 - [排错手册](skills/playmand/references/troubleshooting.md)：导航、草稿覆盖、焦点、布局、模型显示、资源释放和运行异常。
 - [Bevy 经验](skills/playmand/references/bevy.md)：按实际版本查 API、调度/资产就绪和原生打包。
 - [验证方法](skills/playmand/references/verification.md)：区分代码、输入、GPU、系统窗口与性能证据。
-- [经验更新规则](skills/playmand/references/learning.md)：每次开发留下复现与证据，有依据地更新共享技能。
+- [持续积累](skills/playmand/references/learning.md)：记录有效的启动、复现和修复方法，让后续开发复用已验证的做法。
 
-一般流程可用于其他引擎，但专项经验主要来自 Windows Rust/Bevy。它不会强制改用 Bevy，也不依赖 WithYou 仓库、私有素材或本机路径。它指导 AI 使用真实可用的工具，本身不会增加截图、输入控制或引擎操作接口。“100% 控制”仍是长期能力覆盖目标。
+适用于新建游戏、迭代玩法、调整 UI、接入模型与动画、排查性能和准备交付。当前专项指南侧重 Windows Rust/Bevy；已有项目沿用自己的技术栈。
 
 ## 安装
 
@@ -57,13 +59,12 @@ $playmand 在当前游戏加入一个可收集道具及计数 UI。
 
 Claude Code 将首行开头换成 `/playmand` 即可。也可直接请求修复现有游戏问题，技能允许按相关描述自动匹配，实际是否触发以宿主为准。
 
-## 如何判断它有用
+## 验证与维护
 
-先做相同任务的 A（原始 AI）与 B（AI + Skill）对照；不以技能字数或规则数量衡量价值。[评估用例](docs/evaluation.md) 定义起点、通过标准和记录方式，[验证记录](VALIDATION.md) 区分本轮检查与尚未完成的实测。
+- [验证记录](VALIDATION.md)：已执行的安装、宿主与分发检查，以及当前验证范围。
+- [评估用例](docs/evaluation.md)：用实际游戏任务评估正确性、开发耗时和人工接管情况。
 
-维护经验时参考 [来源与边界](docs/provenance.md)。共享包包含归纳后的方法，不包含 WithYou 的代码、素材、个人配置或原始开发对话。
-
-## 本地检查与打包
+维护者可在本地检查和打包：
 
 ```sh
 python -B -m unittest discover -s tests -v
@@ -71,3 +72,7 @@ python scripts/build_package.py
 ```
 
 打包脚本使用明确的公开文件清单，生成 `dist/playmand-0.1.0.zip` 和 SHA-256 清单。GitHub Actions 在 Windows 与 Linux 上运行相同测试。宿主行为验证和引擎/GPU 验证的范围分别记录在 [VALIDATION.md](VALIDATION.md)，不以安装通过宣称任意游戏都能自动完成。
+
+## 许可证
+
+Playmand 采用 [MIT 许可证](LICENSE)。
