@@ -1,0 +1,6 @@
+/work/
+/dist/
+/Playmand_*.md
+__pycache__/
+*.py[cod]
+.DS_Store
