@@ -1,4 +1,4 @@
 interface:
   display_name: "Playmand"
-  short_description: "Rust + Bevy 游戏开发专项：ECS、动画、渲染、调试与构建"
-  default_prompt: "使用 $playmand 帮我用 Rust + Bevy 实现游戏玩法与画面，按项目版本处理引擎 API、资源和调度问题。"
+  short_description: "Rust + Bevy 游戏开发，结合 Blender MCP 制作模型、材质与动画"
+  default_prompt: "使用 $playmand 用 Rust + Bevy 实现游戏玩法与画面，需要制作或修改 3D 资产时使用已连接的 Blender MCP。"

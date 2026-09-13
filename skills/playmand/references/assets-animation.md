@@ -2,6 +2,8 @@
 
 基线：Bevy 0.19.1。这里的符号已对照同版本 crate 源码；本仓库的无窗口 ECS 示例不验证 GLB 或 GPU 渲染。
 
+需要制作或修正源模型、材质、骨骼和动画时，使用 [Blender 与 MCP](blender-mcp.md) 操作源资产并导出，再按本页接入 Bevy。
+
 ## 加载与实例化是不同阶段
 
 `AssetServer::load` 立即返回句柄，不代表资产加载完成。`get_load_states` 可区分根资产、直接依赖和递归依赖状态；需要整条依赖就绪时使用 `is_loaded_with_dependencies`。加载失败应呈现错误或回退，不能一直停在 Loading。

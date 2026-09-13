@@ -4,6 +4,8 @@
 
 核心是 Rust + Bevy 的具体开发能力：正确使用当前版本的 API、组织 ECS 与玩法状态、接入模型动画、实现 UI 和渲染、定位性能问题并构建游戏。Codex、Claude Code 及其他支持技能的工具是使用它的宿主。
 
+**Blender + MCP 是资产制作的重要组成部分**：AI 通过已连接的 MCP 操作 Blender，制作和修改模型、材质、骨骼与动画，检查结果后导出 GLB 并接入 Bevy。技能覆盖从可编辑资产到游戏内呈现的技术衔接。
+
 新建游戏默认 Rust + Bevy；已有 Bevy 工程保留其版本和结构。用户明确选用其他引擎时尊重选择，不自动迁移已有项目。技能不规定固定开发循环，也不把用户要求缩减成最小演示。
 
 ## 提供什么
@@ -12,6 +14,7 @@
 | --- | --- |
 | [Rust / Bevy 工具链](skills/playmand/references/bevy.md) | 新工程配置、版本/API 定位、feature 与插件兼容、编译及 Windows 链接 |
 | [ECS 与玩法状态](skills/playmand/references/ecs.md) | Query 借用冲突、延迟命令、系统顺序、固定时间步输入、暂停与重开 |
+| [Blender 与 MCP](skills/playmand/references/blender-mcp.md) | 连接与能力发现、场景编辑、模型/材质/动画制作、GLB 导出及 Bevy 接入 |
 | [资源与动画](skills/playmand/references/assets-animation.md) | GLB 子场景、实例就绪、动画图/播放器接线、材质与骨骼实例隔离 |
 | [渲染、UI 与性能](skills/playmand/references/rendering.md) | 2D/3D 相机、灯光、图层、UI 布局、截图与预览相机生命周期 |
 | [版本检查脚本](skills/playmand/scripts/inspect_bevy.py) | 从 Cargo 实际解析图报告 Bevy 版本、features、源码位置和文档入口 |
@@ -22,6 +25,8 @@
 ## 安装
 
 要求已安装 Codex 或 Claude Code，以及 Python 3.9+。安装器仅使用 Python 标准库；游戏开发所需的引擎、编译器、图形与输入工具按目标项目准备。它不会自动安装或购买这些工具。
+
+使用 Blender MCP 时，还需在实际宿主配置相应 MCP 服务并启用 Blender 端插件；技能安装不会自动完成连接。具体实现与接入边界见 [Blender MCP 指南](skills/playmand/references/blender-mcp.md)。
 
 ```sh
 git clone https://github.com/edison7009/Playmand.git
@@ -67,6 +72,13 @@ $playmand 修复当前 Bevy 工程：GLB 角色已经显示，但动画不播放
 沿用 Cargo.lock 的版本，检查场景实例、AnimationPlayer 和动画图的接线。
 ```
 
+资产制作示例：
+
+```text
+$playmand 通过已连接的 Blender MCP 制作一个低多边形宝箱，包含开盖动画。
+保留可编辑的 .blend，导出 GLB，接入当前 Bevy 工程，点击后播放开盖动画。
+```
+
 Claude Code 将 `$playmand` 换成 `/playmand`。其他宿主按其技能加载方式使用整个 `skills/playmand` 目录；本仓库安装器只提供 Codex 和 Claude Code 的目录适配，不宣称所有工具已测试兼容。
 
 ## 验证与维护
@@ -88,7 +100,7 @@ cd skills/playmand/examples/ecs-patterns
 cargo test --locked
 ```
 
-打包脚本使用明确的公开文件清单，生成 `dist/playmand-0.2.0.zip` 和 SHA-256 清单。GitHub Actions 在 Windows 与 Linux 上运行相同测试。宿主行为验证和引擎/GPU 验证的范围分别记录在 [VALIDATION.md](VALIDATION.md)，不以安装通过宣称任意游戏都能自动完成。
+打包脚本使用明确的公开文件清单，生成 `dist/playmand-0.2.1.zip` 和 SHA-256 清单。GitHub Actions 在 Windows 与 Linux 上运行相同测试。宿主行为验证和引擎/GPU 验证的范围分别记录在 [VALIDATION.md](VALIDATION.md)，不以安装通过宣称任意游戏都能自动完成。
 
 ## 许可证
 
