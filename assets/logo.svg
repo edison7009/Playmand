@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-labelledby="playmand-title">
+  <title id="playmand-title">Playmand</title>
+  <defs>
+    <radialGradient id="playmand-glow" cx="0" cy="0" r="0.75">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="playmand-glow2" cx="1" cy="1" r="0.45">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.08"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="playmand-metal" gradientUnits="userSpaceOnUse" x1="16" y1="16" x2="112" y2="112">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.55" stop-color="#d6d6d6"/>
+      <stop offset="1" stop-color="#8c8c8c"/>
+    </linearGradient>
+  </defs>
+  <!-- Glossy black tile -->
+  <rect width="128" height="128" rx="30" fill="#0c0c0c"/>
+  <rect width="128" height="128" rx="30" fill="url(#playmand-glow)"/>
+  <rect width="128" height="128" rx="30" fill="url(#playmand-glow2)"/>
+  <rect x="0.5" y="0.5" width="127" height="127" rx="29.5" fill="none" stroke="#ffffff" stroke-opacity="0.12"/>
+  <!-- Metal cog: the engine -->
+  <path d="M103.2 56.1 L113.6 57.5 L113.6 70.5 L103.2 71.9 L97.3 86.1 L103.6 94.5 L94.5 103.6 L86.1 97.3 L71.9 103.2 L70.5 113.6 L57.5 113.6 L56.1 103.2 L41.9 97.3 L33.5 103.6 L24.4 94.5 L30.7 86.1 L24.8 71.9 L14.4 70.5 L14.4 57.5 L24.8 56.1 L30.7 41.9 L24.4 33.5 L33.5 24.4 L41.9 30.7 L56.1 24.8 L57.5 14.4 L70.5 14.4 L71.9 24.8 L86.1 30.7 L94.5 24.4 L103.6 33.5 L97.3 41.9 Z" fill="url(#playmand-metal)" stroke="url(#playmand-metal)" stroke-width="4" stroke-linejoin="round"/>
+  <!-- Winking ">_" face: the agent's command prompt -->
+  <path d="M46 50 L57 58 L46 66" fill="none" stroke="#141414" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="69" y="55" width="14" height="6" rx="3" fill="#141414"/>
+  <path d="M49 75 Q64 87 79 75" fill="none" stroke="#141414" stroke-width="6" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="624" viewBox="0 0 880 624" role="img" aria-labelledby="t d" font-family="system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+<title id="t">Engine scorecard for the AI coding era</title>
+<desc id="d">Scores out of 10 · subjective comparison by an AI assistant, not a benchmark. AI coding friendliness: Bevy 9.5, Godot 8.5, Unity 8, Unreal 7.5; ECS / data-driven: Bevy 10, Godot 7, Unity 8, Unreal 8; 2D games: Bevy 8.5, Godot 9.5, Unity 8.5, Unreal 7; 3D games: Bevy 8, Godot 8, Unity 9, Unreal 10; Visual editor: Bevy 5, Godot 9.5, Unity 10, Unreal 10</desc>
+<rect x="0.5" y="0.5" width="879" height="623" rx="12" fill="#1a1a19" stroke="#2c2c2a"/>
+<text x="32" y="50" font-size="20" font-weight="700" fill="#f0efec">Engine scorecard for the AI coding era</text>
+<text x="32" y="74" font-size="13" fill="#c3c2b7">Scores out of 10 · subjective comparison by an AI assistant, not a benchmark</text>
+<line x1="306.0" y1="112" x2="306.0" y2="596" stroke="#2c2c2a" stroke-width="1"/>
+<text x="306.0" y="106" font-size="11" fill="#898781" text-anchor="middle">0</text>
+<line x1="555.0" y1="112" x2="555.0" y2="596" stroke="#2c2c2a" stroke-width="1"/>
+<text x="555.0" y="106" font-size="11" fill="#898781" text-anchor="middle">5</text>
+<line x1="804.0" y1="112" x2="804.0" y2="596" stroke="#2c2c2a" stroke-width="1"/>
+<text x="804.0" y="106" font-size="11" fill="#898781" text-anchor="middle">10</text>
+<text x="32" y="165.0" font-size="14" font-weight="600" fill="#f0efec">AI coding friendliness</text>
+<text x="296" y="134.0" font-size="12" font-weight="700" fill="#f0efec" text-anchor="end">Bevy</text>
+<path d="M306 124.0 H775.1 Q779.1 124.0 779.1 128.0 V132.0 Q779.1 136.0 775.1 136.0 H306 Z" fill="#d95926"/>
+<text x="787.1" y="134.0" font-size="12" font-weight="700" fill="#f0efec">9.5</text>
+<text x="296" y="154.0" font-size="12" font-weight="400" fill="#c3c2b7" text-anchor="end">Godot</text>
+<path d="M306 144.0 H725.3 Q729.3 144.0 729.3 148.0 V152.0 Q729.3 156.0 725.3 156.0 H306 Z" fill="#5a5955"/>
+<text x="737.3" y="154.0" font-size="12" font-weight="400" fill="#c3c2b7">8.5</text>
+<text x="296" y="174.0" font-size="12" font-weight="400" fill="#c3c2b7" text-anchor="end">Unity</text>
+<path d="M306 164.0 H700.4 Q704.4 164.0 704.4 168.0 V172.0 Q704.4 176.0 700.4 176.0 H306 Z" fill="#5a5955"/>
+<text x="712.4" y="174.0" font-size="12" font-weight="400" fill="#c3c2b7">8</text>
+<text x="296" y="194.0" font-size="12" font-weight="400" fill="#c3c2b7" text-anchor="end">Unreal</text>
+<path d="M306 184.0 H675.5 Q679.5 184.0 679.5 188.0 V192.0 Q679.5 196.0 675.5 196.0 H306 Z" fill="#5a5955"/>
+<text x="687.5" y="194.0" font-size="12" font-weight="400" fill="#c3c2b7">7.5</text>
+<line x1="32" y1="209.0" x2="848" y2="209.0" stroke="#2c2c2a" stroke-width="1"/>
+<text x="32" y="263.0" font-size="14" font-weight="600" fill="#f0efec">ECS / data-driven</text>
+<text x="296" y="232.0" font-size="12" font-weight="700" fill="#f0efec" text-anchor="end">Bevy</text>
+<path d="M306 222.0 H800.0 Q804.0 222.0 804.0 226.0 V230.0 Q804.0 234.0 800.0 234.0 H306 Z" fill="#d95926"/>
+<text x="812.0" y="232.0" font-size="12" font-weight="700" fill="#f0efec">10</text>
+<text x="296" y="252.0" font-size="12" font-weight="400" fill="#c3c2b7" text-anchor="end">Godot</text>
+<path d="M306 242.0 H650.6 Q654.6 242.0 654.6 246.0 V250.0 Q654.6 254.0 650.6 254.0 H306 Z" fill="#5a5955"/>
+<text x="662.6" y="252.0" font-size="12" font-weight="400" fill="#c3c2b7">7</text>
+<text x="296" y="272.0" font-size="12" font-weight="400" fill="#c3c2b7" text-anchor="end">Unity</text>
+<path d="M306 262.0 H700.4 Q704.4 262.0 704.4 266.0 V270.0 Q704.4 274.0 700.4 274.0 H306 Z" fill="#5a5955"/>
+<text x="712.4" y="272.0" font-size="12" font-weight="400" fill="#c3c2b7">8</text>
+<text x="296" y="292.0" font-size="12" font-weight="400" fill="#c3c2b7" text-anchor="end">Unreal</text>
+<path d="M306 282.0 H700.4 Q704.4 282.0 704.4 286.0 V290.0 Q704.4 294.0 700.4 294.0 H306 Z" fill="#5a5955"/>
+<text x="712.4" y="292.0" font-size="12" font-weight="400" fill="#c3c2b7">8</text>
+<line x1="32" y1="307.0" x2="848" y2="307.0" stroke="#2c2c2a" stroke-width="1"/>
+<text x="32" y="361.0" font-size="14" font-weight="600" fill="#f0efec">2D games</text>
+<text x="296" y="330.0" font-size="12" font-weight="700" fill="#f0efec" text-anchor="end">Bevy</text>
+<path d="M306 320.0 H725.3 Q729.3 320.0 729.3 324.0 V328.0 Q729.3 332.0 725.3 332.0 H306 Z" fill="#d95926"/>
+<text x="737.3" y="330.0" font-size="12" font-weight="700" fill="#f0efec">8.5</text>
+<text x="296" y="350.0" font-size="12" font-weight="400" fill="#c3c2b7" text-anchor="end">Godot</text>
+<path d="M306 340.0 H775.1 Q779.1 340.0 779.1 344.0 V348.0 Q779.1 352.0 775.1 352.0 H306 Z" fill="#5a5955"/>
+<text x="787.1" y="350.0" font-size="12" font-weight="400" fill="#c3c2b7">9.5</text>
+<text x="296" y="370.0" font-size="12" font-weight="400" fill="#c3c2b7" text-anchor="end">Unity</text>
+<path d="M306 360.0 H725.3 Q729.3 360.0 729.3 364.0 V368.0 Q729.3 372.0 725.3 372.0 H306 Z" fill="#5a5955"/>
+<text x="737.3" y="370.0" font-size="12" font-weight="400" fill="#c3c2b7">8.5</text>
+<text x="296" y="390.0" font-size="12" font-weight="400" fill="#c3c2b7" text-anchor="end">Unreal</text>
+<path d="M306 380.0 H650.6 Q654.6 380.0 654.6 384.0 V388.0 Q654.6 392.0 650.6 392.0 H306 Z" fill="#5a5955"/>
+<text x="662.6" y="390.0" font-size="12" font-weight="400" fill="#c3c2b7">7</text>
+<line x1="32" y1="405.0" x2="848" y2="405.0" stroke="#2c2c2a" stroke-width="1"/>
+<text x="32" y="459.0" font-size="14" font-weight="600" fill="#f0efec">3D games</text>
+<text x="296" y="428.0" font-size="12" font-weight="700" fill="#f0efec" text-anchor="end">Bevy</text>
+<path d="M306 418.0 H700.4 Q704.4 418.0 704.4 422.0 V426.0 Q704.4 430.0 700.4 430.0 H306 Z" fill="#d95926"/>
+<text x="712.4" y="428.0" font-size="12" font-weight="700" fill="#f0efec">8</text>
+<text x="296" y="448.0" font-size="12" font-weight="400" fill="#c3c2b7" text-anchor="end">Godot</text>
+<path d="M306 438.0 H700.4 Q704.4 438.0 704.4 442.0 V446.0 Q704.4 450.0 700.4 450.0 H306 Z" fill="#5a5955"/>
+<text x="712.4" y="448.0" font-size="12" font-weight="400" fill="#c3c2b7">8</text>
+<text x="296" y="468.0" font-size="12" font-weight="400" fill="#c3c2b7" text-anchor="end">Unity</text>
+<path d="M306 458.0 H750.2 Q754.2 458.0 754.2 462.0 V466.0 Q754.2 470.0 750.2 470.0 H306 Z" fill="#5a5955"/>
+<text x="762.2" y="468.0" font-size="12" font-weight="400" fill="#c3c2b7">9</text>
+<text x="296" y="488.0" font-size="12" font-weight="400" fill="#c3c2b7" text-anchor="end">Unreal</text>
+<path d="M306 478.0 H800.0 Q804.0 478.0 804.0 482.0 V486.0 Q804.0 490.0 800.0 490.0 H306 Z" fill="#5a5955"/>
+<text x="812.0" y="488.0" font-size="12" font-weight="400" fill="#c3c2b7">10</text>
+<line x1="32" y1="503.0" x2="848" y2="503.0" stroke="#2c2c2a" stroke-width="1"/>
+<text x="32" y="557.0" font-size="14" font-weight="600" fill="#f0efec">Visual editor</text>
+<text x="296" y="526.0" font-size="12" font-weight="700" fill="#f0efec" text-anchor="end">Bevy</text>
+<path d="M306 516.0 H551.0 Q555.0 516.0 555.0 520.0 V524.0 Q555.0 528.0 551.0 528.0 H306 Z" fill="#d95926"/>
+<text x="563.0" y="526.0" font-size="12" font-weight="700" fill="#f0efec">5</text>
+<text x="296" y="546.0" font-size="12" font-weight="400" fill="#c3c2b7" text-anchor="end">Godot</text>
+<path d="M306 536.0 H775.1 Q779.1 536.0 779.1 540.0 V544.0 Q779.1 548.0 775.1 548.0 H306 Z" fill="#5a5955"/>
+<text x="787.1" y="546.0" font-size="12" font-weight="400" fill="#c3c2b7">9.5</text>
+<text x="296" y="566.0" font-size="12" font-weight="400" fill="#c3c2b7" text-anchor="end">Unity</text>
+<path d="M306 556.0 H800.0 Q804.0 556.0 804.0 560.0 V564.0 Q804.0 568.0 800.0 568.0 H306 Z" fill="#5a5955"/>
+<text x="812.0" y="566.0" font-size="12" font-weight="400" fill="#c3c2b7">10</text>
+<text x="296" y="586.0" font-size="12" font-weight="400" fill="#c3c2b7" text-anchor="end">Unreal</text>
+<path d="M306 576.0 H800.0 Q804.0 576.0 804.0 580.0 V584.0 Q804.0 588.0 800.0 588.0 H306 Z" fill="#5a5955"/>
+<text x="812.0" y="586.0" font-size="12" font-weight="400" fill="#c3c2b7">10</text>
+</svg>
