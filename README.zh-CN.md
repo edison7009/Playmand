@@ -19,6 +19,12 @@
 
 </div>
 
+<p align="center">
+  <img src="assets/demo-icons.webp" alt="两团在 3D 中滚动的星云（星球、经纬地球、带环行星、圆环）以旋涡、降雨、大爆炸、扫描四种方式汇聚成 Claude 和 ChatGPT 图标。" width="100%">
+</p>
+
+<p align="center"><sub>用 Playmand 制作：3600 个 Bevy 粒子化作在 3D 中滚动的圆形星云，再以四种不同方式汇聚成 Claude 和 ChatGPT 图标。<br/>粉丝致敬作品，与 Anthropic、OpenAI 无关联，也未获其认可；Claude 与 ChatGPT 分别为其所有者的商标。</sub></p>
+
 ## 为什么在 AI 写代码的时代选 Bevy
 
 <picture>
@@ -76,7 +82,7 @@
 | <img src="assets/demo-pelican.webp" alt="一只鹈鹕在公路上蹬自行车，云和山丘在背景中滚动" width="100%"> | <img src="assets/demo-galaxy.webp" alt="由 4000 颗星星组成、正在旋转的发光螺旋星系" width="100%"> |
 | 著名的"鹈鹕骑自行车"大模型测试（由 Simon Willison 推广）。这里不是画一张 SVG，而是一个会动的 Bevy 场景：车轮转速和路面速度匹配，双腿用两段式 IK 跟着踏板转。 | 4000 个星星实体，HDR 辉光，由一个并行 ECS 系统驱动。内圈星星转得更快，旋臂会先卷紧，每轮结束时又回到初始形状。 |
 
-源码：[`pelican.rs`](demos/src/bin/pelican.rs)、[`galaxy.rs`](demos/src/bin/galaxy.rs)。在 `demos/` 目录运行 `cargo run --bin pelican` 或 `cargo run --bin galaxy`。加上 `-- --record frames` 可录制一个无缝循环，再用 `python demos/encode.py frames out.webp` 生成动画。
+源码：[`pelican.rs`](demos/src/bin/pelican.rs)、[`galaxy.rs`](demos/src/bin/galaxy.rs)，以及页首动画 [`icons.rs`](demos/src/bin/icons.rs)。在 `demos/` 目录运行 `cargo run --bin pelican`、`galaxy` 或 `icons`。加上 `-- --record frames` 可录制一个无缝循环，再用 `python demos/encode.py frames out.webp` 生成动画。
 
 ## 做一个游戏或视频
 

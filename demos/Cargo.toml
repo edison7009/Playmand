@@ -19,6 +19,10 @@ path = "src/bin/pelican.rs"
 name = "galaxy"
 path = "src/bin/galaxy.rs"
 
+[[bin]]
+name = "icons"
+path = "src/bin/icons.rs"
+
 [profile.dev]
 opt-level = 1
 

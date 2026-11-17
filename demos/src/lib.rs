@@ -5,6 +5,8 @@
 //! one frame per update and saves a screenshot of each frame, so the output
 //! is identical on every machine and loops seamlessly.
 
+pub mod icon_points;
+
 use bevy::{
     prelude::*,
     render::view::screenshot::{Capturing, Screenshot, save_to_disk},
