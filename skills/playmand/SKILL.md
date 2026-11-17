@@ -1,12 +1,12 @@
 ---
 name: playmand
 license: MIT
-description: 用 Rust + Bevy 开发 2D/3D 游戏，并通过 Blender MCP 制作、修改和检查模型、材质与动画后接入游戏。提供版本匹配、ECS 调度、输入状态、GLB、UI 渲染、性能和原生构建的专项知识。用于新建或改进 Bevy 游戏及其资产；显式使用本技能新建游戏且未指定引擎时默认 Rust + Bevy。
+description: 用 Rust + Bevy 开发 2D/3D 游戏，或制作逐帧录制的演示动画与视频（产品演示、Logo 动画、动图、宣传短片），并通过 Blender MCP 制作、修改和检查模型、材质与动画。提供版本匹配、ECS 调度、输入状态、GLB、UI 渲染、性能、原生构建以及固定时钟录制、无缝循环与编码的专项知识。用于新建或改进 Bevy 游戏、动画视频及其资产；显式使用本技能新建游戏或动画且未指定引擎时默认 Rust + Bevy。
 ---
 
 # Playmand
 
-Rust + Bevy 游戏开发技能，包含 Blender 与 MCP 资产制作能力。Rust + Bevy 实现游戏运行与交互，Blender 制作模型、材质、骨骼与动画，MCP 让 AI 操作和观察这些工具。Codex、Claude Code 等是宿主，不绑定特定模型或某一家 MCP 实现。
+Rust + Bevy 游戏与动画视频技能，包含 Blender 与 MCP 资产制作能力。Rust + Bevy 实现游戏运行与交互，也可把同一套场景代码按固定时钟逐帧录制成动图或视频；Blender 制作模型、材质、骨骼与动画，MCP 让 AI 操作和观察这些工具。Codex、Claude Code 等是宿主，不绑定特定模型或某一家 MCP 实现。
 
 新建游戏默认 Rust + Bevy，按用户要求完成玩法、画面和内容。已有 Bevy 项目沿用锁定版本及结构；用户明确选择其他引擎时尊重选择，已有其他引擎项目不自动迁移。小样用于验证技术疑点，不替代用户要求的完整游戏，也不规定固定开发轮次或汇报模板。
 
@@ -31,6 +31,7 @@ python scripts/inspect_bevy.py --manifest-path /absolute/game/Cargo.toml
 | Blender 建模/材质/动画、MCP 连接与操作、GLB 导出并接入 Bevy | [Blender 与 MCP](references/blender-mcp.md) |
 | GLB、场景实例、动画、骨骼、共享资产与实例隔离 | [资源与动画](references/assets-animation.md) |
 | 2D/3D 相机、灯光、UI、黑屏、预览、多 pass、帧率 | [渲染、UI 与性能](references/rendering.md) |
+| 演示动画、视频/动图录制、无缝循环、辉光效果、编码 | [演示动画与视频录制](references/video.md) |
 | 选择逻辑/画面检查、玩家包资源路径 | [Bevy 验证与分发](references/verification.md) |
 | 跨页草稿、焦点、复杂布局、模型显示异常的补充诊断 | [症状索引](references/troubleshooting.md) |
 

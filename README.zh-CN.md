@@ -4,9 +4,10 @@
 
 # Playmand
 
-### Rust + Bevy Game Skill for AI Agents
+### Rust + Bevy Skill for AI Agents · Games & Videos
 
-描述你想要的游戏，编程 Agent 用 **Rust + Bevy** 把它做出来，<br/>
+描述你想要的游戏或视频，编程 Agent 用 **Rust + Bevy** 把它做出来，<br/>
+既能实时游玩，也能逐帧录制成动画，<br/>
 并通过 **Blender MCP** 制作模型、材质和动画。
 
 [![Bevy 0.20.1](https://img.shields.io/badge/Bevy-0.20.1-eb6834)](https://bevy.org/)
@@ -44,9 +45,32 @@
 评分来自 AI 助手的主观对比，不是基准测试。修改分数后运行 `python assets/make_scorecard.py` 重新生成图表。
 </details>
 
+## 为什么是 Rust：C 级速度，编译器替 Agent 把关
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/langspeed-zh-dark.svg">
+  <img alt="相对 C 的执行时间：Rust 1.04 倍，C++ 1.56 倍，Java 1.89 倍，Go 2.83 倍，C# 3.14 倍，JavaScript 6.52 倍，TypeScript 46.20 倍，Python 71.90 倍，Lua 82.91 倍。" src="assets/langspeed-zh-light.svg" width="100%">
+</picture>
+
+- **27 种语言中速度第 2、能效第 2。** 在上图的研究中，Rust 的执行时间是 C 的 1.04 倍，能耗是 C 的 1.03 倍，领先 C++（1.56 倍 / 1.34 倍），更远超常用的游戏脚本语言：C# 3.14 倍、JavaScript 6.52 倍、Python 71.90 倍、Lua 82.91 倍。
+- **没有垃圾回收。** 不会因为回收内存突然卡一帧，游戏和长时间渲染的帧时间都更稳定。
+- **编译器替 Agent 审代码。** 类型、所有权和借用检查在程序运行前就拦下空指针、数据竞争和内存错误。Agent 拿到的是精确的报错信息，而不是运行时崩溃，这正是 Agent 最擅长利用的反馈。
+- **一套工具链。** `cargo` 负责构建、测试和格式化，`Cargo.lock` 锁定所有依赖，不需要每个项目各选一套构建系统。
+- **代价也是真实的：编译慢、学习曲线陡。** 对人来说，这是不选 Rust 的主要原因；对 Agent 来说，严格反而是帮助，Bevy 的细节由 Playmand 补上。
+
+| | Rust | C++ | C# | GDScript | Python | TypeScript |
+| --- | --- | --- | --- | --- | --- | --- |
+| 执行时间（相对 C） | **1.04 倍** | 1.56 倍 | 3.14 倍 | 未测¹ | 71.90 倍 | 46.20 倍 |
+| 内存管理 | **所有权，无 GC** | 手动 | GC | 引用计数 | 引用计数 + GC | GC |
+| 运行前能发现的错误 | **类型、所有权、借用** | 类型 | 类型 | 可选类型 | 默认没有 | 类型（运行时擦除） |
+| 标准构建工具 | **cargo** | 没有（CMake 等） | dotnet | Godot 编辑器 | pip、uv 等 | npm、pnpm 等 |
+| 编译速度 | 慢 | 慢 | 快 | 无需编译 | 无需编译 | 快 |
+
+¹ GDScript 是解释型语言，不在该研究范围内。数据来自研究中 2017 年 Computer Language Benchmarks Game 的程序；运行 `python assets/make_langchart.py` 重新生成图表。
+
 ## 用 Playmand 做的演示
 
-下面两个演示都由 AI 编程 Agent（Claude Code）借助本技能编写，是实时运行的 Bevy 0.20 场景，逐帧录制而成。
+游戏和视频来自同一套代码：能实时游玩的 Bevy 场景，也能逐帧录制成无缝循环的动画。下面两个演示都由 AI 编程 Agent（Claude Code）借助本技能编写。
 
 | 鹈鹕骑自行车 | ECS 星系 |
 | :---: | :---: |
@@ -55,11 +79,16 @@
 
 源码：[`pelican.rs`](demos/src/bin/pelican.rs)、[`galaxy.rs`](demos/src/bin/galaxy.rs)。在 `demos/` 目录运行 `cargo run --bin pelican` 或 `cargo run --bin galaxy`。加上 `-- --record frames` 可录制一个无缝循环，再用 `python demos/encode.py frames out.webp` 生成动画。
 
-## 做一个游戏
+## 做一个游戏或视频
 
 ```text
 /playmand 做一个俯视角 2D 动作游戏，有冲刺、近战、追踪玩家的敌人、掉落和升级。
 明亮的像素风，打击反馈要有力。
+```
+
+```text
+/playmand 做一段 6 秒无缝循环动画：我们的 logo 由发光粒子汇聚而成，
+1920x1080，导出 MP4，另导出一份 WebP 放进 README。
 ```
 
 Codex 中使用 `$playmand`。安装只需一条命令（详见 [安装](#安装)）：
@@ -70,7 +99,7 @@ python scripts/install_skill.py --user --target both
 
 ## Playmand 是什么
 
-**Playmand 是 Rust + Bevy 游戏开发 Skill，目标是让 AI 更熟练地使用这套技术栈，把游戏设计实现为可玩的 2D / 3D 游戏。**
+**Playmand 是 Rust + Bevy 的游戏与视频 Skill，目标是让 AI 更熟练地使用这套技术栈，把设计实现为可玩的 2D / 3D 游戏，或逐帧录制的动画视频。**
 
 核心是 Rust + Bevy 的具体开发能力：正确使用当前版本的 API、组织 ECS 与玩法状态、接入模型动画、实现 UI 和渲染、定位性能问题并构建游戏。Codex、Claude Code 及其他支持技能的工具是使用它的宿主。
 
@@ -97,6 +126,7 @@ Bevy 的 ECS 架构围绕数据组织游戏逻辑，支持在条件允许时并�
 | [Blender 与 MCP](skills/playmand/references/blender-mcp.md) | 连接与能力发现、场景编辑、模型/材质/动画制作、GLB 导出及 Bevy 接入 |
 | [资源与动画](skills/playmand/references/assets-animation.md) | GLB 子场景、实例就绪、动画图/播放器接线、材质与骨骼实例隔离 |
 | [渲染、UI 与性能](skills/playmand/references/rendering.md) | 2D/3D 相机、灯光、图层、UI 布局、截图与预览相机生命周期 |
+| [演示动画与视频录制](skills/playmand/references/video.md) | 固定时钟逐帧录制、无缝循环、辉光、WebP/GIF/MP4 编码 |
 | [版本检查脚本](skills/playmand/scripts/inspect_bevy.py) | 从 Cargo 实际解析图报告 Bevy 版本、features、源码位置和文档入口 |
 | [可运行 Rust 示例](skills/playmand/examples/ecs-patterns/src/lib.rs) | 四项真实 Bevy ECS 行为测试，可用于理解 API 或缩小故障 |
 

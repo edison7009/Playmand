@@ -4,9 +4,10 @@
 
 # Playmand
 
-### Rust + Bevy Game Skill for AI Agents
+### Rust + Bevy Skill for AI Agents · Games & Videos
 
-Describe a game. Your coding agent builds it in **Rust + Bevy**,<br/>
+Describe a game or a video. Your coding agent builds it in **Rust + Bevy**,<br/>
+playable in real time or recorded frame by frame,<br/>
 and makes the models, materials and animations in **Blender through MCP**.
 
 [![Bevy 0.20.1](https://img.shields.io/badge/Bevy-0.20.1-eb6834)](https://bevy.org/)
@@ -44,9 +45,32 @@ and makes the models, materials and animations in **Blender through MCP**.
 Scores are a subjective comparison produced by an AI assistant, not a benchmark. Regenerate the chart with `python assets/make_scorecard.py`.
 </details>
 
+## Why Rust: C speed, and a compiler that checks the agent's work
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/langspeed-en-dark.svg">
+  <img alt="Execution time relative to C: Rust 1.04x, C++ 1.56x, Java 1.89x, Go 2.83x, C# 3.14x, JavaScript 6.52x, TypeScript 46.20x, Python 71.90x, Lua 82.91x." src="assets/langspeed-en-light.svg" width="100%">
+</picture>
+
+- **2nd fastest and 2nd most energy-efficient of 27 languages.** In the study above, Rust needed 1.04× C's time and 1.03× its energy. That puts it ahead of C++ (1.56× / 1.34×) and far ahead of common game scripting languages: C# 3.14×, JavaScript 6.52×, Python 71.90×, Lua 82.91×.
+- **No garbage collector.** Nothing pauses a frame to collect memory, so frame times stay steady in games and long renders.
+- **The compiler reviews the agent's code.** Types, ownership and the borrow checker reject null, data-race and memory errors before the program runs. The agent gets an exact error message to fix instead of a crash at runtime. That's the feedback loop agents work best with.
+- **One toolchain.** `cargo` builds, tests and formats, and `Cargo.lock` pins every dependency. No project has to pick its own build system.
+- **The costs are real: slow compiles and a steep learning curve.** For people, that's the main reason to avoid Rust. For an agent, the strictness is what helps, and Playmand supplies the Bevy specifics.
+
+| | Rust | C++ | C# | GDScript | Python | TypeScript |
+| --- | --- | --- | --- | --- | --- | --- |
+| Time vs C (study) | **1.04×** | 1.56× | 3.14× | not measured¹ | 71.90× | 46.20× |
+| Memory model | **ownership, no GC** | manual | GC | reference counting | ref counting + GC | GC |
+| Errors caught before running | **types, ownership, borrows** | types | types | optional types | none by default | types, erased at runtime |
+| Standard build tool | **cargo** | none (CMake, …) | dotnet | Godot editor | pip, uv, … | npm, pnpm, … |
+| Compile speed | slow | slow | fast | none needed | none needed | fast |
+
+¹ GDScript is interpreted and was not part of the study. Benchmarks are the study's 2017 Computer Language Benchmarks Game programs; regenerate the chart with `python assets/make_langchart.py`.
+
 ## Made with Playmand
 
-Both demos were written by an AI coding agent (Claude Code) using this skill. They're real-time Bevy 0.20 scenes, recorded frame by frame.
+Games and videos come from the same code: a Bevy scene you can play in real time can also be recorded frame by frame into a seamless animation. Both demos below were written by an AI coding agent (Claude Code) using this skill.
 
 | Pelican riding a bicycle | ECS galaxy |
 | :---: | :---: |
@@ -55,11 +79,16 @@ Both demos were written by an AI coding agent (Claude Code) using this skill. Th
 
 Source: [`pelican.rs`](demos/src/bin/pelican.rs) and [`galaxy.rs`](demos/src/bin/galaxy.rs). Run them from `demos/` with `cargo run --bin pelican` or `cargo run --bin galaxy`. Add `-- --record frames` to save one seamless loop, then `python demos/encode.py frames out.webp`.
 
-## Make a game
+## Make a game or a video
 
 ```text
 /playmand Build a top-down 2D action game with dashing, melee combat,
 enemies that chase you, loot and leveling. Bright pixel art, punchy hit feedback.
+```
+
+```text
+/playmand Make a 6-second seamless looping animation of our logo assembling
+from glowing particles, 1920x1080, exported as MP4 and as a WebP for the README.
 ```
 
 Use `$playmand` in Codex. Setup takes one command (see [Installation](#installation)):
@@ -70,7 +99,7 @@ python scripts/install_skill.py --user --target both
 
 ## What Playmand is
 
-**Playmand is a Rust + Bevy game development skill. It helps AI coding agents work fluently with this stack and turn game designs into playable 2D / 3D games.**
+**Playmand is a Rust + Bevy skill for games and videos. It helps AI coding agents work fluently with this stack and turn designs into playable 2D / 3D games, or into animations recorded frame by frame.**
 
 At its core is hands-on Rust + Bevy expertise: using the API of the version you actually have, structuring ECS and gameplay state, wiring up model animation, building UI and rendering, tracking down performance problems, and shipping builds. Codex, Claude Code and other skill-capable tools are the hosts that run it.
 
@@ -97,6 +126,7 @@ The cost is a steep learning curve: ownership, borrowing, lifetimes, plus Bevy's
 | [Blender and MCP](skills/playmand/references/blender-mcp.md) | Connection and capability discovery, scene editing, modeling/materials/animation, GLB export and Bevy integration |
 | [Assets and animation](skills/playmand/references/assets-animation.md) | GLB sub-scenes, instance readiness, animation graph/player wiring, per-instance material and skeleton isolation |
 | [Rendering, UI and performance](skills/playmand/references/rendering.md) | 2D/3D cameras, lighting, layers, UI layout, screenshots and preview camera lifecycle |
+| [Animation and video recording](skills/playmand/references/video.md) | Fixed-clock frame capture, seamless loops, bloom, WebP/GIF/MP4 encoding |
 | [Version inspection script](skills/playmand/scripts/inspect_bevy.py) | Reports Bevy version, features, source locations and docs links from Cargo's actual resolved graph |
 | [Runnable Rust example](skills/playmand/examples/ecs-patterns/src/lib.rs) | Four real Bevy ECS behavior tests, for understanding the API or narrowing down a bug |
 
