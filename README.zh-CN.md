@@ -6,9 +6,8 @@
 
 ### Rust + Bevy Skill for AI Agents · Games & Videos
 
-描述你想要的游戏或视频，编程 Agent 用 **Rust + Bevy** 把它做出来，<br/>
-既能实时游玩，也能逐帧录制成动画，<br/>
-并通过 **Blender MCP** 制作模型、材质和动画。
+让 AI 熟练地用 **Rust + Bevy** 做出游戏和视频，<br/>
+而且效果出色。
 
 [![Bevy 0.20.1](https://img.shields.io/badge/Bevy-0.20.1-eb6834)](https://bevy.org/)
 [![Rust 1.97.1](https://img.shields.io/badge/Rust-1.97.1-b7410e?logo=rust)](https://rust-lang.org/)

@@ -6,9 +6,8 @@
 
 ### Rust + Bevy Skill for AI Agents · Games & Videos
 
-Describe a game or a video. Your coding agent builds it in **Rust + Bevy**,<br/>
-playable in real time or recorded frame by frame,<br/>
-and makes the models, materials and animations in **Blender through MCP**.
+Make your AI agent fluent in **Rust + Bevy**,<br/>
+so the games and videos it builds actually look good.
 
 [![Bevy 0.20.1](https://img.shields.io/badge/Bevy-0.20.1-eb6834)](https://bevy.org/)
 [![Rust 1.97.1](https://img.shields.io/badge/Rust-1.97.1-b7410e?logo=rust)](https://rust-lang.org/)
