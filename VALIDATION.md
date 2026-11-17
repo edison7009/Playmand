@@ -1,4 +1,8 @@
-# Playmand 0.2.1 验证
+# Playmand 0.3.0 验证
+
+0.3.0 将技术基线升级到 **Bevy 0.20.1 / Rust 1.97.1**（Bevy 0.20.1 声明的最低 Rust 版本）。ECS 示例改用新版本依赖后重新执行；参考资料中出现的 Bevy 类型、方法与字段已逐项对照 0.20.1 crate 源码，并按官方 0.19→0.20 迁移指南补充调度弱顺序、观察者泛型、`NextState::set_if_different`、`Interaction` 弃用、默认字号与 2D 色调映射等变化。旧名 `SceneRoot` / `SceneInstanceReady` 仅作为旧教程识别保留。
+
+以下 0.2.1 说明保留为历史：
 
 0.2.1 新增 Blender + MCP 专项指南、入口路由和资产接入示例。本次只改变指令、文档、显示信息与包版本；执行安装/分发回归和 Skill 格式检查。下方四项 Bevy 执行记录来自 0.2.0，Rust 示例未改动。
 
@@ -12,8 +16,8 @@ Blender MCP 工具映射已核对上游文档与服务源码，也阅读了用�
 | --- | --- | --- |
 | Skill 格式 | 命名、frontmatter、占位符检查通过 | skill-creator 的 `quick_validate.py skills/playmand` |
 | Python 回归 | 13 项通过：双宿主安装、冲突保护、中文路径/旧编码、包完整性、版本图解析、构建缓存排除 | `python -B -m unittest discover -s tests -v` |
-| Rust / Bevy 真实执行 | Windows MSVC、Rust 1.95.0、Bevy 0.19.1，4 项 ECS 测试通过 | 在 `skills/playmand/examples/ecs-patterns` 执行 `cargo test --locked` |
-| 版本定位脚本 | 对真实示例执行成功，报告 Bevy 0.19.1、启用 features、源码目录及对应版本文档 | `python -B skills/playmand/scripts/inspect_bevy.py --manifest-path skills/playmand/examples/ecs-patterns/Cargo.toml --filter-platform x86_64-pc-windows-msvc` |
+| Rust / Bevy 真实执行 | 0.3.0：macOS aarch64、Rust 1.97.1、Bevy 0.20.1，4 项 ECS 测试与 `cargo fmt --check` 通过（2026-11-17）；0.2.x 曾在 Windows MSVC、Bevy 0.19.1 通过 | 在 `skills/playmand/examples/ecs-patterns` 执行 `cargo test --locked` |
+| 版本定位脚本 | 对真实示例执行成功，报告 Bevy 0.20.1、启用 features、源码目录及 docs.rs 0.20.1 文档 | `python -B skills/playmand/scripts/inspect_bevy.py --manifest-path skills/playmand/examples/ecs-patterns/Cargo.toml --filter-platform aarch64-apple-darwin` |
 | 分发内容 | ZIP 校验、SHA-256、包内相对链接与解压后双宿主安装通过；Cargo target / Python 缓存不进入安装和分发 | 包测试及 `python scripts/build_package.py` |
 
 Python 版本图测试覆盖传递依赖、同名不同版本、同版本不同来源、无解析图的错误输入。脚本以 Cargo 元数据为依据，匹配 bevy / bevy_ 名称，其中可能包含第三方 crate；报告整个工作区，不冒充单个游戏二进制的精确依赖列表。path/git 修改版应优先看报告中的源码，发布版文档可能与其不同。
@@ -25,9 +29,9 @@ Python 版本图测试覆盖传递依赖、同名不同版本、同版本不同�
 - 同值写入不重复触发下游变化处理，真正改变值会触发。
 - 连续三次进入/退出游玩状态，关卡实体每次创建一个、退出归零。
 
-示例使用真实 Bevy、精简 features 和无窗口 App，未启动 GPU。GLB、动画、UI 与截图指南的 API 已对照 0.19.1 官方 crate 源码/示例，尚未在本版独立图形工程中逐项运行。
+示例使用真实 Bevy、精简 features 和无窗口 App，未启动 GPU。GLB、动画、UI 与截图指南的 API 已对照 0.20.1 官方 crate 源码，尚未在本版独立图形工程中逐项运行。
 
-CI 配置覆盖 Windows / Linux 的 Python 3.9 / 3.13，以及两平台的 Rust 1.95.0 ECS 示例；远程实际结果以对应提交的 Actions 为准。本地 Windows 通过不替代 Linux 实测。
+CI 配置覆盖 Windows / Linux 的 Python 3.9 / 3.13，以及两平台的 Rust 1.97.1 ECS 示例；远程实际结果以对应提交的 Actions 为准。0.3.0 的 Bevy 示例仅在本地 macOS 实测，Windows / Linux 以 CI 结果为准。
 
 ## 历史宿主测试与尚未证明的收益
 

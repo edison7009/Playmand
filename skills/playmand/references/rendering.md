@@ -1,10 +1,10 @@
 # Bevy 渲染、UI 与性能
 
-基线：Bevy 0.19.1。先处理当前游戏具体画面，按项目版本核对字段。以下是源码核对过的技术索引，GPU 效果需在目标游戏运行验证。
+基线：Bevy 0.20.1。先处理当前游戏具体画面，按项目版本核对字段。以下是源码核对过的技术索引，GPU 效果需在目标游戏运行验证。
 
 ## 2D / 3D 的实际接线
 
-2D 从 `Camera2d` 配合 `Sprite` 或 `Mesh2d` 开始；3D 使用 `Camera3d`、`Mesh3d`、`MeshMaterial3d<StandardMaterial>`、`Transform`。现代 Bevy 通过 required components 补齐部分基础组件，不需要恢复旧教程里的各种 `*Bundle`。材质类型必须与渲染路径匹配。
+2D 从 `Camera2d` 配合 `Sprite` 或 `Mesh2d` 开始；3D 使用 `Camera3d`、`Mesh3d`、`MeshMaterial3d<StandardMaterial>`、`Transform`。0.20 中 `Camera2d` 默认 `Tonemapping::Linear`，`Camera3d` 默认启用 `DebandDither`；`Tonemapping::None` 变为完全直通，想保留旧“关闭色调曲线”效果改用 `Linear`。精灵改走 Mesh2d/Material2d 后端，同一 Z 值的精灵绘制顺序可能变化，需要稳定层次时显式区分 Z。现代 Bevy 通过 required components 补齐部分基础组件，不需要恢复旧教程里的各种 `*Bundle`。材质类型必须与渲染路径匹配。
 
 ```rust
 commands.spawn((
@@ -21,17 +21,17 @@ commands.spawn((
 | --- | --- |
 | 完全没有目标场景 | 活动 `Camera`、渲染目标、Transform/GlobalTransform、投影近平面/远平面、资源加载错误 |
 | 只有部分对象消失 | `Visibility` 与继承可见性、包围盒/剔除、`RenderLayers`、负缩放背面、透明模式 |
-| 几何存在但材质发黑 | 法线/贴图、灯光、曝光、环境光；0.19.1 全局环境光为 `GlobalAmbientLight` |
-| 阴影没有出现 | 当前版本灯光字段、材质/网格投射接收设置与阴影距离；0.19.1 灯光使用 `shadow_maps_enabled` |
+| 几何存在但材质发黑 | 法线/贴图、灯光、曝光、环境光；0.20.1 全局环境光为 `GlobalAmbientLight` |
+| 阴影没有出现 | 当前版本灯光字段、材质/网格投射接收设置与阴影距离；0.20.1 灯光使用 `shadow_maps_enabled` |
 | 场景出现两次/覆盖 | 多相机的 target、order、清屏设置与图层；先排除同一实体被多个 pass 绘制 |
 
-`RenderLayers` 不会沿实体层级自动继承。GLB 根设置图层后，实例内部 mesh 仍可能留在默认层；在实例就绪后处理实际后代。光源与相机/网格图层也要匹配。[RenderLayers 文档](https://docs.rs/bevy/0.19.1/bevy/camera/visibility/struct.RenderLayers.html) 解释交集语义。
+`RenderLayers` 不会沿实体层级自动继承。GLB 根设置图层后，实例内部 mesh 仍可能留在默认层；在实例就绪后处理实际后代。光源与相机/网格图层也要匹配。[RenderLayers 文档](https://docs.rs/bevy/0.20.1/bevy/camera/visibility/struct.RenderLayers.html) 解释交集语义。
 
 ## Bevy UI
 
-0.19.1 的布局主组件是 `Node`；文本使用 `Text`、`TextFont`、`TextColor` 等。不要混用旧版 `Style` / `TextBundle` 字段。布局用父容器约束表达，区分百分比尺寸与像素尺寸；绝对定位的装饰与内容流分开。
+0.20.1 的布局主组件是 `Node`；文本使用 `Text`、`TextFont`、`TextColor` 等。不要混用旧版 `Style` / `TextBundle` 字段。布局用父容器约束表达，区分百分比尺寸与像素尺寸；绝对定位的装饰与内容流分开。
 
-按钮可从 `Changed<Interaction>` 消费按下/悬停状态。主题更新只写改变的值，不在每帧重建整个 UI 树。焦点、文本编辑、提交错误和鼠标悬停是不同状态；英文字符输入通过不证明中文 IME 路径正常。
+0.20 中 `Interaction` 已弃用，按钮状态改读 `Hovered` / `Pressed`，`bevy::ui::widget::Button` 也让位于 `ui_widgets::Button`；旧项目仍用 `Changed<Interaction>` 时保持原写法即可，不为消除弃用警告整体迁移。`TextFont::default()` 字号由 20px 改为 `FontSize::Rem(1.)`，需要固定像素时写 `font_size: FontSize::Px(20.)`；可编辑输入需同时插入 `EditableText` 与 `TextInput`。主题更新只写改变的值，不在每帧重建整个 UI 树。焦点、文本编辑、提交错误和鼠标悬停是不同状态；英文字符输入通过不证明中文 IME 路径正常。
 
 读取实际尺寸用布局后的 `ComputedNode`，在 `PostUpdate` / `UiSystems::Layout` 之后；注意物理像素与 UI 逻辑坐标/DPI 换算。多相机情况下在相应 UI 根指定 `UiTargetCamera`，避免主 HUD 意外出现在角色预览纹理。
 
@@ -59,4 +59,4 @@ commands.spawn(Screenshot::primary_window()).observe(save_to_disk("capture.png")
 
 复用资产、收窄查询和关闭无用相机应服务于测到的问题。不要为提帧擅自减少用户要求的画质或内容。对比使用相同 release 配置、场景、硬件、窗口尺寸、前后台状态和预热条件；离线视频的编码帧率不能当运行帧率。
 
-查找入口：同版本官方 `examples/2d`、`examples/3d`、`examples/ui`、`examples/window/screenshot.rs`；[Bevy UI API](https://docs.rs/bevy/0.19.1/bevy/ui/index.html)。
+查找入口：同版本官方 `examples/2d`、`examples/3d`、`examples/ui`、`examples/window/screenshot.rs`；[Bevy UI API](https://docs.rs/bevy/0.20.1/bevy/ui/index.html)。

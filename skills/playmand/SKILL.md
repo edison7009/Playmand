@@ -34,7 +34,7 @@ python scripts/inspect_bevy.py --manifest-path /absolute/game/Cargo.toml
 | 选择逻辑/画面检查、玩家包资源路径 | [Bevy 验证与分发](references/verification.md) |
 | 跨页草稿、焦点、复杂布局、模型显示异常的补充诊断 | [症状索引](references/troubleshooting.md) |
 
-只读取相关资料。技术示例基线为 **Bevy 0.19.1 / Rust 1.95.0**，不代表应升级现有项目。不同版本先查该版本源码与迁移指南。
+只读取相关资料。技术示例基线为 **Bevy 0.20.1 / Rust 1.97.1**，不代表应升级现有项目。不同版本先查该版本源码与迁移指南。
 
 制作或修改 3D 资产时，优先使用宿主已连接的 Blender MCP 查询场景、操作目标对象并查看结果，再导出到 Bevy。先核对真实工具 schema、Blender 文件与版本；不要编造调用。没有连接时按 [接入指南](references/blender-mcp.md) 定位缺口，已有 Blender CLI 可承担离线处理。Playmand 安装器只安装技能，Blender 插件和 MCP 服务需在实际执行环境单独配置。
 

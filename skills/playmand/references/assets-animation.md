@@ -1,6 +1,6 @@
 # Bevy 资源、GLB 与动画
 
-基线：Bevy 0.19.1。这里的符号已对照同版本 crate 源码；本仓库的无窗口 ECS 示例不验证 GLB 或 GPU 渲染。
+基线：Bevy 0.20.1。这里的符号已对照同版本 crate 源码；本仓库的无窗口 ECS 示例不验证 GLB 或 GPU 渲染。
 
 需要制作或修正源模型、材质、骨骼和动画时，使用 [Blender 与 MCP](blender-mcp.md) 操作源资产并导出，再按本页接入 Bevy。
 
@@ -8,7 +8,7 @@
 
 `AssetServer::load` 立即返回句柄，不代表资产加载完成。`get_load_states` 可区分根资产、直接依赖和递归依赖状态；需要整条依赖就绪时使用 `is_loaded_with_dependencies`。加载失败应呈现错误或回退，不能一直停在 Loading。
 
-0.19.1 的 GLB 子场景加载写法：
+0.20.1 的 GLB 子场景加载写法：
 
 ```rust
 commands.spawn(WorldAssetRoot(
@@ -30,7 +30,7 @@ commands.spawn(WorldAssetRoot(
 
 ## 让动画真正播到当前模型
 
-0.19.1 的动画接线涉及：
+0.20.1 的动画接线涉及：
 
 1. 将目标 `Handle<AnimationClip>` 放入 `AnimationGraph::from_clip`，取得图和 `AnimationNodeIndex`；索引属于该图，不能拿任意动画数组下标代替。
 2. 把图放入 `Assets<AnimationGraph>`，保留返回句柄。
@@ -43,4 +43,4 @@ commands.spawn(WorldAssetRoot(
 
 模型导入完成后核对尺寸、坐标轴、原点、法线、透明模式和纹理颜色空间；先调整明确的问题，避免同时改相机、曝光和材质。没有目标风格素材时，根据宿主已有生成工具或用户提供的资产准备素材，并在游戏中实际检查。占位几何能验证机制，但不等于达到了用户指定的画面风格。
 
-API 与接线依据：[GLTF API](https://docs.rs/bevy/0.19.1/bevy/gltf/index.html)、[AssetServer](https://docs.rs/bevy/0.19.1/bevy/asset/struct.AssetServer.html)、同版本官方 `examples/animation/animated_mesh.rs` 与 `animated_mesh_control.rs`。通过 [版本定位工具](../scripts/inspect_bevy.py) 找到本地对应示例，避免依赖不断变化的 main 分支。
+API 与接线依据：[GLTF API](https://docs.rs/bevy/0.20.1/bevy/gltf/index.html)、[AssetServer](https://docs.rs/bevy/0.20.1/bevy/asset/struct.AssetServer.html)、同版本官方 `examples/animation/animated_mesh.rs` 与 `animated_mesh_control.rs`。通过 [版本定位工具](../scripts/inspect_bevy.py) 找到本地对应示例，避免依赖不断变化的 main 分支。
