@@ -2,7 +2,7 @@
 
 0.3.0 将技术基线升级到 **Bevy 0.20.1 / Rust 1.97.1**（Bevy 0.20.1 声明的最低 Rust 版本）。ECS 示例改用新版本依赖后重新执行；参考资料中出现的 Bevy 类型、方法与字段已逐项对照 0.20.1 crate 源码，并按官方 0.19→0.20 迁移指南补充调度弱顺序、观察者泛型、`NextState::set_if_different`、`Interaction` 弃用、默认字号与 2D 色调映射等变化。旧名 `SceneRoot` / `SceneInstanceReady` 仅作为旧教程识别保留。
 
-新增 [演示动画与视频录制](skills/playmand/references/video.md) 指南。固定时钟逐帧截图、无缝循环与 WebP 编码已用 `demos/` 的鹈鹕骑车（100 帧）和 ECS 星系（150 帧，4000 实体 + Bloom）在 macOS Metal 上实际录制，并逐帧检查首、中、末帧；MP4（ffmpeg）与 Blender 渲染路径未在本机执行。
+新增 [演示动画与视频录制](skills/playmand/references/video.md) 指南。固定时钟逐帧截图、无缝循环与 WebP 编码已用 `demos/` 的鹈鹕骑车（100 帧）和 ECS 星系（150 帧，4000 实体 + Bloom）在 macOS Metal 上实际录制，并逐帧检查首、中、末帧；另以 1920×1080 / 30fps 录制三个演示，并用 AVFoundation（`demos/encode_mp4.swift`）编码为 H.264 MP4，经系统解码生成缩略图确认可播放；录制中发现窗口被遮挡会产生黑帧，改为置顶窗口、单截图在途后逐帧检查无黑帧。ffmpeg 编码与 Blender 渲染路径未在本机执行。
 
 以下 0.2.1 说明保留为历史：
 

@@ -1,6 +1,6 @@
 # 演示动画与视频录制
 
-基线：Bevy 0.20.1。本页方法已用仓库 `demos/` 中的鹈鹕骑车与 ECS 星系两个场景在 macOS（Metal）实际录制验证；MP4 编码与 Blender 渲染路径未在该次验证中执行。
+基线：Bevy 0.20.1。本页方法已用仓库 `demos/` 中的鹈鹕骑车、ECS 星系与粒子图标三个场景在 macOS（Metal）实际录制验证，包括 1920×1080 / 30fps 录制和 AVFoundation 编码 MP4；ffmpeg 编码与 Blender 渲染路径未在该次验证中执行。
 
 用 Bevy 做视频，本质是把场景写成“时间 → 画面”的函数，再逐帧离线渲染。和游戏的区别只在时钟：游戏跟随真实时间与输入，录制跟随固定帧号。
 
@@ -36,7 +36,9 @@ commands
 - **预热**：前若干次 update 不截图（演示用 90 次），等管线编译、网格和材质就绪，避免开头出现空白帧。
 - **等落盘再退出**：最后一帧请求后，查询 `With<Capturing>` 为空再写 `AppExit::Success`。截图是 GPU 回读加异步保存，请求返回不代表文件已写入。
 - **精确像素**：窗口用 `WindowResolution::new(960, 540).with_scale_factor_override(1.0)`，否则 HiDPI 屏会按缩放因子输出 2 倍尺寸。
-- **回读开销**：[渲染指南](rendering.md) 提醒游戏中不要每帧截图；离线录制可以每帧截，因为画面只由帧号决定，录制变慢不会改变结果。
+- **回读开销**：[渲染指南](rendering.md) 提醒游戏中不要每帧截图；离线录制可以每帧截，因为画面只由帧号决定，录制变慢不会改变结果。高分辨率或带辉光的场景只保留一个截图在途：查询 `Or<(With<Screenshot>, With<Capturing>)>` 为空时才请求下一帧并推进帧号。
+- **高清输出**：保持场景逻辑尺寸不变，用 `WindowResolution::new(1920, 1080).with_scale_factor_override(2.0)` 让 960×540 的场景按 2 倍渲染，布局和文字位置不变。
+- **窗口被遮挡会出黑帧（macOS）**：录制窗口被其他窗口盖住后不再呈现，之后的截图全黑。录制时设 `window_level: WindowLevel::AlwaysOnTop`，并在录完后统计全黑帧（例如 Pillow `convert("L").getbbox() is None`），有黑帧就重录。
 - 录制期间会打开真实窗口并占用 GPU；无 GPU 的环境无法用此方法验证画面。
 
 ## 无缝循环
@@ -53,7 +55,8 @@ README 动图、社交媒体短片通常需要首尾无缝。让每个周期运�
 ## 编码
 
 - **动图（README、网页）**：Pillow 可直接生成循环 WebP 或 GIF，无需 ffmpeg。WebP 对辉光、渐变的画质和体积明显优于 GIF；扁平色块画面 GIF 也可接受。720×405、25fps、4–6 秒，WebP 约 1–2.5 MB。
-- **视频（MP4）**：有 ffmpeg 时，`ffmpeg -framerate 25 -i frame-%04d.png -c:v libx264 -pix_fmt yuv420p -crf 18 out.mp4`。`yuv420p` 保证浏览器与社交平台可播放；宽高需为偶数。
+- **视频（MP4，macOS 无需 ffmpeg）**：用 AVFoundation 的 `AVAssetWriter` 把 PNG 帧编码为 H.264，仓库 `demos/encode_mp4.swift` 可直接 `swiftc -O` 编译使用，支持重复循环以延长时长；1080p30 用 12–16 Mbps 画质已足够。
+- **视频（MP4，ffmpeg）**：有 ffmpeg 时，`ffmpeg -framerate 25 -i frame-%04d.png -c:v libx264 -pix_fmt yuv420p -crf 18 out.mp4`。`yuv420p` 保证浏览器与社交平台可播放；宽高需为偶数。
 - 先缩放再编码，用 LANCZOS 等高质量重采样；辉光场景降低质量参数前先比较暗部色带。
 
 ## 画面效果

@@ -23,6 +23,8 @@ so the games and videos it builds actually look good.
   <img src="assets/demo-icons.webp" alt="Two rolling 3D star nebulae, a ball, a globe, a ringed planet and a torus, assemble into the Claude and ChatGPT icons in four styles: vortex, rain, big bang and scan." width="100%">
 </p>
 
+<p align="center"><a href="https://github.com/edison7009/Playmand/releases/download/demo-videos/playmand-icons-1080p.mp4"><b>▶ Watch in 1080p (MP4)</b></a></p>
+
 <p align="center"><sub>Made with Playmand: 3,600 Bevy particles roll as round 3D nebulae, then assemble into the Claude and ChatGPT icons four different ways.<br/>Fan-made tribute. Not affiliated with or endorsed by Anthropic or OpenAI; Claude and ChatGPT are their respective trademarks.</sub></p>
 
 ## Why Bevy, now that agents write the code
@@ -81,6 +83,7 @@ Games and videos come from the same code: a Bevy scene you can play in real time
 | :---: | :---: |
 | <img src="assets/demo-pelican.webp" alt="A pelican pedaling a bicycle along a road, with scrolling clouds and hills" width="100%"> | <img src="assets/demo-galaxy.webp" alt="A glowing spiral galaxy of 4,000 stars rotating" width="100%"> |
 | The well-known "pelican riding a bicycle" LLM test, popularized by Simon Willison. Here it's an animated Bevy scene instead of an SVG: wheel spin matches road speed, and the legs follow the pedals with two-bone IK. | 4,000 star entities with HDR bloom, moved by one parallel ECS system. Inner stars do more laps, so the arms wind up and come back to their starting shape each loop. |
+| [▶ Watch in 1080p (MP4)](https://github.com/edison7009/Playmand/releases/download/demo-videos/playmand-pelican-1080p.mp4) | [▶ Watch in 1080p (MP4)](https://github.com/edison7009/Playmand/releases/download/demo-videos/playmand-galaxy-1080p.mp4) |
 
 Source: [`pelican.rs`](demos/src/bin/pelican.rs), [`galaxy.rs`](demos/src/bin/galaxy.rs) and the header animation [`icons.rs`](demos/src/bin/icons.rs). Run them from `demos/` with `cargo run --bin pelican`, `galaxy` or `icons`. Add `-- --record frames` to save one seamless loop, then `python demos/encode.py frames out.webp`.
 
