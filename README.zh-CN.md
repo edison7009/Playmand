@@ -44,6 +44,17 @@
 评分来自 AI 助手的主观对比，不是基准测试。修改分数后运行 `python assets/make_scorecard.py` 重新生成图表。
 </details>
 
+## 用 Playmand 做的演示
+
+下面两个演示都由 AI 编程 Agent（Claude Code）借助本技能编写，是实时运行的 Bevy 0.20 场景，逐帧录制而成。
+
+| 鹈鹕骑自行车 | ECS 星系 |
+| :---: | :---: |
+| <img src="assets/demo-pelican.webp" alt="一只鹈鹕在公路上蹬自行车，云和山丘在背景中滚动" width="100%"> | <img src="assets/demo-galaxy.webp" alt="由 4000 颗星星组成、正在旋转的发光螺旋星系" width="100%"> |
+| 著名的"鹈鹕骑自行车"大模型测试（由 Simon Willison 推广）。这里不是画一张 SVG，而是一个会动的 Bevy 场景：车轮转速和路面速度匹配，双腿用两段式 IK 跟着踏板转。 | 4000 个星星实体，HDR 辉光，由一个并行 ECS 系统驱动。内圈星星转得更快，旋臂会先卷紧，每轮结束时又回到初始形状。 |
+
+源码：[`pelican.rs`](demos/src/bin/pelican.rs)、[`galaxy.rs`](demos/src/bin/galaxy.rs)。在 `demos/` 目录运行 `cargo run --bin pelican` 或 `cargo run --bin galaxy`。加上 `-- --record frames` 可录制一个无缝循环，再用 `python demos/encode.py frames out.webp` 生成动画。
+
 ## 做一个游戏
 
 ```text

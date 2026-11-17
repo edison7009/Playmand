@@ -44,6 +44,17 @@ and makes the models, materials and animations in **Blender through MCP**.
 Scores are a subjective comparison produced by an AI assistant, not a benchmark. Regenerate the chart with `python assets/make_scorecard.py`.
 </details>
 
+## Made with Playmand
+
+Both demos were written by an AI coding agent (Claude Code) using this skill. They're real-time Bevy 0.20 scenes, recorded frame by frame.
+
+| Pelican riding a bicycle | ECS galaxy |
+| :---: | :---: |
+| <img src="assets/demo-pelican.webp" alt="A pelican pedaling a bicycle along a road, with scrolling clouds and hills" width="100%"> | <img src="assets/demo-galaxy.webp" alt="A glowing spiral galaxy of 4,000 stars rotating" width="100%"> |
+| The well-known "pelican riding a bicycle" LLM test, popularized by Simon Willison. Here it's an animated Bevy scene instead of an SVG: wheel spin matches road speed, and the legs follow the pedals with two-bone IK. | 4,000 star entities with HDR bloom, moved by one parallel ECS system. Inner stars do more laps, so the arms wind up and come back to their starting shape each loop. |
+
+Source: [`pelican.rs`](demos/src/bin/pelican.rs) and [`galaxy.rs`](demos/src/bin/galaxy.rs). Run them from `demos/` with `cargo run --bin pelican` or `cargo run --bin galaxy`. Add `-- --record frames` to save one seamless loop, then `python demos/encode.py frames out.webp`.
+
 ## Make a game
 
 ```text

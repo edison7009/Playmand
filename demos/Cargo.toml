@@ -1,0 +1,26 @@
+[package]
+name = "playmand-demos"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.97"
+publish = false
+license = "MIT"
+
+[workspace]
+
+[dependencies]
+bevy = "=0.20.1"
+
+[[bin]]
+name = "pelican"
+path = "src/bin/pelican.rs"
+
+[[bin]]
+name = "galaxy"
+path = "src/bin/galaxy.rs"
+
+[profile.dev]
+opt-level = 1
+
+[profile.dev.package."*"]
+opt-level = 3

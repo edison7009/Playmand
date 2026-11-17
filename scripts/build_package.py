@@ -12,7 +12,7 @@ VERSION = "0.3.0"
 
 def public_files():
     paths = [ROOT / "README.md", ROOT / "README.zh-CN.md", ROOT / "LICENSE", ROOT / "VALIDATION.md"]
-    for folder in ("assets", "skills", "docs", "scripts", "tests"):
+    for folder in ("assets", "demos", "skills", "docs", "scripts", "tests"):
         paths.extend(sorted(
             path for path in (ROOT / folder).rglob("*")
             if path.is_file() and not {"__pycache__", "target"}.intersection(path.relative_to(ROOT).parts)
