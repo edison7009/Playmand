@@ -1,4 +1,63 @@
+<div align="center">
+
+<img src="assets/logo.svg" alt="Playmand logo" width="112">
+
 # Playmand
+
+### Rust + Bevy Game Skill for AI Agents
+
+描述你想要的游戏，编程 Agent 用 **Rust + Bevy** 把它做出来，<br/>
+并通过 **Blender MCP** 制作模型、材质和动画。
+
+[![Bevy 0.20.1](https://img.shields.io/badge/Bevy-0.20.1-eb6834)](https://bevy.org/)
+[![Rust 1.97.1](https://img.shields.io/badge/Rust-1.97.1-b7410e?logo=rust)](https://rust-lang.org/)
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-skill-f5f5f5)](https://code.claude.com/docs/en/skills)
+[![Codex](https://img.shields.io/badge/Codex-skill-f5f5f5)](https://learn.chatgpt.com/docs/build-skills)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+
+[English](README.md) | **简体中文**
+
+</div>
+
+## 为什么在 AI 写代码的时代选 Bevy
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/scorecard-zh-dark.svg">
+  <img alt="AI 编码时代的引擎评分：Bevy 在 AI 代码开发友好度（9.5）和 ECS / 数据驱动（10）上领先，可视化编辑器（5）较弱。" src="assets/scorecard-zh-light.svg" width="100%">
+</picture>
+
+- **AI 代码开发友好度（9.5）和 ECS / 数据驱动（10）两项最高。** Bevy 游戏完全由 Rust 代码构成：组件、系统和状态都写在代码里，没有藏在场景文件或编辑器面板里、Agent 看不到的设置。Cargo 的编译和测试能立刻告诉 Agent 哪里写错了。
+- **短板是可视化编辑器（5），而 Agent 恰恰不需要它。** 编辑器是给人点来点去用的，Agent 直接写代码。画面这一侧由 Playmand 补上：用 Blender + MCP 做资产，用截图检查实际画面。
+- **2D 和 3D 都够用（8–8.5）。** 足以做完整游戏，不只是原型。
+
+<details>
+<summary>评分表格</summary>
+
+| 维度 | Bevy | Godot | Unity | Unreal |
+| --- | ---: | ---: | ---: | ---: |
+| AI 代码开发友好度 | **9.5** | 8.5 | 8 | 7.5 |
+| ECS / 数据驱动 | **10** | 7 | 8 | 8 |
+| 2D 游戏 | **8.5** | 9.5 | 8.5 | 7 |
+| 3D 游戏 | **8** | 8 | 9 | 10 |
+| 可视化编辑器 | **5** | 9.5 | 10 | 10 |
+
+评分来自 AI 助手的主观对比，不是基准测试。修改分数后运行 `python assets/make_scorecard.py` 重新生成图表。
+</details>
+
+## 做一个游戏
+
+```text
+/playmand 做一个俯视角 2D 动作游戏，有冲刺、近战、追踪玩家的敌人、掉落和升级。
+明亮的像素风，打击反馈要有力。
+```
+
+Codex 中使用 `$playmand`。安装只需一条命令（详见 [安装](#安装)）：
+
+```sh
+python scripts/install_skill.py --user --target both
+```
+
+## Playmand 是什么
 
 **Playmand 是 Rust + Bevy 游戏开发 Skill，目标是让 AI 更熟练地使用这套技术栈，把游戏设计实现为可玩的 2D / 3D 游戏。**
 
@@ -30,7 +89,7 @@ Bevy 的 ECS 架构围绕数据组织游戏逻辑，支持在条件允许时并�
 | [版本检查脚本](skills/playmand/scripts/inspect_bevy.py) | 从 Cargo 实际解析图报告 Bevy 版本、features、源码位置和文档入口 |
 | [可运行 Rust 示例](skills/playmand/examples/ecs-patterns/src/lib.rs) | 四项真实 Bevy ECS 行为测试，可用于理解 API 或缩小故障 |
 
-技术示例基线为 **Bevy 0.19.1 / Rust 1.95.0**。其他版本需查对应源码，已有项目不应为套用示例而升级。辅助资料按问题读取，完整入口见 [SKILL.md](skills/playmand/SKILL.md)。
+技术示例基线为 **Bevy 0.20.1 / Rust 1.97.1**。其他版本需查对应源码，已有项目不应为套用示例而升级。辅助资料按问题读取，完整入口见 [SKILL.md](skills/playmand/SKILL.md)。
 
 ## 安装
 
@@ -103,14 +162,14 @@ python -B -m unittest discover -s tests -v
 python scripts/build_package.py
 ```
 
-真实 Bevy 示例另行运行（需 Rust 1.95.0 工具链）：
+真实 Bevy 示例另行运行（需 Rust 1.97.1 工具链）：
 
 ```sh
 cd skills/playmand/examples/ecs-patterns
 cargo test --locked
 ```
 
-打包脚本使用明确的公开文件清单，生成 `dist/playmand-0.2.1.zip` 和 SHA-256 清单。GitHub Actions 在 Windows 与 Linux 上运行相同测试。宿主行为验证和引擎/GPU 验证的范围分别记录在 [VALIDATION.md](VALIDATION.md)，不以安装通过宣称任意游戏都能自动完成。
+打包脚本使用明确的公开文件清单，生成 `dist/playmand-0.3.0.zip` 和 SHA-256 清单。GitHub Actions 在 Windows 与 Linux 上运行相同测试。宿主行为验证和引擎/GPU 验证的范围分别记录在 [VALIDATION.md](VALIDATION.md)，不以安装通过宣称任意游戏都能自动完成。
 
 ## 许可证
 

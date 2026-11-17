@@ -7,12 +7,12 @@ import zipfile
 
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = "0.2.1"
+VERSION = "0.3.0"
 
 
 def public_files():
-    paths = [ROOT / "README.md", ROOT / "LICENSE", ROOT / "VALIDATION.md"]
-    for folder in ("skills", "docs", "scripts", "tests"):
+    paths = [ROOT / "README.md", ROOT / "README.zh-CN.md", ROOT / "LICENSE", ROOT / "VALIDATION.md"]
+    for folder in ("assets", "skills", "docs", "scripts", "tests"):
         paths.extend(sorted(
             path for path in (ROOT / folder).rglob("*")
             if path.is_file() and not {"__pycache__", "target"}.intersection(path.relative_to(ROOT).parts)
