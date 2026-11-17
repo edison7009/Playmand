@@ -1,0 +1,10 @@
+Playmand Sans and Playmand Sans Bold are subset, renamed derivatives of
+Noto Sans CJK SC (Google), licensed under the SIL Open Font License 1.1.
+"Noto" is a Reserved Font Name and is not used for these files.
+See OFL.txt.
+
+NotoSansMono-Regular.ttf is an unmodified copy of Noto Sans Mono
+(Google), also under the SIL Open Font License 1.1.
+
+The rendered film is a document created with these fonts. The OFL
+requirement does not apply to that document.
