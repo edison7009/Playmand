@@ -11,10 +11,10 @@
 name = "my_game"
 version = "0.1.0"
 edition = "2024"
-rust-version = "1.95"
+rust-version = "1.97"
 
 [dependencies]
-bevy = "=0.19.1"
+bevy = "=0.20.1"
 
 [profile.dev]
 opt-level = 1
@@ -41,7 +41,7 @@ cargo tree --locked -e features -i bevy
 
 在脚本输出的 `source_dir` 中用 `rg` 查符号；Bevy 顶层 crate 的 `examples/` 有对应版本示例，组件实现通常在 `bevy_ecs`、`bevy_ui`、`bevy_gltf` 等子 crate。先看函数签名、必要组件和插件注册，再改调用。E0432/E0599 常见于版本或 feature 不匹配；“System 不满足 trait”继续展开到具体参数，检查 Resource/Component derive、Query 项类型及借用。
 
-0.19.1 的场景根与就绪信号是 `WorldAssetRoot` / `WorldInstanceReady`；旧教程常见 `SceneRoot` / `SceneInstanceReady`。不能只靠类型重命名完成迁移。[官方迁移指南](https://bevy.org/learn/migration-guides/) 应与版本源码一起看。
+0.20.1 的场景根与就绪信号是 `WorldAssetRoot` / `WorldInstanceReady`；旧教程常见 `SceneRoot` / `SceneInstanceReady`。不能只靠类型重命名完成迁移。[官方迁移指南](https://bevy.org/learn/migration-guides/) 应与版本源码一起看。
 
 ## 编译与平台陷阱
 

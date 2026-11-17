@@ -2,11 +2,11 @@
 name = "playmand-ecs-patterns"
 version = "0.1.0"
 edition = "2024"
-rust-version = "1.95"
+rust-version = "1.97"
 publish = false
 license = "MIT"
 
 [workspace]
 
 [dependencies]
-bevy = { version = "=0.19.1", default-features = false, features = ["std", "bevy_state"] }
+bevy = { version = "=0.20.1", default-features = false, features = ["std", "bevy_state"] }
