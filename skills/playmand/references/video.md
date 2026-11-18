@@ -1,10 +1,48 @@
 # Animation and video recording
 
-Baseline: Bevy 0.20.1. This method was verified by recording three scenes from the repository's `demos/` (a pelican on a bicycle, an ECS galaxy and particle icons) on macOS (Metal), including 1920×1080 / 30 fps recording and MP4 encoding with AVFoundation. Encoding with ffmpeg and the Blender render path were not run in that verification.
+Baseline: Bevy 0.20.1. Window capture was verified by recording three scenes from the repository's `demos/` (a pelican on a bicycle, an ECS galaxy and particle icons) on macOS (Metal), including 1920×1080 / 30 fps. Offscreen capture, the soundtrack and MP4 encoding with audio were verified by the [motion-video example](../examples/motion-video/src/bin/render.rs) in 16:9, 9:16 and 1:1. Encoding with ffmpeg and the Blender render path were not run in that verification. For planning, captions, sound and formats of a video people will watch, see [Motion graphics and video production](motion-graphics.md).
 
 Making a video with Bevy means writing the scene as a function of "time → image" and rendering it frame by frame offline. The only difference from a game is the clock: a game follows real time and input, a recording follows a fixed frame number.
 
-## Fixed clock, one screenshot per frame
+## Offscreen rendering (recommended for video)
+
+Render into an image instead of a window, read each frame back once, and advance the clock only after that frame is on disk. Nothing can cover the output, it needs no display, and it was the fastest path in the example (270 frames of 1920×1080 in about 4 seconds on an Apple M4).
+
+```rust
+use bevy::{app::ScheduleRunnerPlugin, camera::RenderTarget, prelude::*, window::ExitCondition, winit::WinitPlugin};
+use bevy::render::{gpu_readback::{ReadbackComplete, ReadbackOnce}, render_resource::{TextureFormat, TextureUsages}};
+
+App::new()
+    .add_plugins(DefaultPlugins
+        .set(WindowPlugin { primary_window: None, exit_condition: ExitCondition::DontExit, ..default() })
+        .disable::<WinitPlugin>())
+    .add_plugins(ScheduleRunnerPlugin::run_loop(Duration::ZERO));
+
+// Setup: the camera draws into an image the GPU may copy from.
+let mut image = Image::new_target_texture(w, h, TextureFormat::Rgba8UnormSrgb, None);
+image.texture_descriptor.usage |= TextureUsages::COPY_SRC;
+let target = images.add(image);
+commands.spawn((Camera2d, RenderTarget::Image(target.clone().into())));
+
+// Each frame, after the scene was posed for frame `n` (one readback in flight):
+commands.spawn(ReadbackOnce::texture(target.clone()))
+    .observe(move |ev: On<ReadbackComplete>, mut rec: ResMut<Rec>| {
+        let pixels = unpad_rows(&ev.data, w, h, 4);   // see below
+        save_png(&rec.dir, n, &pixels);
+        rec.frame = n + 1;                             // only now does the clock move
+        rec.in_flight = false;
+    });
+```
+
+- **Row padding**: the readback pads every row to a multiple of 256 bytes. 1920×4 = 7680 bytes needs none, but 1080×4 = 4320 is padded to 4352, so 9:16 and square frames come out skewed unless you copy `width × 4` bytes out of each padded row.
+- **Warm-up**: render about 30 updates before the first capture so pipelines, fonts and the glyph atlas are ready.
+- The bytes are sRGB RGBA when the target is `Rgba8UnormSrgb`; write them straight to PNG.
+- Text with a CSS family list needs Bevy's `system_font_discovery` feature (and fontconfig on Linux); a font file loaded by handle does not.
+
+## Window capture, one screenshot per frame
+
+Use this when you need the real window (a game's own recording mode).
+
 
 Animation systems read one clock resource and never read `Time` directly:
 
@@ -69,8 +107,8 @@ Record `L · fps` frames, numbered 0 to `L · fps - 1`; frame `L · fps` itself 
 ## Encoding
 
 - **Animated images (README, web)**: Pillow can write a looping WebP or GIF directly, with no ffmpeg. WebP is clearly better than GIF in quality and size for glow and gradients; GIF is acceptable for flat-colour scenes. At 720×405, 25 fps and 4–6 seconds, WebP is about 1–2.5 MB.
-- **Video (MP4, macOS without ffmpeg)**: AVFoundation's `AVAssetWriter` can encode PNG frames to H.264; the repository's `demos/encode_mp4.swift` compiles with `swiftc -O` and can repeat the loop to lengthen the clip. 12–16 Mbps is enough for 1080p30.
-- **Video (MP4, ffmpeg)**: with ffmpeg, `ffmpeg -framerate 25 -i frame-%04d.png -c:v libx264 -pix_fmt yuv420p -crf 18 out.mp4`. `yuv420p` keeps it playable in browsers and on social platforms; width and height must be even.
+- **Video (MP4, macOS without ffmpeg)**: the skill's [`scripts/encode_mp4.swift`](../scripts/encode_mp4.swift) (`swiftc -O`) encodes PNG frames to H.264 with AVFoundation, adds a WAV soundtrack as AAC with `--audio`, repeats a loop with `--repeat`, and checks a finished file with `--verify`. 12–16 Mbps is enough for 1080p30.
+- **Video (MP4, ffmpeg)**: with ffmpeg, `ffmpeg -framerate 25 -i frame-%04d.png -c:v libx264 -pix_fmt yuv420p -crf 18 out.mp4`; add `-i soundtrack.wav -c:a aac -shortest` for sound. `yuv420p` keeps it playable in browsers and on social platforms; width and height must be even.
 - Scale before encoding with a high-quality filter such as LANCZOS; for glowing scenes, compare dark-area banding before lowering the quality setting.
 
 ## Visual effects

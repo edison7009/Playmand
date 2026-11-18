@@ -18,7 +18,8 @@ Bevy 是默认，但不是唯一选择。按用户要做的东西来选；用户
 | 调试面板、调参滑杆、检查器、游戏内工具 | egui（在 Bevy 中用 bevy_egui） | [egui](references/egui.md) |
 | 更看重轻量和快速构建、不需要 ECS 的小型 2D 游戏（或用户指定 Macroquad） | Macroquad，独立使用 | [Macroquad](references/macroquad.md) |
 | 自定义渲染通道、GPU 计算、不用引擎的渲染 | wgpu（Bevy 项目里用 Bevy 自带的） | [wgpu](references/wgpu.md) |
-| 视频、动图或循环动画 | Bevy 固定时钟录制，再编码 | [演示动画与视频录制](references/video.md) |
+| 给人看的视频：产品演示、讲解、数据故事、logo 片头、社交短视频 | 时间线（镜头、字幕、声音），Bevy 离屏渲染，再编码 | [动态图形与视频制作](references/motion-graphics.md)，再看[录制](references/video.md) |
+| 动图或循环动画 | Bevy 固定时钟录制，再编码 | [演示动画与视频录制](references/video.md) |
 | 现有网页或 Tauri/React 窗口里的特效 | Rust → WebAssembly + WebGL2，不用引擎 | [Rust → WebAssembly 网页特效](references/web-wasm.md) |
 | 模型、材质、骨骼、动画片段 | 通过 MCP 驱动 Blender，导出 GLB | [Blender 与 MCP](references/blender-mcp.md) |
 
@@ -59,7 +60,8 @@ python scripts/inspect_bevy.py --manifest-path /absolute/game/Cargo.toml
 | Blender 建模/材质/动画、MCP 连接与操作、GLB 导出并接入 Bevy | [Blender 与 MCP](references/blender-mcp.md) |
 | GLB、场景实例、动画、骨骼、共享资产与实例隔离 | [资源与动画](references/assets-animation.md) |
 | 2D/3D 相机、灯光、UI、黑屏、预览、多 pass、帧率 | [渲染、UI 与性能](references/rendering.md) |
-| 演示动画、视频/动图录制、无缝循环、辉光效果、编码 | [演示动画与视频录制](references/video.md) |
+| 规划视频：分镜、品牌包、节奏、16:9 / 9:16 / 1:1 安全区、字幕、音轨、导出检查 | [动态图形与视频制作](references/motion-graphics.md) |
+| 录制：离屏或窗口截图、无缝循环、辉光效果、编码 | [演示动画与视频录制](references/video.md) |
 | 在网页或 Tauri 应用里用 Rust → WebAssembly 与 WebGL2 做特效（卡包、全息卡片、体素小伙伴），不用引擎 | [Rust → WebAssembly 网页特效](references/web-wasm.md) |
 | 选择逻辑/画面检查、玩家包资源路径 | [Bevy 验证与分发](references/verification.md) |
 | 跨页草稿、焦点、复杂布局、模型显示异常的补充诊断 | [症状索引](references/troubleshooting.md) |
@@ -95,6 +97,18 @@ cargo test --locked
 ```sh
 cd examples/bevy-stack
 cargo test --locked
+```
+
+## 可执行的视频示例
+
+[视频示例](../../../skills/playmand/examples/motion-video/src/lib.rs) 把一条 9 秒宣传片写成时间线（镜头、交叉淡化、字幕、音效提示点、品牌包），不需要 GPU 就能测试；加上 `--features render` 后，可离屏渲染出 16:9、9:16 或 1:1 画幅，输出逐帧画面、WAV 音轨和 SRT 字幕。在 macOS 上，[`scripts/encode_mp4.swift`](../../../skills/playmand/scripts/encode_mp4.swift) 把它们合成带声音的 MP4 并校验成品。
+
+```sh
+cd examples/motion-video
+cargo test --locked                                                     # 时间线、字幕、音轨
+cargo run --release --features render -- portrait out                   # 逐帧画面 + soundtrack.wav + captions.srt
+swiftc -O ../../scripts/encode_mp4.swift -o encode_mp4
+./encode_mp4 out/portrait out/portrait.mp4 --audio out/portrait/soundtrack.wav && ./encode_mp4 --verify out/portrait.mp4
 ```
 
 ## 可执行的音频、界面、2D 与 GPU 示例

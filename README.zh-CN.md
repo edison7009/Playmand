@@ -97,6 +97,12 @@
 
 Rust 编译成 WebAssembly，在普通网页里直接用 WebGL2 绘制：没有游戏引擎，也没有 JavaScript 3D 库，代码仅 66 KB（WebAssembly + JS，gzip 压缩后）。沿随机裂口撕开铝箔卡包，五张卡从开口升起并依次翻成正面，每张都有真实厚度、随倾斜反光的透明涂层，以及浮在卡面上方的角色。角色用 Bevy 建模渲染。它最初是 [EchoBird](https://github.com/edison7009/EchoBird) 的 TokenPet 功能。源码与构建说明见 [`web/`](https://github.com/edison7009/Playmand/tree/main/web)，经验总结写进了技能的[网页特效指南](docs/zh-CN/playmand/references/web-wasm.md)。
 
+### 用 Rust 离屏渲染的宣传片
+
+<img src="assets/demo-promo.webp" alt="9 秒宣传片：Playmand 标题逐字弹入并迸发粒子，柱状图显示 Rust 的执行时间为 C 的 1.04 倍，并与 C++、C#、JavaScript 对比，最后是带播放按钮标志和 playmand.com 的结尾卡" width="100%">
+
+游戏式视频：字母带弹性落位，粒子踩着节拍迸发，每次切镜头有色带擦除，柱子回弹后停稳，结尾卡水波纹扩散。一条时间线（镜头、交叉淡化、字幕、音效提示点、品牌包），用 Bevy 不开窗口渲染出 16:9、9:16、1:1 三种画幅，带音轨和 SRT 字幕，编码成有声音的 MP4。每一帧画面、每一句字幕、每一声音效都来自同一组数字：每根柱子到位时的"嗒"声正好落在那一帧上。源码：[`motion-video`](skills/playmand/examples/motion-video/src/lib.rs)；方法：[动态图形与视频制作指南](docs/zh-CN/playmand/references/motion-graphics.md)。
+
 ## 做一个游戏或视频
 
 ```text
@@ -107,6 +113,12 @@ Rust 编译成 WebAssembly，在普通网页里直接用 WebGL2 绘制：没有�
 ```text
 /playmand 做一段 6 秒无缝循环动画：我们的 logo 由发光粒子汇聚而成，
 1920x1080，导出 MP4，另导出一份 WebP 放进 README。
+```
+
+```text
+/playmand 给我们的应用做一条 20 秒发布视频，要 16:9 和 9:16 两版：
+问题、产品、三个关键功能、结尾卡。用我们的品牌色和字体，
+字幕烧进画面，配一段轻音乐，每次切镜头有一声音效。
 ```
 
 Codex 中使用 `$playmand`。在 Claude Code 中一行即可安装（其他 Agent 见 [安装](#安装)）：
@@ -144,7 +156,8 @@ Bevy 的 ECS 架构围绕数据组织游戏逻辑，支持在条件允许时并�
 | [Blender 与 MCP](docs/zh-CN/playmand/references/blender-mcp.md) | 连接与能力发现、场景编辑、模型/材质/动画制作、GLB 导出及 Bevy 接入 |
 | [资源与动画](docs/zh-CN/playmand/references/assets-animation.md) | GLB 子场景、实例就绪、动画图/播放器接线、材质与骨骼实例隔离 |
 | [渲染、UI 与性能](docs/zh-CN/playmand/references/rendering.md) | 2D/3D 相机、灯光、图层、UI 布局、截图与预览相机生命周期 |
-| [演示动画与视频录制](docs/zh-CN/playmand/references/video.md) | 固定时钟逐帧录制、无缝循环、辉光、WebP/GIF/MP4 编码 |
+| [动态图形与视频制作](docs/zh-CN/playmand/references/motion-graphics.md) | 产品演示、讲解、数据故事和社交短视频：分镜、品牌包、节奏、16:9 / 9:16 / 1:1 安全区、字幕、音轨、导出检查 |
+| [演示动画与视频录制](docs/zh-CN/playmand/references/video.md) | 离屏或窗口录制、无缝循环、辉光、带声音的 WebP/GIF/MP4 编码 |
 | [用 Avian 做物理](docs/zh-CN/playmand/references/physics.md) | 刚体与碰撞体、碰撞事件与传感器、快速物体不穿墙、无窗口物理测试 |
 | [用 Kira 做音频](docs/zh-CN/playmand/references/audio.md) | 按分贝管理音乐和音效声道、淡入淡出与交叉淡化、暂停、无声卡检查电平 |
 | [用 egui 做调试面板](docs/zh-CN/playmand/references/egui.md) | bevy_egui 接入与调度、egui 版本对齐、点面板不影响游戏 |
@@ -153,7 +166,7 @@ Bevy 的 ECS 架构围绕数据组织游戏逻辑，支持在条件允许时并�
 | [Rust → WebAssembly 网页特效](docs/zh-CN/playmand/references/web-wasm.md) | 网页和 Tauri 应用里的 WebGL2 特效：首帧快、体积、隐藏时暂停、释放 GPU 内存 |
 | [游戏手感：奖励与升级](docs/zh-CN/playmand/references/feedback.md) | 分层反馈、预备与冲击、狂点时也跟得上、安全取消、减少动态效果 |
 | [版本检查脚本](skills/playmand/scripts/inspect_bevy.py) | 从 Cargo 实际解析图报告 Bevy 版本、features、源码位置和文档入口 |
-| [可运行示例](docs/zh-CN/playmand/README.md) | 在 Windows 和 Linux 的 CI 中运行的小型 Rust 工程：Bevy ECS、Avian 物理、Kira 音频、egui、Macroquad、wgpu、游戏手感，以及[整套技术栈一起运行](skills/playmand/examples/bevy-stack/src/lib.rs)（Bevy + Avian + Kira + egui 放在同一个应用里） |
+| [可运行示例](docs/zh-CN/playmand/README.md) | 在 Windows 和 Linux 的 CI 中运行的小型 Rust 工程：Bevy ECS、Avian 物理、Kira 音频、egui、Macroquad、wgpu、游戏手感、[视频](skills/playmand/examples/motion-video/src/lib.rs)，以及[整套技术栈一起运行](skills/playmand/examples/bevy-stack/src/lib.rs)（Bevy + Avian + Kira + egui 放在同一个应用里） |
 
 技术示例基线为 **Bevy 0.20.1 / Rust 1.97.1**。其他版本需查对应源码，已有项目不应为套用示例而升级。辅助资料按问题读取，完整入口见 [SKILL.md](skills/playmand/SKILL.md)（英文，Agent 实际加载的版本）；中文副本见 [docs/zh-CN/playmand](docs/zh-CN/playmand/README.md)。
 

@@ -42,6 +42,7 @@ Assets (Blender through MCP) and encoding (FFmpeg, AVFoundation) serve all three
 ### Alongside: craft
 
 - [x] **Game feel and feedback**: tiered rewards, squash and stretch, impact timing, safe cancellation and reduced motion, from the pet level-up effects; an engine-free example tests the beats and the player.
+- [x] **Video production**: videos people watch, not just recordings: a timeline of shots, captions and sound cues; a brand kit; 16:9, 9:16 and 1:1 with safe areas; offscreen rendering; a soundtrack and MP4 encoding with sound; checks on every export.
 
 ### Phase 3 — only when a real demo needs it
 

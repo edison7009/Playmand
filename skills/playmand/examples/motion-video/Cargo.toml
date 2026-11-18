@@ -1,0 +1,23 @@
+[package]
+name = "playmand-motion-video"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.97"
+publish = false
+license = "MIT"
+
+[workspace]
+
+[features]
+# The timeline, captions and audio are plain Rust and test without a GPU.
+# `render` adds Bevy and the offscreen renderer that writes PNG frames.
+render = ["dep:bevy", "dep:png"]
+
+[dependencies]
+bevy = { version = "=0.20.1", default-features = false, features = ["2d", "system_font_discovery"], optional = true }
+png = { version = "0.18", optional = true }
+
+[[bin]]
+name = "render"
+path = "src/bin/render.rs"
+required-features = ["render"]

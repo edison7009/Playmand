@@ -1,7 +1,7 @@
 ---
 name: playmand
 license: MIT
-description: Make games and visual work in Rust. Real-time 2D/3D games with Bevy (the default engine), physics with Avian, audio with Kira, debug tools with egui, small 2D games with Macroquad and custom GPU work with wgpu; frame-by-frame recorded animations and videos (product demos, logo animations, GIFs, promo clips); interactive WebGL2 effects for a web page or Tauri app in Rust compiled to WebAssembly (card packs, holographic cards, 3D companions); and models, materials and animation through Blender MCP. Picks the right Rust tool for the task and always follows the engine the user names. Covers version matching, ECS scheduling, input state, physics, GLB, UI rendering, performance, native and web builds, fixed-clock recording, seamless loops and encoding. Use when creating or improving a Rust game, an animated video, a web effect or their assets; when this skill is invoked to start a new game or animation and no engine is named, default to Rust + Bevy.
+description: Make games and visual work in Rust. Real-time 2D/3D games with Bevy (the default engine), physics with Avian, audio with Kira, debug tools with egui, small 2D games with Macroquad and custom GPU work with wgpu; videos rendered frame by frame (product demos, explainers, data stories, logo stings, social shorts in 16:9, 9:16 and 1:1, with captions and a soundtrack); interactive WebGL2 effects for a web page or Tauri app in Rust compiled to WebAssembly (card packs, holographic cards, 3D companions); and models, materials and animation through Blender MCP. Picks the right Rust tool for the task and always follows the engine the user names. Covers version matching, ECS scheduling, input state, physics, GLB, UI rendering, performance, native and web builds, offscreen recording, seamless loops and encoding. Use when creating or improving a Rust game, an animated video, a web effect or their assets; when this skill is invoked to start a new game or animation and no engine is named, default to Rust + Bevy.
 ---
 
 # Playmand
@@ -22,7 +22,8 @@ Bevy is the default, not the only choice. Pick by what the user is making; if th
 | Debug panels, tweak sliders, inspectors, in-game tools | egui (bevy_egui in Bevy) | [egui](references/egui.md) |
 | A small 2D game where a light, quick build matters more than ECS (or the user asks for Macroquad) | Macroquad, on its own | [Macroquad](references/macroquad.md) |
 | Custom render passes, GPU compute, rendering without an engine | wgpu (Bevy's own in a Bevy project) | [wgpu](references/wgpu.md) |
-| A video, GIF or looping animation | Bevy on a fixed clock, then an encoder | [Animation and video recording](references/video.md) |
+| A video people will watch: product demo, explainer, data story, logo sting, social short | A timeline (shots, captions, sound), Bevy offscreen, then an encoder | [Motion graphics and video production](references/motion-graphics.md), then [recording](references/video.md) |
+| A GIF or looping animation | Bevy on a fixed clock, then an encoder | [Animation and video recording](references/video.md) |
 | An effect inside an existing web page or Tauri/React window | Rust → WebAssembly + WebGL2, no engine | [Rust → WebAssembly web effects](references/web-wasm.md) |
 | Models, materials, rigs, animation clips | Blender through MCP, exported to GLB | [Blender and MCP](references/blender-mcp.md) |
 
@@ -63,7 +64,8 @@ Before the first build of a project (or after a toolchain, dependency or feature
 | Blender modelling/materials/animation, MCP connection and operations, exporting GLB into Bevy | [Blender and MCP](references/blender-mcp.md) |
 | GLB, scene instances, animation, skeletons, shared assets and per-instance changes | [Assets and animation](references/assets-animation.md) |
 | 2D/3D cameras, lighting, UI, black screens, previews, multiple passes, frame rate | [Rendering, UI and performance](references/rendering.md) |
-| Demo animations, video/GIF recording, seamless loops, bloom, encoding | [Animation and video recording](references/video.md) |
+| Planning a video: shot list, brand kit, timing, 16:9 / 9:16 / 1:1 safe areas, captions, soundtrack, export checks | [Motion graphics and video production](references/motion-graphics.md) |
+| Recording: offscreen or window capture, seamless loops, bloom, encoding | [Animation and video recording](references/video.md) |
 | Effects inside a web page or Tauri app with Rust → WebAssembly and WebGL2 (card packs, holographic cards, voxel companions), no engine | [Rust → WebAssembly web effects](references/web-wasm.md) |
 | Choosing logic or visual checks, asset paths in a player build | [Bevy verification and distribution](references/verification.md) |
 | Extra diagnosis for drafts across pages, focus, complex layouts, models that display wrong | [Symptom index](references/troubleshooting.md) |
@@ -99,6 +101,18 @@ The [stack example](examples/bevy-stack/src/lib.rs) puts Bevy 0.20, Avian 0.8, b
 ```sh
 cd examples/bevy-stack
 cargo test --locked
+```
+
+## Runnable video
+
+The [motion-video example](examples/motion-video/src/lib.rs) describes a 9-second promo as a timeline (shots, cross-fades, captions, sound cues, brand kit) and tests it without a GPU; with `--features render` it renders the promo offscreen in 16:9, 9:16 or 1:1 and writes the frames, a WAV soundtrack and SRT captions. On macOS, [`scripts/encode_mp4.swift`](scripts/encode_mp4.swift) turns them into an MP4 with sound and checks the result.
+
+```sh
+cd examples/motion-video
+cargo test --locked                                                     # timeline, captions, audio
+cargo run --release --features render -- portrait out                   # frames + soundtrack.wav + captions.srt
+swiftc -O ../../scripts/encode_mp4.swift -o encode_mp4
+./encode_mp4 out/portrait out/portrait.mp4 --audio out/portrait/soundtrack.wav && ./encode_mp4 --verify out/portrait.mp4
 ```
 
 ## Runnable audio, UI, 2D and GPU examples

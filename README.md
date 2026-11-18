@@ -97,6 +97,12 @@ Source: [`pelican.rs`](demos/src/bin/pelican.rs), [`galaxy.rs`](demos/src/bin/ga
 
 Rust compiled to WebAssembly, drawing straight into WebGL2 in an ordinary web page: no engine and no JavaScript 3D library, and only 66 KB of code (WebAssembly + JS, gzipped). Tear a foil pack along a random line; five cards rise out of the slit and turn face up, each with real thickness, a clear coat that catches the light as it tilts and a character floating above the art. The characters were modelled and rendered with Bevy. It began as the TokenPet feature of [EchoBird](https://github.com/edison7009/EchoBird). Source and build notes: [`web/`](https://github.com/edison7009/Playmand/tree/main/web); what we learned is in the skill's [web effects guide](skills/playmand/references/web-wasm.md).
 
+### A promo video, rendered offscreen in Rust
+
+<img src="assets/demo-promo.webp" alt="A 9-second promo: the Playmand title springs in letter by letter with a particle burst, a bar chart shows Rust at 1.04x C's execution time against C++, C# and JavaScript, then an end card with a play-button mark and playmand.com" width="100%">
+
+A game-style video: letters that spring into place, particles on the beat, wipes on every cut, bars that overshoot and settle, ripples on the end card. One timeline (shots, cross-fades, captions, sound cues, brand kit) rendered with Bevy without a window, in 16:9, 9:16 and 1:1, with a soundtrack and SRT captions, encoded to MP4 with sound. Every frame, caption and sound comes from the same numbers: the tick as each bar lands sits on that exact frame. Source: [`motion-video`](skills/playmand/examples/motion-video/src/lib.rs); method: the [motion graphics guide](skills/playmand/references/motion-graphics.md).
+
 ## Make a game or a video
 
 ```text
@@ -107,6 +113,12 @@ enemies that chase you, loot and leveling. Bright pixel art, punchy hit feedback
 ```text
 /playmand Make a 6-second seamless looping animation of our logo assembling
 from glowing particles, 1920x1080, exported as MP4 and as a WebP for the README.
+```
+
+```text
+/playmand Make a 20-second launch video for our app in 16:9 and 9:16:
+problem, product, three key features, end card. Our brand colours and font,
+burned-in captions, a soft music bed and a sound on each cut.
 ```
 
 Use `$playmand` in Codex. In Claude Code, install it in one line (see [Installation](#installation) for other agents):
@@ -144,7 +156,8 @@ The cost is a steep learning curve: ownership, borrowing, lifetimes, plus Bevy's
 | [Blender and MCP](skills/playmand/references/blender-mcp.md) | Connection and capability discovery, scene editing, modeling/materials/animation, GLB export and Bevy integration |
 | [Assets and animation](skills/playmand/references/assets-animation.md) | GLB sub-scenes, instance readiness, animation graph/player wiring, per-instance material and skeleton isolation |
 | [Rendering, UI and performance](skills/playmand/references/rendering.md) | 2D/3D cameras, lighting, layers, UI layout, screenshots and preview camera lifecycle |
-| [Animation and video recording](skills/playmand/references/video.md) | Fixed-clock frame capture, seamless loops, bloom, WebP/GIF/MP4 encoding |
+| [Motion graphics and video production](skills/playmand/references/motion-graphics.md) | Product demos, explainers, data stories and social shorts: shot list, brand kit, timing, 16:9 / 9:16 / 1:1 safe areas, captions, soundtrack, export checks |
+| [Animation and video recording](skills/playmand/references/video.md) | Offscreen or window capture, seamless loops, bloom, WebP/GIF/MP4 encoding with sound |
 | [Physics with Avian](skills/playmand/references/physics.md) | Bodies and colliders, collision events and sensors, fast objects not tunnelling, headless physics tests |
 | [Audio with Kira](skills/playmand/references/audio.md) | Music and effect channels in decibels, fades and crossfades, pausing, checking levels without a sound card |
 | [Debug panels with egui](skills/playmand/references/egui.md) | bevy_egui setup and schedule, matching egui versions, keeping panel clicks out of the game |
@@ -153,7 +166,7 @@ The cost is a steep learning curve: ownership, borrowing, lifetimes, plus Bevy's
 | [Web effects in Rust → WebAssembly](skills/playmand/references/web-wasm.md) | WebGL2 effects for web pages and Tauri apps: fast first paint, size, pausing when hidden, freeing GPU memory |
 | [Game feel: rewards and level-ups](skills/playmand/references/feedback.md) | Tiered feedback, anticipation and impact, rewards that keep up when players mash, cancelling safely, reduced motion |
 | [Version inspection script](skills/playmand/scripts/inspect_bevy.py) | Reports Bevy version, features, source locations and docs links from Cargo's actual resolved graph |
-| [Runnable examples](skills/playmand/SKILL.md) | Small Rust projects run in CI on Windows and Linux: Bevy ECS, Avian physics, Kira audio, egui, Macroquad, wgpu, game feel, and [the whole stack together](skills/playmand/examples/bevy-stack/src/lib.rs) (Bevy + Avian + Kira + egui in one app) |
+| [Runnable examples](skills/playmand/SKILL.md) | Small Rust projects run in CI on Windows and Linux: Bevy ECS, Avian physics, Kira audio, egui, Macroquad, wgpu, game feel, [video](skills/playmand/examples/motion-video/src/lib.rs), and [the whole stack together](skills/playmand/examples/bevy-stack/src/lib.rs) (Bevy + Avian + Kira + egui in one app) |
 
 The technical baseline is **Bevy 0.20.1 / Rust 1.97.1**. For other versions, check that version's source; existing projects should not be upgraded just to match the examples. Reference material is read on demand per problem; the full entry point is [SKILL.md](skills/playmand/SKILL.md).
 
