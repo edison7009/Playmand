@@ -34,6 +34,7 @@ python scripts/inspect_bevy.py --manifest-path /absolute/game/Cargo.toml
 | GLB、场景实例、动画、骨骼、共享资产与实例隔离 | [资源与动画](references/assets-animation.md) |
 | 2D/3D 相机、灯光、UI、黑屏、预览、多 pass、帧率 | [渲染、UI 与性能](references/rendering.md) |
 | 演示动画、视频/动图录制、无缝循环、辉光效果、编码 | [演示动画与视频录制](references/video.md) |
+| 在网页或 Tauri 应用里用 Rust → WebAssembly 与 WebGL2 做特效（卡包、全息卡片、体素小伙伴），不用引擎 | [Rust → WebAssembly 网页特效](references/web-wasm.md) |
 | 选择逻辑/画面检查、玩家包资源路径 | [Bevy 验证与分发](references/verification.md) |
 | 跨页草稿、焦点、复杂布局、模型显示异常的补充诊断 | [症状索引](references/troubleshooting.md) |
 

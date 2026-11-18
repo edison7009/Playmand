@@ -1,0 +1,18 @@
+[package]
+name = "playmand-web"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.93"
+license = "MIT"
+description = "Rust + WebAssembly WebGL2 demo: a tearable card pack, holographic cards and voxel pets."
+publish = false
+
+[workspace]
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen = "=0.2.127"
+js-sys = "=0.3.104"
+web-sys = { version = "=0.3.104", features = ["Window", "Document", "HtmlCanvasElement", "HtmlImageElement", "CanvasRenderingContext2d", "CanvasGradient", "WebGl2RenderingContext", "WebGlProgram", "WebGlShader", "WebGlBuffer", "WebGlTexture", "WebGlUniformLocation", "WebGlVertexArrayObject", "TextMetrics"] }

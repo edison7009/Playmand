@@ -1,7 +1,7 @@
 ---
 name: playmand
 license: MIT
-description: Build 2D/3D games in Rust + Bevy, or produce frame-by-frame recorded animations and videos (product demos, logo animations, GIFs, promo clips), and create, edit and inspect models, materials and animation through Blender MCP. Covers version matching, ECS scheduling, input state, GLB, UI rendering, performance, native builds, fixed-clock recording, seamless loops and encoding. Use when creating or improving a Bevy game, an animated video or their assets; when this skill is invoked to start a new game or animation and no engine is named, default to Rust + Bevy.
+description: Build 2D/3D games in Rust + Bevy, or produce frame-by-frame recorded animations and videos (product demos, logo animations, GIFs, promo clips), build interactive WebGL2 effects for a web page or Tauri app in Rust compiled to WebAssembly (card packs, holographic cards, 3D companions), and create, edit and inspect models, materials and animation through Blender MCP. Covers version matching, ECS scheduling, input state, GLB, UI rendering, performance, native builds, fixed-clock recording, seamless loops and encoding. Use when creating or improving a Bevy game, an animated video or their assets; when this skill is invoked to start a new game or animation and no engine is named, default to Rust + Bevy.
 ---
 
 # Playmand
@@ -38,6 +38,7 @@ It calls `cargo metadata` offline and locked, and prints the Bevy crates the wor
 | GLB, scene instances, animation, skeletons, shared assets and per-instance changes | [Assets and animation](references/assets-animation.md) |
 | 2D/3D cameras, lighting, UI, black screens, previews, multiple passes, frame rate | [Rendering, UI and performance](references/rendering.md) |
 | Demo animations, video/GIF recording, seamless loops, bloom, encoding | [Animation and video recording](references/video.md) |
+| Effects inside a web page or Tauri app with Rust → WebAssembly and WebGL2 (card packs, holographic cards, voxel companions), no engine | [Rust → WebAssembly web effects](references/web-wasm.md) |
 | Choosing logic or visual checks, asset paths in a player build | [Bevy verification and distribution](references/verification.md) |
 | Extra diagnosis for drafts across pages, focus, complex layouts, models that display wrong | [Symptom index](references/troubleshooting.md) |
 

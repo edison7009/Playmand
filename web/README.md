@@ -1,0 +1,25 @@
+# Playmand web demo
+
+A tearable card pack, five holographic cards and six voxel pets, written in Rust and compiled to WebAssembly. It draws with WebGL2 into ordinary page canvases; there is no engine and no JavaScript 3D library.
+
+**Live:** <https://edison7009.github.io/Playmand/>
+
+| Path | What it is |
+| --- | --- |
+| `src/lib.rs` | Pure logic: timing, springs, the tear path, card layout (tested natively) |
+| `src/scene.rs`, `src/shaders.rs` | The card pack scene: foil pack, tear, ribbons, cards with thickness, clear coat and hover tilt, showcase mode |
+| `src/pet_models.rs`, `pet_pose.rs`, `pet_mesh.rs`, `pet_scene.rs` | Voxel pets: models, poses, hatch, growth, ambient occlusion and edges |
+| `site/` | The published page, the built `pkg/` and the character art |
+
+It began as the TokenPet card pack and pets in [EchoBird](https://github.com/edison7009/EchoBird), which reveals one card; this demo turns all five face up. The characters were modelled and rendered with Bevy and matted into layers ([`site/art/SOURCE.md`](site/art/SOURCE.md)). Lessons learned are in the skill's [web effects guide](../skills/playmand/references/web-wasm.md).
+
+## Build
+
+```sh
+rustup target add wasm32-unknown-unknown --toolchain 1.93.0
+cargo install wasm-bindgen-cli --version 0.2.127
+./build.sh                       # writes site/pkg/playmand.js and playmand_bg.wasm
+python3 -m http.server -d site 8000
+```
+
+Then open <http://127.0.0.1:8000/>. Run the native tests with `cargo test`. In the page, `window.playmand.scene` and `window.playmand.pets` are available for poking at from the console.

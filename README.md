@@ -88,6 +88,14 @@ Games and videos come from the same code: a Bevy scene you can play in real time
 
 Source: [`pelican.rs`](demos/src/bin/pelican.rs), [`galaxy.rs`](demos/src/bin/galaxy.rs) and the header animation [`icons.rs`](demos/src/bin/icons.rs). Run them from `demos/` with `cargo run --bin pelican`, `galaxy` or `icons`. Add `-- --record frames` to save one seamless loop, then `python demos/encode.py frames out.webp`.
 
+### Live in your browser: card pack and voxel pets
+
+<a href="https://edison7009.github.io/Playmand/"><img src="assets/demo-cards.webp" alt="Five holographic cards with cartoon characters, fanned out side by side, one tilted toward the pointer" width="100%"></a>
+
+<p align="center"><a href="https://edison7009.github.io/Playmand/"><b>▶ Play it live</b></a> · tear the pack, hover the cards, hatch and grow the pets</p>
+
+Rust compiled to WebAssembly, drawing straight into WebGL2 in an ordinary web page: no engine and no JavaScript 3D library, 235 KB of WebAssembly (about 92 KB gzipped). Tear a foil pack along a random line; five cards rise out of the slit and turn face up, each with real thickness, a clear coat that catches the light as it tilts and a character floating above the art. Below, six voxel pets hatch from an egg and grow through three forms. The characters were modelled and rendered with Bevy. It began as the TokenPet feature of [EchoBird](https://github.com/edison7009/EchoBird). Source and build notes: [`web/`](web/); what we learned is in the skill's [web effects guide](skills/playmand/references/web-wasm.md).
+
 ## Make a game or a video
 
 ```text
