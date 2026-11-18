@@ -37,6 +37,32 @@ jobs:
       - run: cargo +1.97.1 fmt --manifest-path skills/playmand/examples/physics-avian/Cargo.toml --check
       - run: cargo +1.97.1 test --locked --manifest-path skills/playmand/examples/physics-avian/Cargo.toml
 
+  # Phase 2 pieces: audio, debug UI, a small 2D engine and the GPU API.
+  pieces:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
+    env:
+      # The GPU tests must really run in CI, not skip.
+      PLAYMAND_REQUIRE_GPU: "1"
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - run: rustup toolchain install 1.97.1 --profile minimal --component rustfmt --target wasm32-unknown-unknown
+      # Linux runners have no GPU: lavapipe is a software Vulkan driver.
+      # Windows has the WARP software adapter built in.
+      - if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y mesa-vulkan-drivers
+      - name: Format
+        shell: bash
+        run: for e in audio-kira ui-egui macroquad-2d gpu-wgpu; do cargo +1.97.1 fmt --manifest-path skills/playmand/examples/$e/Cargo.toml --check; done
+      - run: cargo +1.97.1 test --locked --manifest-path skills/playmand/examples/audio-kira/Cargo.toml
+      - run: cargo +1.97.1 test --locked --manifest-path skills/playmand/examples/ui-egui/Cargo.toml
+      - run: cargo +1.97.1 test --locked --manifest-path skills/playmand/examples/macroquad-2d/Cargo.toml --lib
+      - run: cargo +1.97.1 build --locked --release --target wasm32-unknown-unknown --manifest-path skills/playmand/examples/macroquad-2d/Cargo.toml
+      - run: cargo +1.97.1 test --locked --manifest-path skills/playmand/examples/gpu-wgpu/Cargo.toml
+
   web:
     runs-on: ubuntu-24.04
     steps:

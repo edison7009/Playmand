@@ -1,0 +1,15 @@
+[package]
+name = "playmand-gpu-wgpu"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.97"
+publish = false
+license = "MIT"
+
+[workspace]
+
+[dependencies]
+# The wgpu major version Bevy 0.20 renders with.
+wgpu = "30"
+pollster = "0.4"
+bytemuck = "1"

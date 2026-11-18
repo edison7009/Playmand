@@ -1,0 +1,13 @@
+[package]
+name = "playmand-ui-egui"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.97"
+publish = false
+license = "MIT"
+
+[workspace]
+
+[dependencies]
+# The egui that bevy_egui 0.43 (Bevy 0.20) is built on: not the newest egui.
+egui = "=0.36.0"

@@ -1,0 +1,18 @@
+[package]
+name = "playmand-macroquad-2d"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.97"
+publish = false
+license = "MIT"
+
+[workspace]
+
+[dependencies]
+macroquad = { version = "=0.4.16", default-features = false }
+
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+panic = "abort"
