@@ -94,7 +94,7 @@ Source: [`pelican.rs`](demos/src/bin/pelican.rs), [`galaxy.rs`](demos/src/bin/ga
 
 <p align="center"><a href="https://edison7009.github.io/Playmand/"><b>▶ Play it live</b></a> · tear the pack, hover the cards, hatch and grow the pets</p>
 
-Rust compiled to WebAssembly, drawing straight into WebGL2 in an ordinary web page: no engine and no JavaScript 3D library, 235 KB of WebAssembly (about 92 KB gzipped). Tear a foil pack along a random line; five cards rise out of the slit and turn face up, each with real thickness, a clear coat that catches the light as it tilts and a character floating above the art. Below, six voxel pets hatch from an egg and grow through three forms. The characters were modelled and rendered with Bevy. It began as the TokenPet feature of [EchoBird](https://github.com/edison7009/EchoBird). Source and build notes: [`web/`](web/); what we learned is in the skill's [web effects guide](skills/playmand/references/web-wasm.md).
+Rust compiled to WebAssembly, drawing straight into WebGL2 in an ordinary web page: no engine and no JavaScript 3D library, 235 KB of WebAssembly (about 92 KB gzipped). Tear a foil pack along a random line; five cards rise out of the slit and turn face up, each with real thickness, a clear coat that catches the light as it tilts and a character floating above the art. Below, six voxel pets hatch from an egg and grow through three forms. The characters were modelled and rendered with Bevy. It began as the TokenPet feature of [EchoBird](https://github.com/edison7009/EchoBird). Source and build notes: [`web/`](https://github.com/edison7009/Playmand/tree/main/web); what we learned is in the skill's [web effects guide](skills/playmand/references/web-wasm.md).
 
 ## Make a game or a video
 

@@ -94,7 +94,7 @@
 
 <p align="center"><a href="https://edison7009.github.io/Playmand/"><b>▶ 在线体验</b></a> · 撕开卡包、悬停卡片、孵化和养成宠物</p>
 
-Rust 编译成 WebAssembly，在普通网页里直接用 WebGL2 绘制：没有游戏引擎，也没有 JavaScript 3D 库，WebAssembly 235 KB（gzip 约 92 KB）。沿随机裂口撕开铝箔卡包，五张卡从开口升起并依次翻成正面，每张都有真实厚度、随倾斜反光的透明涂层，以及浮在卡面上方的角色。下方是六种体素宠物，从蛋里孵化，再成长为三个形态。角色用 Bevy 建模渲染。它最初是 [EchoBird](https://github.com/edison7009/EchoBird) 的 TokenPet 功能。源码与构建说明见 [`web/`](web/)，经验总结写进了技能的[网页特效指南](docs/zh-CN/playmand/references/web-wasm.md)。
+Rust 编译成 WebAssembly，在普通网页里直接用 WebGL2 绘制：没有游戏引擎，也没有 JavaScript 3D 库，WebAssembly 235 KB（gzip 约 92 KB）。沿随机裂口撕开铝箔卡包，五张卡从开口升起并依次翻成正面，每张都有真实厚度、随倾斜反光的透明涂层，以及浮在卡面上方的角色。下方是六种体素宠物，从蛋里孵化，再成长为三个形态。角色用 Bevy 建模渲染。它最初是 [EchoBird](https://github.com/edison7009/EchoBird) 的 TokenPet 功能。源码与构建说明见 [`web/`](https://github.com/edison7009/Playmand/tree/main/web)，经验总结写进了技能的[网页特效指南](docs/zh-CN/playmand/references/web-wasm.md)。
 
 ## 做一个游戏或视频
 
