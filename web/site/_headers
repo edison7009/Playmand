@@ -1,0 +1,8 @@
+# Cloudflare Pages: cache the built WebAssembly and art for a day; the page
+# itself is always revalidated so a new build shows up straight away.
+/pkg/*
+  Cache-Control: public, max-age=86400
+/art/*
+  Cache-Control: public, max-age=86400
+/index.html
+  Cache-Control: no-cache
