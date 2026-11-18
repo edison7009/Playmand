@@ -2,9 +2,23 @@
 
 > 这是 Playmand 技能的中文副本，供中文读者阅读。Agent 实际加载的是英文版 [`skills/playmand/SKILL.md`](../../../skills/playmand/SKILL.md)；两者内容一致，如有出入以英文版为准。
 
-Rust + Bevy 游戏与动画视频技能，包含 Blender 与 MCP 资产制作能力。Rust + Bevy 实现游戏运行与交互，也可把同一套场景代码按固定时钟逐帧录制成动图或视频；Blender 制作模型、材质、骨骼与动画，MCP 让 AI 操作和观察这些工具。Codex、Claude Code 等是宿主，不绑定特定模型或某一家 MCP 实现。
+用 Rust 做游戏和视觉创作的技能，默认引擎为 Bevy，并包含 Blender 与 MCP 资产制作能力。Rust + Bevy 实现游戏运行与交互，也可把同一套场景代码按固定时钟逐帧录制成动图或视频；Blender 制作模型、材质、骨骼与动画，MCP 让 AI 操作和观察这些工具。Codex、Claude Code 等是宿主，不绑定特定模型或某一家 MCP 实现。
 
 新建游戏默认 Rust + Bevy，按用户要求完成玩法、画面和内容。已有 Bevy 项目沿用锁定版本及结构；用户明确选择其他引擎时尊重选择，已有其他引擎项目不自动迁移。小样用于验证技术疑点，不替代用户要求的完整游戏，也不规定固定开发轮次或汇报模板。
+
+## 选择工具
+
+Bevy 是默认，但不是唯一选择。按用户要做的东西来选；用户指定了引擎或库就照用，绝不擅自把现有项目迁到别的引擎。
+
+| 用户要做的 | 使用 | 专项资料 |
+| --- | --- | --- |
+| 实时 2D/3D 游戏，或之后要录制的场景 | Rust + Bevy | [Rust 与 Bevy 工具链](references/bevy.md)、[ECS](references/ecs.md) |
+| 碰撞、刚体、触发区、掉落与堆叠 | 在 Bevy 里用 Avian（项目已在用 Rapier 时用 Rapier） | [物理](references/physics.md) |
+| 视频、动图或循环动画 | Bevy 固定时钟录制，再编码 | [演示动画与视频录制](references/video.md) |
+| 现有网页或 Tauri/React 窗口里的特效 | Rust → WebAssembly + WebGL2，不用引擎 | [Rust → WebAssembly 网页特效](references/web-wasm.md) |
+| 模型、材质、骨骼、动画片段 | 通过 MCP 驱动 Blender，导出 GLB | [Blender 与 MCP](references/blender-mcp.md) |
+
+表里没有的工具还没有经过验证的资料：按用户的选择来，查该 crate 对应版本的官方文档，并说明本技能对它没有测试过的指引。即将加入的内容见[路线图](https://github.com/edison7009/Playmand/blob/main/docs/zh-CN/roadmap.md)。
 
 ## 信任边界
 
@@ -30,6 +44,7 @@ python scripts/inspect_bevy.py --manifest-path /absolute/game/Cargo.toml
 | --- | --- |
 | 新建工程、版本/API 报错、编译慢、Windows 链接、插件兼容 | [Rust 与 Bevy 工具链](references/bevy.md) |
 | 组件/资源设计、Query 冲突、Commands 可见性、帧时序、输入、暂停/重开 | [ECS、调度与玩法状态](references/ecs.md) |
+| 刚体、碰撞体、碰撞事件、传感器、重力、固定步长与确定性物理 | [用 Avian 做物理](references/physics.md) |
 | Blender 建模/材质/动画、MCP 连接与操作、GLB 导出并接入 Bevy | [Blender 与 MCP](references/blender-mcp.md) |
 | GLB、场景实例、动画、骨骼、共享资产与实例隔离 | [资源与动画](references/assets-animation.md) |
 | 2D/3D 相机、灯光、UI、黑屏、预览、多 pass、帧率 | [渲染、UI 与性能](references/rendering.md) |
@@ -52,3 +67,12 @@ cargo test --locked
 ```
 
 命令从技能目录执行；首次需要获取依赖及满足示例 Rust 版本。示例不启动窗口，不能证明 GPU 画面、操作手感或游戏完成度。游戏任务仍使用项目的真实运行入口验证相应结果。
+
+## 可执行的物理示例
+
+[物理示例](../../../skills/playmand/examples/physics-avian/src/lib.rs) 不开窗口，直接在 Bevy 0.20 上运行真实的 Avian 0.8：掉下的球最终停在地面上；第一次碰撞出现在自由落体公式预测的时刻；传感器能看到物体穿过但不会挡住它；相同输入每次运行得到相同位置。
+
+```sh
+cd examples/physics-avian
+cargo test --locked
+```

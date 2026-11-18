@@ -4,13 +4,14 @@
 
 # Playmand
 
-### Rust + Bevy Skill for AI Agents · Games & Videos
+### Rust Game & Visual Creation Skill for AI Agents · Bevy by default
 
-Make your AI agent fluent in **Rust + Bevy**,<br/>
-so the games and videos it builds actually look good.
+Make your AI agent fluent in **Rust** for games, physics, web effects and video,<br/>
+with **Bevy** as the default engine, so what it builds actually looks good.
 
 [![Bevy 0.20.1](https://img.shields.io/badge/Bevy-0.20.1-eb6834)](https://bevy.org/)
 [![Rust 1.97.1](https://img.shields.io/badge/Rust-1.97.1-b7410e?logo=rust)](https://rust-lang.org/)
+[![Avian 0.8](https://img.shields.io/badge/Avian-0.8-4b7bec)](https://github.com/avianphysics/avian)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-skill-f5f5f5)](https://code.claude.com/docs/en/skills)
 [![Codex](https://img.shields.io/badge/Codex-skill-f5f5f5)](https://learn.chatgpt.com/docs/build-skills)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
@@ -116,7 +117,7 @@ Use `$playmand` in Codex. In Claude Code, install it in one line (see [Installat
 
 ## What Playmand is
 
-**Playmand is a Rust + Bevy skill for games and videos. It helps AI coding agents work fluently with this stack and turn designs into playable 2D / 3D games, or into animations recorded frame by frame.**
+**Playmand is a Rust skill for games and visual creation, with Bevy as the default engine. It helps AI coding agents pick the right Rust tool for the job (Bevy for games and recorded video, Avian for physics, Rust → WebAssembly for effects inside web pages and Tauri apps) and turn designs into playable 2D / 3D games, animations recorded frame by frame, or effects on a page. Where Playmand is heading: [roadmap](docs/roadmap.md).**
 
 At its core is hands-on Rust + Bevy expertise: using the API of the version you actually have, structuring ECS and gameplay state, wiring up model animation, building UI and rendering, tracking down performance problems, and shipping builds. Codex, Claude Code and other skill-capable tools are the hosts that run it.
 

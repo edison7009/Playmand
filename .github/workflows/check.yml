@@ -34,6 +34,8 @@ jobs:
       - run: rustup toolchain install 1.97.1 --profile minimal --component rustfmt
       - run: cargo +1.97.1 fmt --manifest-path skills/playmand/examples/ecs-patterns/Cargo.toml --check
       - run: cargo +1.97.1 test --locked --manifest-path skills/playmand/examples/ecs-patterns/Cargo.toml
+      - run: cargo +1.97.1 fmt --manifest-path skills/playmand/examples/physics-avian/Cargo.toml --check
+      - run: cargo +1.97.1 test --locked --manifest-path skills/playmand/examples/physics-avian/Cargo.toml
 
   web:
     runs-on: ubuntu-24.04
