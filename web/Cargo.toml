@@ -9,6 +9,10 @@ publish = false
 
 [workspace]
 
+[features]
+# The voxel pets scene (PetScene). Off for the card pack page.
+pets = []
+
 [lib]
 crate-type = ["cdylib", "rlib"]
 

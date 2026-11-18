@@ -376,6 +376,7 @@ void main() {
 }
 "#;
 
+#[cfg(feature = "pets")]
 /// Voxel pets: three.js-style Lambert light (key, fill, ambient), with soft
 /// per-vertex occlusion and a thin highlight on the shape's outer corners.
 /// Growth cells reuse it with one instanced cube per cell.
@@ -420,6 +421,7 @@ void main() {
 }
 "#;
 
+#[cfg(feature = "pets")]
 pub const PET_FS: &str = r#"#version 300 es
 precision highp float;
 in vec3 v_normal;

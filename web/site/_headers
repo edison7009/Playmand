@@ -4,5 +4,7 @@
   Cache-Control: public, max-age=86400
 /art/*
   Cache-Control: public, max-age=86400
-/index.html
+/
+  Cache-Control: no-cache
+/zh/
   Cache-Control: no-cache

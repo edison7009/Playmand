@@ -1,6 +1,6 @@
 # 在网页或 Tauri 应用里用 Rust → WebAssembly 做特效
 
-验证来源：本仓库 [`web/`](https://github.com/edison7009/Playmand/tree/main/web) 中的卡包、全息卡片和体素宠物（在线演示：<https://edison7009.github.io/Playmand/>），最初用于 EchoBird 桌面应用。Rust 1.93、wasm-bindgen 0.2.127、web-sys 0.3.104、WebGL2；在 macOS 的 Chromium 系浏览器中检查过，Windows WebView2 与 Linux WebKitGTK 未检查。
+验证来源：本仓库 [`web/`](https://github.com/edison7009/Playmand/tree/main/web) 中的卡包、全息卡片和体素宠物（在线演示：<https://playmand.com/zh/>），最初用于 EchoBird 桌面应用。Rust 1.93、wasm-bindgen 0.2.127、web-sys 0.3.104、WebGL2；在 macOS 的 Chromium 系浏览器中检查过，Windows WebView2 与 Linux WebKitGTK 未检查。
 
 当特效要放进现有网页或 React/Tauri 窗口时用这条路线：奖励动画、3D 小伙伴、产品展示。游戏和录制视频仍默认用 Bevy；这里整套引擎太重，而布局、文字和无障碍本来就归宿主页面管。
 
@@ -33,6 +33,10 @@
 
 用 Bevy 网格建模角色，每个图层（身体、眼睛、表情）用正交相机分别在黑底和白底各渲染一次，从差值算出精确透明度。输出小体积的 WebP 图层，由浏览器叠加，眼睛可以眨、可以跟着看。
 
+## 首屏
+
+立即显示一个 CSS 加载状态；用 `modulepreload` 和 `preload as=fetch crossorigin` 预载模块与 `.wasm`；只等首帧需要的图片，其余在后台加载；资源到齐后同步画出第一帧，不等 `requestAnimationFrame`。动画循环只保留一个。
+
 ## 检查方法
 
 - 加固定时钟的测试模式：页面停掉自己的循环，由脚本以 `t += 16.7` 调用 `frame(t)`，每次截图都可复现。嵌入式浏览器面板可能把 `requestAnimationFrame` 限到每秒几帧，不要用它判断节奏。
@@ -41,7 +45,7 @@
 
 ## 体积
 
-发布构建用 `opt-level = "s"`、LTO、单个 codegen unit、`panic = "abort"`（如果不能改工作区 profile，就在构建脚本里用 `CARGO_PROFILE_RELEASE_*` 环境变量设置），再用 `wasm-bindgen --remove-name-section --remove-producers-section`。这个演示因此从 194 KB 降到 134 KB；加上体素宠物后为 235 KB，gzip 约 92 KB，而它取代的 three.js 场景是 516 KB（gzip 133 KB）。
+发布构建用 `opt-level = "s"`、LTO、单个 codegen unit、`panic = "abort"`（如果不能改工作区 profile，就在构建脚本里用 `CARGO_PROFILE_RELEASE_*` 环境变量设置），再用 `wasm-bindgen --remove-name-section --remove-producers-section`。这个演示因此从 194 KB 降到 134 KB；线上卡包页面是 148 KB 的 WebAssembly 加 34 KB 的 JS，gzip 后合计 66 KB。体素宠物放在 Cargo feature 后面（`--features pets`），带上后为 235 KB（gzip 92 KB），而它们取代的 three.js 场景是 516 KB（gzip 133 KB）。可选场景都放进 feature，每个页面只带自己要画的东西。
 
 ## 踩过的坑
 

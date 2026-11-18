@@ -1081,7 +1081,12 @@ impl SupplyScene {
         ctx.fill_text(&self.copy[2], w * 0.075, h * 0.098)?;
         letter_spacing(&ctx, "0px");
         ctx.set_fill_style_str("#ffffff");
+        // The wordmark fills the width beside the mark, shrinking for long names.
+        let logo_room = if self.logo.is_some() { 132.0 } else { 0.0 };
         ctx.set_font(&format!("800 118px {FONT}"));
+        let natural = ctx.measure_text(&self.copy[0])?.width();
+        let brand_px = (118.0 * (w * 0.86 - logo_room) / natural.max(1.0)).min(118.0);
+        ctx.set_font(&format!("800 {brand_px:.0}px {FONT}"));
         let mut brand_x = w * 0.07;
         if let Some(logo) = &self.logo {
             // The bird mark, about the height of the wordmark.
@@ -1100,7 +1105,8 @@ impl SupplyScene {
         ctx.set_font(&format!("700 30px {FONT}"));
         letter_spacing(&ctx, "5px");
         ctx.set_text_align("right");
-        ctx.fill_text(&self.copy[1], w * 0.93, h * 0.215)?;
+        // The kind of pack sits on its own line under the wordmark.
+        ctx.fill_text(&self.copy[1], w * 0.93, h * 0.305)?;
         letter_spacing(&ctx, "0px");
         ctx.set_font(&format!("600 40px {FONT}"));
         ctx.set_fill_style_str("rgba(255,255,255,0.9)");

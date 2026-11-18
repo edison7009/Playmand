@@ -85,6 +85,7 @@ impl Program {
     pub fn i1(&mut self, gl: &Gl, name: &'static str, v: i32) {
         gl.uniform1i(self.loc(gl, name).as_ref(), v);
     }
+    #[cfg(feature = "pets")]
     pub fn f3v(&mut self, gl: &Gl, name: &'static str, v: &[f32]) {
         gl.uniform3fv_with_f32_array(self.loc(gl, name).as_ref(), v);
     }

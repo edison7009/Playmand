@@ -9,19 +9,24 @@
 //! path and card layout); `scene`, `pet_scene` and `gl` hold the WebGL side.
 
 pub mod mat;
+// The voxel pets are optional (`--features pets`): the card pack page does
+// not need them, and leaving them out keeps the WebAssembly small.
+#[cfg(feature = "pets")]
 pub mod pet_mesh;
+#[cfg(feature = "pets")]
 pub mod pet_models;
+#[cfg(feature = "pets")]
 pub mod pet_pose;
 
 #[cfg(target_arch = "wasm32")]
 mod gl;
-#[cfg(target_arch = "wasm32")]
+#[cfg(all(target_arch = "wasm32", feature = "pets"))]
 mod pet_scene;
 #[cfg(target_arch = "wasm32")]
 mod scene;
 #[cfg(target_arch = "wasm32")]
 mod shaders;
-#[cfg(target_arch = "wasm32")]
+#[cfg(all(target_arch = "wasm32", feature = "pets"))]
 pub use pet_scene::PetScene;
 #[cfg(target_arch = "wasm32")]
 pub use scene::SupplyScene;

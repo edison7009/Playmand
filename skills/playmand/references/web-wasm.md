@@ -1,6 +1,6 @@
 # Rust → WebAssembly effects inside a web or Tauri app
 
-Verified by building the card pack, holographic cards and voxel pets in this repository's [`web/`](https://github.com/edison7009/Playmand/tree/main/web) (live: <https://edison7009.github.io/Playmand/>), first shipped inside the EchoBird desktop app. Rust 1.93, wasm-bindgen 0.2.127, web-sys 0.3.104, WebGL2; checked in Chromium-based browsers on macOS. Windows WebView2 and Linux WebKitGTK were not checked.
+Verified by building the card pack, holographic cards and voxel pets in this repository's [`web/`](https://github.com/edison7009/Playmand/tree/main/web) (live: <https://playmand.com/>), first shipped inside the EchoBird desktop app. Rust 1.93, wasm-bindgen 0.2.127, web-sys 0.3.104, WebGL2; checked in Chromium-based browsers on macOS. Windows WebView2 and Linux WebKitGTK were not checked.
 
 Use this when the effect lives inside an existing page or React/Tauri window: a reward animation, a 3D companion, a product showcase. Bevy is still the default for a game or a recorded video; here a whole engine would be too heavy, and the host page already owns layout, text and accessibility.
 
@@ -33,6 +33,10 @@ Dump the original's output (every voxel, pivot, generated track) to text in Node
 
 Model characters as Bevy meshes, render each layer (body, eyes, expressions) twice with an orthographic camera, on black and on white, and recover exact alpha from the difference. Ship small WebP layers; the browser composites them, so eyes can blink and look around.
 
+## First paint
+
+Show a CSS loading state at once, preload the module and the `.wasm` (`modulepreload`, `preload as=fetch crossorigin`), wait only for the art the first frame needs, load the rest in the background, and draw the first frame synchronously instead of waiting for `requestAnimationFrame`. Run exactly one animation loop.
+
 ## Checking it
 
 - Add a fixed-clock test mode: the page stops its own loop and a script calls `frame(t)` with `t += 16.7`, so every capture is repeatable. Embedded browser panes may throttle `requestAnimationFrame` to a few frames per second; do not judge timing from them.
@@ -41,7 +45,7 @@ Model characters as Bevy meshes, render each layer (body, eyes, expressions) twi
 
 ## Size
 
-Release build with `opt-level = "s"`, LTO, one codegen unit and `panic = "abort"` (set as `CARGO_PROFILE_RELEASE_*` environment variables in the build script if the workspace profile must not change), then `wasm-bindgen --remove-name-section --remove-producers-section`. That took this demo from 194 KB to 134 KB; with the voxel pets added it is 235 KB, about 92 KB gzipped, compared with 516 KB (133 KB gzipped) for the three.js scene it replaced.
+Release build with `opt-level = "s"`, LTO, one codegen unit and `panic = "abort"` (set as `CARGO_PROFILE_RELEASE_*` environment variables in the build script if the workspace profile must not change), then `wasm-bindgen --remove-name-section --remove-producers-section`. That took this demo from 194 KB to 134 KB; the live card pack page ships 148 KB of WebAssembly plus 34 KB of JS, 66 KB together gzipped. The voxel pets sit behind a Cargo feature (`--features pets`); with them it is 235 KB (92 KB gzipped), against 516 KB (133 KB gzipped) for the three.js scene they replaced. Keep optional scenes behind features so each page ships only what it draws.
 
 ## Pitfalls met along the way
 

@@ -1,115 +1,3 @@
-export class PetScene {
-    __destroy_into_raw() {
-        const ptr = this.__wbg_ptr;
-        this.__wbg_ptr = 0;
-        PetSceneFinalization.unregister(this);
-        return ptr;
-    }
-    free() {
-        const ptr = this.__destroy_into_raw();
-        wasm.__wbg_petscene_free(ptr, 0);
-    }
-    dispose() {
-        wasm.petscene_dispose(this.__wbg_ptr);
-    }
-    /**
-     * @param {HTMLCanvasElement} canvas
-     */
-    constructor(canvas) {
-        const ret = wasm.petscene_new(canvas);
-        if (ret[2]) {
-            throw takeFromExternrefTable0(ret[1]);
-        }
-        this.__wbg_ptr = ret[0];
-        PetSceneFinalization.register(this, this.__wbg_ptr, this);
-        return this;
-    }
-    /**
-     * Draws the current pet into a `width` x `height` CSS-pixel canvas.
-     * @param {number} width
-     * @param {number} height
-     * @param {number} dpr
-     */
-    render(width, height, dpr) {
-        const ret = wasm.petscene_render(this.__wbg_ptr, width, height, dpr);
-        if (ret[1]) {
-            throw takeFromExternrefTable0(ret[0]);
-        }
-    }
-    /**
-     * @param {number} dx
-     * @param {number} dy
-     */
-    rotate(dx, dy) {
-        wasm.petscene_rotate(this.__wbg_ptr, dx, dy);
-    }
-    /**
-     * The light theme needs softer, fuller light (thumbnails keep studio light).
-     * @param {boolean} daylight
-     */
-    set_daylight(daylight) {
-        wasm.petscene_set_daylight(this.__wbg_ptr, daylight);
-    }
-    /**
-     * The running animation ("still", "level", "interact", "crack",
-     * "hatch" or "grow") and how far along it is.
-     * @param {string} mode
-     * @param {number} progress
-     */
-    set_mode(mode, progress) {
-        const ptr0 = passStringToWasm0(mode, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-        const len0 = WASM_VECTOR_LEN;
-        wasm.petscene_set_mode(this.__wbg_ptr, ptr0, len0, progress);
-    }
-    /**
-     * @param {boolean} reduced
-     */
-    set_reduced_motion(reduced) {
-        wasm.petscene_set_reduced_motion(this.__wbg_ptr, reduced);
-    }
-    /**
-     * The pet to show when nothing is animating.
-     * @param {string} kind
-     * @param {number} stage
-     * @param {number} color
-     */
-    show(kind, stage, color) {
-        const ptr0 = passStringToWasm0(kind, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-        const len0 = WASM_VECTOR_LEN;
-        wasm.petscene_show(this.__wbg_ptr, ptr0, len0, stage, color);
-    }
-    /**
-     * A 96 px three-quarter portrait as a PNG data URL. Call `render`
-     * afterwards to put the main view back.
-     * @param {string} kind
-     * @param {number} stage
-     * @param {number} color
-     * @param {number} dpr
-     * @returns {string}
-     */
-    thumbnail(kind, stage, color, dpr) {
-        let deferred3_0;
-        let deferred3_1;
-        try {
-            const ptr0 = passStringToWasm0(kind, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-            const len0 = WASM_VECTOR_LEN;
-            const ret = wasm.petscene_thumbnail(this.__wbg_ptr, ptr0, len0, stage, color, dpr);
-            var ptr2 = ret[0];
-            var len2 = ret[1];
-            if (ret[3]) {
-                ptr2 = 0; len2 = 0;
-                throw takeFromExternrefTable0(ret[2]);
-            }
-            deferred3_0 = ptr2;
-            deferred3_1 = len2;
-            return getStringFromWasm0(ptr2, len2);
-        } finally {
-            wasm.__wbindgen_free(deferred3_0, deferred3_1, 1);
-        }
-    }
-}
-if (Symbol.dispose) PetScene.prototype[Symbol.dispose] = PetScene.prototype.free;
-
 export class SupplyScene {
     __destroy_into_raw() {
         const ptr = this.__wbg_ptr;
@@ -467,9 +355,6 @@ function __wbg_get_imports() {
             const ret = arg0.createVertexArray();
             return isLikeNone(ret) ? 0 : addToExternrefTable0(ret);
         },
-        __wbg_cullFace_94e1cd382e8b654f: function(arg0, arg1) {
-            arg0.cullFace(arg1 >>> 0);
-        },
         __wbg_deleteBuffer_42bd497a20b76d88: function(arg0, arg1) {
             arg0.deleteBuffer(arg1);
         },
@@ -500,12 +385,6 @@ function __wbg_get_imports() {
         },
         __wbg_drawArrays_b2004a40c212065c: function(arg0, arg1, arg2, arg3) {
             arg0.drawArrays(arg1 >>> 0, arg2, arg3);
-        },
-        __wbg_drawElementsInstanced_07717eeb890435e9: function(arg0, arg1, arg2, arg3, arg4, arg5) {
-            arg0.drawElementsInstanced(arg1 >>> 0, arg2, arg3 >>> 0, arg4, arg5);
-        },
-        __wbg_drawElements_3f24a677bf20c491: function(arg0, arg1, arg2, arg3, arg4) {
-            arg0.drawElements(arg1 >>> 0, arg2, arg3 >>> 0, arg4);
         },
         __wbg_drawImage_df46beb36e04ae8f: function() { return handleError(function (arg0, arg1, arg2, arg3, arg4, arg5) {
             arg0.drawImage(arg1, arg2, arg3, arg4, arg5);
@@ -630,10 +509,6 @@ function __wbg_get_imports() {
             const ret = new Float32Array(getArrayF32FromWasm0(arg0, arg1));
             return ret;
         },
-        __wbg_new_from_slice_af1eb765183f5cf0: function(arg0, arg1) {
-            const ret = new Uint16Array(getArrayU16FromWasm0(arg0, arg1));
-            return ret;
-        },
         __wbg_pixelStorei_86481a168d6e225e: function(arg0, arg1, arg2) {
             arg0.pixelStorei(arg1 >>> 0, arg2);
         },
@@ -705,13 +580,6 @@ function __wbg_get_imports() {
         __wbg_texParameteri_dd4f56c2acbbe859: function(arg0, arg1, arg2, arg3) {
             arg0.texParameteri(arg1 >>> 0, arg2 >>> 0, arg3);
         },
-        __wbg_toDataURL_86519921a450022b: function() { return handleError(function (arg0, arg1) {
-            const ret = arg1.toDataURL();
-            const ptr1 = passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-            const len1 = WASM_VECTOR_LEN;
-            getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
-            getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
-        }, arguments); },
         __wbg_uniform1f_e93503bc589b432d: function(arg0, arg1, arg2) {
             arg0.uniform1f(arg1, arg2);
         },
@@ -727,9 +595,6 @@ function __wbg_get_imports() {
         __wbg_uniform3f_a145e21c0ac04d3a: function(arg0, arg1, arg2, arg3, arg4) {
             arg0.uniform3f(arg1, arg2, arg3, arg4);
         },
-        __wbg_uniform3fv_025760367cc4eed3: function(arg0, arg1, arg2, arg3) {
-            arg0.uniform3fv(arg1, getArrayF32FromWasm0(arg2, arg3));
-        },
         __wbg_uniform4f_d9bb623add5d2541: function(arg0, arg1, arg2, arg3, arg4, arg5) {
             arg0.uniform4f(arg1, arg2, arg3, arg4, arg5);
         },
@@ -738,9 +603,6 @@ function __wbg_get_imports() {
         },
         __wbg_useProgram_1c047de878f20b72: function(arg0, arg1) {
             arg0.useProgram(arg1);
-        },
-        __wbg_vertexAttribDivisor_f910af52b19ce382: function(arg0, arg1, arg2) {
-            arg0.vertexAttribDivisor(arg1 >>> 0, arg2 >>> 0);
         },
         __wbg_vertexAttribPointer_b0838f8618a8c446: function(arg0, arg1, arg2, arg3, arg4, arg5, arg6) {
             arg0.vertexAttribPointer(arg1 >>> 0, arg2, arg3 >>> 0, arg4 !== 0, arg5, arg6);
@@ -777,9 +639,6 @@ function __wbg_get_imports() {
     };
 }
 
-const PetSceneFinalization = (typeof FinalizationRegistry === 'undefined')
-    ? { register: () => {}, unregister: () => {} }
-    : new FinalizationRegistry(ptr => wasm.__wbg_petscene_free(ptr, 1));
 const SupplySceneFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_supplyscene_free(ptr, 1));
@@ -798,11 +657,6 @@ function getArrayF32FromWasm0(ptr, len) {
 function getArrayF64FromWasm0(ptr, len) {
     ptr = ptr >>> 0;
     return getFloat64ArrayMemory0().subarray(ptr / 8, ptr / 8 + len);
-}
-
-function getArrayU16FromWasm0(ptr, len) {
-    ptr = ptr >>> 0;
-    return getUint16ArrayMemory0().subarray(ptr / 2, ptr / 2 + len);
 }
 
 let cachedDataViewMemory0 = null;
@@ -831,14 +685,6 @@ function getFloat64ArrayMemory0() {
 
 function getStringFromWasm0(ptr, len) {
     return decodeText(ptr >>> 0, len);
-}
-
-let cachedUint16ArrayMemory0 = null;
-function getUint16ArrayMemory0() {
-    if (cachedUint16ArrayMemory0 === null || cachedUint16ArrayMemory0.byteLength === 0) {
-        cachedUint16ArrayMemory0 = new Uint16Array(wasm.memory.buffer);
-    }
-    return cachedUint16ArrayMemory0;
 }
 
 let cachedUint8ArrayMemory0 = null;
@@ -942,7 +788,6 @@ function __wbg_finalize_init(instance, module) {
     cachedDataViewMemory0 = null;
     cachedFloat32ArrayMemory0 = null;
     cachedFloat64ArrayMemory0 = null;
-    cachedUint16ArrayMemory0 = null;
     cachedUint8ArrayMemory0 = null;
     wasm.__wbindgen_start();
     return wasm;
