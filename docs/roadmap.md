@@ -1,6 +1,6 @@
 # Playmand roadmap
 
-Playmand is the skill an AI agent uses to make games and visual work in Rust. Bevy is the default engine, but the skill is not tied to it: the agent picks the right tool for the task from a verified set, and always follows the user's choice of engine.
+Playmand is the skill an AI agent uses to make games and visual work in Rust. Its value is the look: logic and gameplay get cheaper to write every month, while a result that looks great stays scarce. So it helps the user find the picture first, then builds to it with Rust's performance. Bevy is the default engine, but the skill is not tied to it: the agent picks the right tool for the task from a verified set, and always follows the user's choice of engine.
 
 The goal is not to list the most engines. It is to be the Rust creation skill AI agents use best, so every tool that joins must arrive **with a runnable example, a pinned version and a check in CI**. A tool with only prose about it does not get a row in the selector.
 

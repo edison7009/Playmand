@@ -8,6 +8,8 @@ description: Make games and visual work in Rust. Real-time 2D/3D games with Bevy
 
 A skill for making games and visual work in Rust, with Bevy as the default engine and asset creation through Blender and MCP. Rust + Bevy runs the game and its interaction; the same scene code can also be recorded frame by frame on a fixed clock into a GIF or video. Blender makes models, materials, rigs and animation, and MCP lets the AI drive and inspect those tools. Codex, Claude Code and similar agents are hosts; the skill is not tied to one model or one MCP implementation.
 
+The look comes first. Logic and gameplay are quick to write; what makes the work stand out is how it looks, so agree on a picture of the target before building new visual work, and judge the result against that picture, not against "it compiles".
+
 New games default to Rust + Bevy and should deliver the gameplay, visuals and content the user asked for. Existing Bevy projects keep their pinned version and structure. When the user explicitly chooses another engine, respect it, and never migrate an existing project on another engine automatically. Small prototypes are for testing technical questions; they do not replace the full game the user asked for, and this skill does not impose a fixed number of iterations or a report template.
 
 ## Start from a picture

@@ -4,10 +4,10 @@
 
 # Playmand
 
-### Rust Game & Visual Creation Skill for AI Agents · Bevy by default
+### Rust Visual Creation Skill for AI Agents · Bevy by default
 
-Make your AI agent fluent in **Rust** for games, physics, web effects and video,<br/>
-with **Bevy** as the default engine, so what it builds actually looks good.
+Find the look first, then build it in **Rust**:<br/>
+games, video and web effects that look as good as the picture you had in mind.
 
 [![Bevy 0.20.1](https://img.shields.io/badge/Bevy-0.20.1-eb6834)](https://bevy.org/)
 [![Rust 1.97.1](https://img.shields.io/badge/Rust-1.97.1-b7410e?logo=rust)](https://rust-lang.org/)
@@ -128,6 +128,8 @@ Use `$playmand` in Codex. In Claude Code, install it in one line (see [Installat
 ```
 
 ## What Playmand is
+
+**Playmand's value is the look.** Game logic and gameplay are quick for an agent to write; what is scarce is a result that looks great. So Playmand starts by helping you find the picture you want (your references, your image app, an image API, or the host's own image generation), then uses Rust's performance (Bevy, shaders, particles, WebAssembly) to build it to that standard, and checks the result against the picture.
 
 **Playmand is a Rust skill for games and visual creation, with Bevy as the default engine. It helps AI coding agents pick the right Rust tool for the job (Bevy for games and recorded video, Avian for physics, Kira for audio, egui for debug tools, Macroquad for small 2D games, wgpu for custom GPU work, Rust → WebAssembly for effects inside web pages and Tauri apps) and turn designs into playable 2D / 3D games, animations recorded frame by frame, or effects on a page. Where Playmand is heading: [roadmap](docs/roadmap.md).**
 

@@ -4,10 +4,10 @@
 
 # Playmand
 
-### 面向 AI Agent 的 Rust 游戏与视觉创作技能 · 默认 Bevy
+### 面向 AI Agent 的 Rust 视觉创作技能 · 默认 Bevy
 
-让 AI 熟练地用 **Rust** 做游戏、物理、网页特效和视频，<br/>
-默认 **Bevy** 引擎，而且效果出色。
+先找到惊艳的画面，再用 **Rust** 高性能地做出来：<br/>
+游戏、视频、网页特效，和你心里想的一样好看。
 
 [![Bevy 0.20.1](https://img.shields.io/badge/Bevy-0.20.1-eb6834)](https://bevy.org/)
 [![Rust 1.97.1](https://img.shields.io/badge/Rust-1.97.1-b7410e?logo=rust)](https://rust-lang.org/)
@@ -128,6 +128,8 @@ Codex 中使用 `$playmand`。在 Claude Code 中一行即可安装（其他 Age
 ```
 
 ## Playmand 是什么
+
+**Playmand 的价值在于画面。** 游戏逻辑和玩法，Agent 很快就能写出来；真正稀缺的是做得好看。所以 Playmand 先帮你找到想要的画面（你的参考图、你的生图软件、生图 API，或宿主自带的生图能力），再用 Rust 的高性能（Bevy、着色器、粒子、WebAssembly）按这个标准把它做出来，并拿成品和目标图对比。
 
 **Playmand 是用 Rust 做游戏与视觉创作的 Skill，默认引擎为 Bevy。它帮 AI 按任务选对 Rust 工具（游戏和录制视频用 Bevy，物理用 Avian，音频用 Kira，调试工具用 egui，小型 2D 游戏用 Macroquad，自定义 GPU 工作用 wgpu，网页和 Tauri 应用里的特效用 Rust → WebAssembly），把设计实现为可玩的 2D / 3D 游戏、逐帧录制的动画，或页面里的特效。Playmand 的发展方向见[路线图](docs/zh-CN/roadmap.md)。**
 
