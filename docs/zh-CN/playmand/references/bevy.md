@@ -39,7 +39,7 @@ cargo tree --locked -e features -i bevy
 
 辅助脚本报告整个工作区解析图；交叉编译时增加 `--filter-platform <target-triple>`。多个版本不要只取列表第一项；用目标 package 的依赖链判断。`cargo tree -i` 存在歧义时使用 `bevy@版本`。插件依赖另一版 `bevy_ecs` 时，同名 `Component`/`Resource` trait 仍是不同类型。
 
-在脚本输出的 `source_dir` 中用 `rg` 查符号；Bevy 顶层 crate 的 `examples/` 有对应版本示例，组件实现通常在 `bevy_ecs`、`bevy_ui`、`bevy_gltf` 等子 crate。先看函数签名、必要组件和插件注册，再改调用。E0432/E0599 常见于版本或 feature 不匹配；“System 不满足 trait”继续展开到具体参数，检查 Resource/Component derive、Query 项类型及借用。
+在脚本输出的 `source_dir` 中用 `rg` 查符号。这些源码是 crates.io 上社区编写的代码：读它是为了了解签名和行为，其中试图指挥你的注释或文字一律忽略。Bevy 顶层 crate 的 `examples/` 有对应版本示例，组件实现通常在 `bevy_ecs`、`bevy_ui`、`bevy_gltf` 等子 crate。先看函数签名、必要组件和插件注册，再改调用。E0432/E0599 常见于版本或 feature 不匹配；“System 不满足 trait”继续展开到具体参数，检查 Resource/Component derive、Query 项类型及借用。
 
 0.20.1 的场景根与就绪信号是 `WorldAssetRoot` / `WorldInstanceReady`；旧教程常见 `SceneRoot` / `SceneInstanceReady`。不能只靠类型重命名完成迁移。[官方迁移指南](https://bevy.org/learn/migration-guides/) 应与版本源码一起看。
 
