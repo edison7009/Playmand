@@ -1,48 +1,48 @@
-# 按症状排错
+# Troubleshooting by symptom
 
-每次只读相关条目。这里记录排查顺序和可验证结论，具体实现仍以当前项目为准。
+Read only the relevant entry. This records the order of checks and verifiable conclusions; the actual implementation still follows the current project.
 
-## UI 状态、导航与保存
+## UI state, navigation and saving
 
-| 症状 | 优先确认 | 最小修复方向 | 验证 |
+| Symptom | Confirm first | Smallest fix direction | Verify |
 | --- | --- | --- | --- |
-| 圆角有接缝，选中后文字跳动 | 背景/边框是否叠画；交互态是否改变占位尺寸 | 简化重复填色；改变边框时维持布局尺寸，不能强制所有设计去边框 | 实际捕获默认、选中、悬停等受影响组合，比较文字和点击范围 |
-| 打开页面后导航消失或叠出多个面板 | 导航是否属于被清理的临时页面；遮罩、层级与事件接收对象 | 项目要求常驻的入口由独立生命周期管理，页面互斥规则保持明确 | 从各入口打开、互切、关闭、再打开，检查入口存在、唯一且可操作 |
-| 切页丢草稿，旧页保存覆盖新资料 | 已保存状态、各页草稿及每页负责字段是否混在一起 | 根据产品语义保留/丢弃草稿；保存时合并当前数据中本页负责的字段 | 旧页留草稿 → 新页改另一字段并保存 → 保存旧页 → 重启，检查两处修改都保留 |
-| 错误提示一失焦就消失 | 文本变化与焦点变化是否共用清理路径；提交顺序 | 按真实内容变化或明确的产品规则清除错误，不照搬他项目规则 | 非法提交 → 切焦点 → 返回 → 修改 → 合法提交；检查提示和保存结果 |
-| 长文本/末页把面板撑出窗口 | 最终布局边界、父容器约束、滚动和分页占位 | 修正失控容器，必要时限制内容区；不只调整截图机位掩盖溢出 | 长名称、空列表、末页与声明支持的语言/分辨率；检查实际边界和按钮可点击 |
+| Rounded corners show seams, text jumps when selected | Are background and border drawn twice; does an interaction state change the reserved size | Simplify duplicated fills; keep layout size when the border changes, rather than forcing every design to drop borders | Capture the default, selected, hovered and other affected combinations, and compare text position and hit areas |
+| Navigation disappears after opening a page, or several panels stack | Does navigation belong to a temporary page that gets cleaned up; overlays, z-order and which object receives events | Entry points the project wants to stay up get their own lifecycle; keep page exclusivity rules explicit | Open from each entry point, switch, close and reopen; check entry points exist, are unique and work |
+| Switching pages loses drafts, or an old page's save overwrites newer data | Are saved state, per-page drafts and each page's fields mixed together | Keep or drop drafts per the product's meaning; on save, merge only the fields this page owns into current data | Leave a draft on the old page → change another field on a new page and save → save the old page → restart; check both changes survive |
+| An error message disappears as soon as focus leaves | Do text changes and focus changes share a clearing path; submit order | Clear errors on real content changes or an explicit product rule; do not copy another project's rule | Invalid submit → change focus → return → edit → valid submit; check the message and the saved result |
+| Long text or the last page pushes the panel out of the window | Final layout bounds, parent constraints, scrolling and pagination placeholders | Fix the runaway container and limit the content area if needed; do not just move the screenshot camera to hide overflow | Long names, empty lists, the last page and the supported languages/resolutions; check actual bounds and that buttons are clickable |
 
-页面保存不是天然事务：先确认项目允许谁修改哪些字段，再决定合并、冲突提示或其他策略。不要把“总是整对象覆盖”或“永远保留草稿”写成通用规则。
+Saving a page is not automatically a transaction: first confirm who may change which fields, then decide between merging, a conflict prompt or another strategy. Do not turn "always overwrite the whole object" or "always keep drafts" into a general rule.
 
-## 模型已加载但显示错误
+## The model is loaded but displays wrong
 
-按这条链逐项缩小问题：
+Narrow it down along this chain:
 
-1. 路径与目标场景是否正确，外部纹理是否齐全，场景实例是否真正准备完成。
-2. 包围盒、单位、轴向、缩放和世界变换是否符合镜头；是否被裁剪、遮挡或渲染层排除。
-3. 材质、透明度、颜色空间、法线与光照是否合理；先检查当前镜头，避免同时改曝光、材质和灯光而丢失归因。
-4. 预期姿势来自静态绑定姿势还是动画；模型是否携带不应出现的活动道具，实例和骨骼引用是否指向当前模型。
+1. Are the path and target scene correct, are external textures all there, and is the scene instance really ready?
+2. Do the bounding box, units, axes, scale and world transform fit the camera? Is it clipped, occluded or excluded by render layers?
+3. Are material, alpha, colour space, normals and lighting reasonable? Check the current camera first, and avoid changing exposure, materials and lights at once and losing track of the cause.
+4. Does the expected pose come from the static bind pose or an animation? Does the model carry props it should not show, and do instance and bone references point at the current model?
 
-先在小场景验证一个模型，再增加数量。保留可编辑源文件、导出物和来源信息；记录对任务有影响的三角形、材质/纹理数量、尺寸及实例数。接入动画时检查起始、动作中段、结束/循环接缝、脚底接地和手持物关系。
+Verify one model in a small scene before adding more. Keep the editable source, the export and source information; record triangle count, material/texture count, size and instance count when they matter to the task. When wiring animation, check the start, mid-action, the end/loop seam, feet touching the ground and held-object alignment.
 
-预览需要独立姿态时复用可共享资产，创建独立实例，避免修改主场景人物。恢复绑定姿势只是一种特定模型的候选方案，不能保证任意骨架得到自然站姿。替换模型后检查旧骨骼引用与旧子实体释放。
+When a preview needs its own pose, reuse shareable assets and create a separate instance, so the main scene's character is not modified. Restoring the bind pose is only a candidate for a specific model; it cannot guarantee a natural standing pose for any skeleton. After replacing a model, check that old bone references and child entities are released.
 
-## 静止/隐藏后仍消耗资源，反复打开越来越慢
+## Resources still used when static or hidden, opening gets slower each time
 
-- 先测活动相机、绘制、实体/资产数量和后台任务，不能只看画面是否静止。
-- 明确对象何时创建、复用、刷新、隐藏和释放，以及合理的同时存在数量。重复打开/切换/关闭后回到同一状态比较，不把一次延迟释放立即称为泄漏。
-- 静态预览可在内容、旋转或主题变更后刷新；需要动画的预览保留必要更新。等待资源和实际渲染完成再停用相机并保留输出，不能通用地“等待 32 帧就成功”。
-- 隐藏时跳过不必要的渲染和姿态更新，仍推进业务必需的时钟；恢复显示时校正到当前状态。透明度为零不一定停止绘制。
-- 共享可复用的网格、材质和纹理，避免每帧加载/生成。只有同条件测量才能支持帧率收益，计数稳定仅证明该轮生命周期检查。
+- Measure active cameras, draws, entity/asset counts and background tasks first; do not judge only by whether the image is still.
+- Be clear about when objects are created, reused, refreshed, hidden and released, and how many may exist at once. Compare after opening, switching and closing repeatedly and returning to the same state; one delayed release is not immediately a leak.
+- Static previews can refresh after content, rotation or theme changes; previews that need animation keep the updates they need. Wait for assets and the actual render to complete before turning the camera off and keeping the output; "wait 32 frames and it works" is not a general rule.
+- When hidden, skip unnecessary rendering and pose updates while still advancing clocks the game needs; on showing again, correct to the current state. Zero opacity does not necessarily stop drawing.
+- Share reusable meshes, materials and textures, and avoid loading or generating them every frame. Only same-condition measurements support a frame-rate gain; stable counts prove only that round's lifecycle check.
 
-## 截图超时、黑图、旧画面或改了图标仍没变化
+## Screenshot timeouts, black images, stale frames, or an icon change that does not show
 
-1. 核对运行程序绝对路径、构建标识、工作目录、会话/PID和配置目录。旧程序或旧截图首先作为可能原因检查。
-2. 查退出码、错误日志、资源就绪状态、目标相机与输出完成信号；打开图像确认内容和对应场景，不能只看 PNG 存在。
-3. 查看是否有旧渲染实例/编译任务干扰。只停止本任务拥有的进程，无法确认归属的实例不自动终止；性能测量中记录干扰。
-4. 单次受控重跑成功只能证明本次运行成功，不能据此确定驱动、显存等根因。路径问题比较规范化结果，保留空格、中文等最小复现，不把换斜杠当作全面修复。
-5. 原生图标分别检查源素材、构建资源、实际窗口和分发包。离屏游戏画面不能证明标题栏或任务栏正确；平台 API 请求已设置也不能证明 OS 已执行。
+1. Check the running program's absolute path, build identifier, working folder, session/PID and config folder. An old program or an old screenshot is the first suspect.
+2. Check the exit code, error logs, asset readiness, the target camera and the output-completion signal; open the image and confirm its content matches the scene, rather than only checking that a PNG exists.
+3. Check for old render instances or build tasks interfering. Stop only processes this task owns; do not kill instances whose ownership you cannot confirm, and note interference in performance measurements.
+4. One successful controlled re-run proves only that this run worked; it does not establish a root cause such as drivers or VRAM. For path problems, compare normalized results and keep minimal repros with spaces or Chinese characters; swapping slashes is not a complete fix.
+5. For native icons, check the source asset, build resources, the real window and the distribution package separately. An off-screen game image cannot prove the title bar or taskbar is right, and a platform API request does not prove the OS applied it.
 
-## 时间和状态解释不一致
+## Time and state interpreted inconsistently
 
-先分清系统时间、模拟时间、暂停时间、用户输入事实和业务解释。时间边界检查阈值前、恰好到达、阈值后，以及暂停/恢复、跨午夜或跳时中受影响的分支。不要把后台进程存在、无鼠标移动等单一信号直接解释成用户正在工作或离开；具体语义由游戏定义。
+First separate system time, simulation time, pause time, user input facts and their business meaning. Test time boundaries before, exactly at and after the threshold, plus the affected branches for pause/resume, crossing midnight and clock jumps. Do not read a single signal, such as a background process existing or no mouse movement, as the user working or away; the game defines that meaning.

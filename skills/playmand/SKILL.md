@@ -1,51 +1,51 @@
 ---
 name: playmand
 license: MIT
-description: 用 Rust + Bevy 开发 2D/3D 游戏，或制作逐帧录制的演示动画与视频（产品演示、Logo 动画、动图、宣传短片），并通过 Blender MCP 制作、修改和检查模型、材质与动画。提供版本匹配、ECS 调度、输入状态、GLB、UI 渲染、性能、原生构建以及固定时钟录制、无缝循环与编码的专项知识。用于新建或改进 Bevy 游戏、动画视频及其资产；显式使用本技能新建游戏或动画且未指定引擎时默认 Rust + Bevy。
+description: Build 2D/3D games in Rust + Bevy, or produce frame-by-frame recorded animations and videos (product demos, logo animations, GIFs, promo clips), and create, edit and inspect models, materials and animation through Blender MCP. Covers version matching, ECS scheduling, input state, GLB, UI rendering, performance, native builds, fixed-clock recording, seamless loops and encoding. Use when creating or improving a Bevy game, an animated video or their assets; when this skill is invoked to start a new game or animation and no engine is named, default to Rust + Bevy.
 ---
 
 # Playmand
 
-Rust + Bevy 游戏与动画视频技能，包含 Blender 与 MCP 资产制作能力。Rust + Bevy 实现游戏运行与交互，也可把同一套场景代码按固定时钟逐帧录制成动图或视频；Blender 制作模型、材质、骨骼与动画，MCP 让 AI 操作和观察这些工具。Codex、Claude Code 等是宿主，不绑定特定模型或某一家 MCP 实现。
+A Rust + Bevy skill for games and animated videos, including asset creation with Blender and MCP. Rust + Bevy runs the game and its interaction; the same scene code can also be recorded frame by frame on a fixed clock into a GIF or video. Blender makes models, materials, rigs and animation, and MCP lets the AI drive and inspect those tools. Codex, Claude Code and similar agents are hosts; the skill is not tied to one model or one MCP implementation.
 
-新建游戏默认 Rust + Bevy，按用户要求完成玩法、画面和内容。已有 Bevy 项目沿用锁定版本及结构；用户明确选择其他引擎时尊重选择，已有其他引擎项目不自动迁移。小样用于验证技术疑点，不替代用户要求的完整游戏，也不规定固定开发轮次或汇报模板。
+New games default to Rust + Bevy and should deliver the gameplay, visuals and content the user asked for. Existing Bevy projects keep their pinned version and structure. When the user explicitly chooses another engine, respect it, and never migrate an existing project on another engine automatically. Small prototypes are for testing technical questions; they do not replace the full game the user asked for, and this skill does not impose a fixed number of iterations or a report template.
 
-## 先解决版本问题
+## Settle the version first
 
-读取游戏的 `Cargo.toml`、`Cargo.lock` 与 `rust-toolchain.toml`。API、第三方插件和 feature 以实际解析版本为准，不能把网上旧版示例混入当前工程。新项目先确认目标平台，选定可用稳定版本并生成锁文件。
+Read the game's `Cargo.toml`, `Cargo.lock` and `rust-toolchain.toml`. APIs, third-party plugins and features follow the versions Cargo actually resolved; do not mix older examples from the web into the current project. For a new project, confirm the target platform first, then pick a current stable version and generate the lockfile.
 
-需要定位 crate 源码和启用的 feature 时，可运行随技能安装的辅助脚本（路径相对技能目录）：
+To locate crate sources and enabled features, run the helper script that ships with the skill (paths are relative to the skill folder):
 
 ```sh
 python scripts/inspect_bevy.py --manifest-path /absolute/game/Cargo.toml
 ```
 
-它调用离线、锁定的 `cargo metadata`，输出工作区解析到的 Bevy crate、源码目录和版本文档链接。缺少依赖时给出 Cargo 原始错误；按项目需要获取依赖后再运行。[工具链指南](references/bevy.md) 包含构建配置和 API 查找方法。
+It calls `cargo metadata` offline and locked, and prints the Bevy crates the workspace resolved, their source folders and links to that version's docs. If dependencies are missing, it shows Cargo's original error; fetch dependencies as the project requires and run it again. The [toolchain guide](references/bevy.md) covers build setup and how to look up APIs.
 
-## 按当前技术问题读取
+## Read only what the task needs
 
-| 工作 | 专项资料 |
+| Task | Reference |
 | --- | --- |
-| 新建工程、版本/API 报错、编译慢、Windows 链接、插件兼容 | [Rust 与 Bevy 工具链](references/bevy.md) |
-| 组件/资源设计、Query 冲突、Commands 可见性、帧时序、输入、暂停/重开 | [ECS、调度与玩法状态](references/ecs.md) |
-| Blender 建模/材质/动画、MCP 连接与操作、GLB 导出并接入 Bevy | [Blender 与 MCP](references/blender-mcp.md) |
-| GLB、场景实例、动画、骨骼、共享资产与实例隔离 | [资源与动画](references/assets-animation.md) |
-| 2D/3D 相机、灯光、UI、黑屏、预览、多 pass、帧率 | [渲染、UI 与性能](references/rendering.md) |
-| 演示动画、视频/动图录制、无缝循环、辉光效果、编码 | [演示动画与视频录制](references/video.md) |
-| 选择逻辑/画面检查、玩家包资源路径 | [Bevy 验证与分发](references/verification.md) |
-| 跨页草稿、焦点、复杂布局、模型显示异常的补充诊断 | [症状索引](references/troubleshooting.md) |
+| New project, version/API errors, slow builds, Windows linking, plugin compatibility | [Rust and Bevy toolchain](references/bevy.md) |
+| Component/resource design, query conflicts, when commands become visible, frame timing, input, pause/restart | [ECS, scheduling and gameplay state](references/ecs.md) |
+| Blender modelling/materials/animation, MCP connection and operations, exporting GLB into Bevy | [Blender and MCP](references/blender-mcp.md) |
+| GLB, scene instances, animation, skeletons, shared assets and per-instance changes | [Assets and animation](references/assets-animation.md) |
+| 2D/3D cameras, lighting, UI, black screens, previews, multiple passes, frame rate | [Rendering, UI and performance](references/rendering.md) |
+| Demo animations, video/GIF recording, seamless loops, bloom, encoding | [Animation and video recording](references/video.md) |
+| Choosing logic or visual checks, asset paths in a player build | [Bevy verification and distribution](references/verification.md) |
+| Extra diagnosis for drafts across pages, focus, complex layouts, models that display wrong | [Symptom index](references/troubleshooting.md) |
 
-只读取相关资料。技术示例基线为 **Bevy 0.20.1 / Rust 1.97.1**，不代表应升级现有项目。不同版本先查该版本源码与迁移指南。
+Read only the relevant reference. The technical baseline for examples is **Bevy 0.20.1 / Rust 1.97.1**; that is not a reason to upgrade an existing project. For a different version, check that version's source and migration guide first.
 
-制作或修改 3D 资产时，优先使用宿主已连接的 Blender MCP 查询场景、操作目标对象并查看结果，再导出到 Bevy。先核对真实工具 schema、Blender 文件与版本；不要编造调用。没有连接时按 [接入指南](references/blender-mcp.md) 定位缺口，已有 Blender CLI 可承担离线处理。Playmand 安装器只安装技能，Blender 插件和 MCP 服务需在实际执行环境单独配置。
+When creating or editing 3D assets, prefer the Blender MCP the host has connected: query the scene, operate on the target objects and look at the result, then export to Bevy. Check the real tool schema, the Blender file and the Blender version first; never invent calls. Without a connection, use the [setup guide](references/blender-mcp.md) to find what is missing; an installed Blender CLI can handle offline processing. The Playmand installer only installs the skill; the Blender add-on and the MCP server must be configured separately where the agent actually runs.
 
-## 可执行的 ECS 用法
+## Runnable ECS patterns
 
-[独立示例](examples/ecs-patterns/src/lib.rs) 用真实 Bevy 验证：查询互斥、延迟命令对后续系统可见、避免无效 change detection、状态退出清理。用于学习或缩小对应故障，不是强制套用的游戏模板。
+The [standalone example](examples/ecs-patterns/src/lib.rs) checks, with real Bevy, that queries are disjoint, deferred commands become visible to later systems, change detection is not triggered needlessly, and state exit cleans up. Use it to learn or to narrow down the matching bug; it is not a template every game must follow.
 
 ```sh
 cd examples/ecs-patterns
 cargo test --locked
 ```
 
-命令从技能目录执行；首次需要获取依赖及满足示例 Rust 版本。示例不启动窗口，不能证明 GPU 画面、操作手感或游戏完成度。游戏任务仍使用项目的真实运行入口验证相应结果。
+Run the commands from the skill folder; the first run needs to fetch dependencies and the example's Rust version. The example opens no window, so it cannot prove GPU output, game feel or completeness. Game tasks are still verified through the project's real entry point.

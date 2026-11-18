@@ -1,34 +1,34 @@
-# 让经验可累积
+# Making experience accumulate
 
-使用本技能不意味着模型永久记住经验。已验证的启动、操作和排错方法需要写入可再次读取的项目记录；后续任务先读最新结论，避免重新摸索。
+Using this skill does not mean the model remembers experience permanently. Verified launch, operation and debugging methods must be written into project records that can be read again; later tasks read the latest conclusions first instead of rediscovering them.
 
-## 先留下项目记录
+## Leave a project record first
 
-只记录本轮新发现或改变的结论。优先更新现有交接/验证文件，保留：
+Record only conclusions that are new or changed this round. Prefer updating an existing hand-over or verification file, and keep:
 
 ```text
-问题：可观察的症状与触发条件
-环境：引擎/插件版本、平台及影响复现的条件
-最短复现：初始状态 → 操作 → 实际结果 / 预期结果
-原因：已证实的原因；尚不能证明的推测单列
-处理：改变了什么，为何有效；实际失败的尝试只保留有排错价值的部分
-证据：回归、日志、截图或测量及对应版本
-复用范围：哪些条件下可用，哪些只是本项目业务或临时绕行
+Issue: observable symptom and trigger conditions
+Environment: engine/plugin versions, platform, and conditions that affect reproduction
+Shortest repro: initial state → action → actual result / expected result
+Cause: the proven cause; list unproven guesses separately
+Fix: what changed and why it works; keep failed attempts only if they help debugging
+Evidence: regression test, logs, screenshots or measurements, with versions
+Reuse scope: which conditions it applies to, and what is project-specific or a temporary workaround
 ```
 
-交接长任务时补充当前可运行版本、有效命令、已完成/未完成项和下一步，不复制整个对话。记录真实工具入口；没有执行过的命令标为候选。
+When handing over a long task, add the current runnable version, working commands, what is done and not done, and the next step; do not copy the whole conversation. Record the real tool entry points; mark commands that were never run as candidates.
 
-## 哪些进入共享技能
+## What goes into the shared skill
 
-- 改变下一次开发决策，且有复现和证据：可以成为候选条目。
-- API/插件差异：标注适用版本和平台，不升格为跨版本规则。
-- 一个项目的特定配色、人物、时长、骨架处理或保存语义：留在项目；共享技能保留诊断方法。
-- 单次异常、环境绕行、根因不明或没有对照的速度变化：保留为观察，不写成必然原因/收益。
+- Changes the next development decision, with a repro and evidence: can become a candidate entry.
+- API or plugin differences: note the versions and platforms they apply to; do not promote them to a cross-version rule.
+- One project's colours, characters, durations, skeleton handling or save semantics: stays in the project; the shared skill keeps the diagnostic method.
+- A one-off anomaly, an environment workaround, an unknown root cause, or a speed change without a comparison: keep it as an observation, not as a certain cause or gain.
 
-没有维护共享技能的任务授权时，只在当前项目记录候选经验；不要自行改用户的全局技能。维护时在共享源文件中合并同类条目，优先替换失效指导，避免每次遇到问题就增加一条永久规则。新工具接口先有实际实现和调用证据，再写成可用操作。
+Without authorization to maintain the shared skill, record candidate experience only in the current project; do not change the user's global skills on your own. When maintaining, merge similar entries in the shared source files, prefer replacing stale guidance, and avoid adding a permanent rule for every problem met. A new tool interface needs a real implementation and evidence of a call before it is written up as a usable operation.
 
-## 更新后检验
+## Check after updating
 
-用能触发新经验的实际任务检查：AI 是否先发现相关条件、是否少了错误尝试、是否仍完成同样的玩家验收。与更新前保持相同起点、模型和工具条件；记录耗时、重试、人工接管和通过情况，缺失的成本字段留空。
+Check with a real task that triggers the new experience: does the AI notice the relevant conditions first, make fewer wrong attempts, and still pass the same player acceptance? Keep the same starting point, model and tool conditions as before the update; record time, retries, human takeover and pass/fail, leaving missing cost fields empty.
 
-至少在另一独立项目或脱离原项目的最小复现上验证，再扩大“可复用”的声明。只读审阅可以发现指令矛盾，不能冒充独立 AI 实测或提效数据。
+Verify in at least one other independent project or a minimal repro outside the original project before widening a "reusable" claim. A read-only review can find contradictions in instructions, but cannot stand in for independent AI testing or efficiency data.

@@ -1,10 +1,10 @@
-# Rust 与 Bevy 工具链
+# Rust and Bevy toolchain
 
-## 建项目与锁版本
+## Create the project and pin versions
 
-新项目采用 Rust + Bevy；保留用户指定的 2D/3D、平台和美术方向。先建立能启动目标渲染路径的工程，再按实际功能拆模块。一个 `Plugin` 可以组织输入、角色、战斗或 UI；小功能不需要抽成通用框架、脚本语言或自制引擎。
+New projects use Rust + Bevy and keep the user's chosen 2D/3D, platform and art direction. First get a project that starts the target render path, then split modules by real features. A `Plugin` can own input, characters, combat or UI; small features do not need a generic framework, a scripting language or a home-made engine.
 
-以下是本技能示例的版本基线，非永久“最新版”：
+This is the version baseline for the skill's examples, not a permanent "latest":
 
 ```toml
 [package]
@@ -23,13 +23,13 @@ opt-level = 1
 opt-level = 3
 ```
 
-游戏提交 `Cargo.lock`。已有工程优先保留 features；新工程可先用默认功能跑通，再依据该版本 feature 表裁剪。照抄其他版本的 feature 名会让解析直接失败。依赖优化有助开发态运行，但首次构建更慢，不把第一次全编译计入热缓存迭代比较。
+Games commit `Cargo.lock`. Existing projects keep their features; a new project can start with the defaults and then trim against that version's feature table. Feature names copied from another version make resolution fail outright. Optimizing dependencies helps the dev build run, but makes the first build slower; do not count the first full build in warm-cache iteration comparisons.
 
-`cargo check --locked` 用于快速类型检查；`cargo run --locked` 进行开发态运行；分发和性能测量用 `cargo build --release --locked`。遵循项目已有构建约定。不要为了每次 UI 修改都验证 release 而无谓拉长迭代；也不要用未优化运行结果判断引擎性能。
+Use `cargo check --locked` for fast type checks, `cargo run --locked` for dev runs, and `cargo build --release --locked` for distribution and performance measurements. Follow the project's existing build conventions. Do not verify release for every UI tweak and slow iteration down for nothing, and do not judge engine performance from an unoptimized run.
 
-## 从报错定位正确 API
+## Find the right API from an error
 
-运行 [inspect_bevy.py](../scripts/inspect_bevy.py)，或直接：
+Run [inspect_bevy.py](../scripts/inspect_bevy.py), or directly:
 
 ```sh
 cargo metadata --format-version 1 --locked --offline --manifest-path /absolute/game/Cargo.toml
@@ -37,18 +37,18 @@ cargo tree --locked -d
 cargo tree --locked -e features -i bevy
 ```
 
-辅助脚本报告整个工作区解析图；交叉编译时增加 `--filter-platform <target-triple>`。多个版本不要只取列表第一项；用目标 package 的依赖链判断。`cargo tree -i` 存在歧义时使用 `bevy@版本`。插件依赖另一版 `bevy_ecs` 时，同名 `Component`/`Resource` trait 仍是不同类型。
+The helper reports the whole workspace's resolved graph; add `--filter-platform <target-triple>` when cross-compiling. With several versions, do not just take the first item in the list; follow the target package's dependency chain. When `cargo tree -i` is ambiguous, use `bevy@<version>`. If a plugin depends on a different `bevy_ecs` version, its `Component`/`Resource` traits are different types even though the names match.
 
-在脚本输出的 `source_dir` 中用 `rg` 查符号；Bevy 顶层 crate 的 `examples/` 有对应版本示例，组件实现通常在 `bevy_ecs`、`bevy_ui`、`bevy_gltf` 等子 crate。先看函数签名、必要组件和插件注册，再改调用。E0432/E0599 常见于版本或 feature 不匹配；“System 不满足 trait”继续展开到具体参数，检查 Resource/Component derive、Query 项类型及借用。
+Search for symbols with `rg` in the `source_dir` the script prints. The top-level Bevy crate's `examples/` holds examples for that version; component implementations usually live in sub-crates such as `bevy_ecs`, `bevy_ui` and `bevy_gltf`. Read the function signature, required components and plugin registration before changing the call. E0432/E0599 usually mean a version or feature mismatch; for "system does not satisfy trait", expand down to the exact parameter and check Resource/Component derives, query item types and borrows.
 
-0.20.1 的场景根与就绪信号是 `WorldAssetRoot` / `WorldInstanceReady`；旧教程常见 `SceneRoot` / `SceneInstanceReady`。不能只靠类型重命名完成迁移。[官方迁移指南](https://bevy.org/learn/migration-guides/) 应与版本源码一起看。
+In 0.20.1 the scene root and readiness signal are `WorldAssetRoot` / `WorldInstanceReady`; older tutorials use `SceneRoot` / `SceneInstanceReady`. A type rename alone does not complete the migration. Read the [official migration guides](https://bevy.org/learn/migration-guides/) together with that version's source.
 
-## 编译与平台陷阱
+## Build and platform traps
 
-- Windows 的 Rust MSVC 工具链还需要兼容的 Visual C++ 链接器与 Windows SDK。先读链接错误；缺 `link.exe` 与 Rust 类型错误是两类问题。Cargo 不在 PATH 时检查 rustup 安装目录，而非重复安装整个环境。
-- 在工作区根配置 profile，避免成员文件中的 profile 被忽略。沿用已有 target 目录；不同任务不要并发写同一构建目录造成锁等待。
-- `bevy/dynamic_linking` 可作为开发选项评估，不能默认带入玩家包。它会改变运行时动态库依赖，直接搬走 exe 可能无法启动。
-- GPU、音频、桌面窗口支持取决于执行环境。无窗口测试可以只启用所需 Bevy features；不要为让云端测试通过而从用户游戏删掉渲染或音频。
-- Bevy 核心不等于已安装物理、导航或网络插件。先确认游戏是否需要，再查插件发布版支持的 Bevy 版本；不要仅凭 crate 名选择最新版。
+- On Windows, the Rust MSVC toolchain also needs a compatible Visual C++ linker and Windows SDK. Read the linker error first; a missing `link.exe` is a different problem from a Rust type error. When Cargo is not on PATH, check the rustup install folder instead of reinstalling everything.
+- Configure profiles at the workspace root; profiles in member manifests are ignored. Reuse the existing target folder, and do not let concurrent tasks write the same build folder and wait on its lock.
+- `bevy/dynamic_linking` is worth evaluating for development, but must not ship in player builds by default. It changes runtime library dependencies, and moving the exe on its own may stop it from starting.
+- GPU, audio and desktop window support depend on the environment. Windowless tests can enable only the Bevy features they need; do not delete rendering or audio from the user's game to make a cloud test pass.
+- Bevy core does not include physics, navigation or networking plugins. Confirm the game needs one, then check which Bevy version the plugin's release supports; do not pick the newest crate by name alone.
 
-出处：[Bevy 官方安装与开发配置](https://bevy.org/learn/quick-start/getting-started/setup/)、[Cargo metadata](https://doc.rust-lang.org/cargo/commands/cargo-metadata.html)。技术基线核对日期：2026-09-13。
+Sources: [Bevy setup and development configuration](https://bevy.org/learn/quick-start/getting-started/setup/), [Cargo metadata](https://doc.rust-lang.org/cargo/commands/cargo-metadata.html). Technical baseline checked 2026-09-13.

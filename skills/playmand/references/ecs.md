@@ -1,42 +1,42 @@
-# ECS、调度与玩法状态
+# ECS, scheduling and gameplay state
 
-以下符号以 Bevy 0.20.1 为基线。可运行代码见 [ecs-patterns](../examples/ecs-patterns/src/lib.rs)。
+Symbols below use Bevy 0.20.1 as the baseline. Runnable code: [ecs-patterns](../examples/ecs-patterns/src/lib.rs).
 
-## 数据归属与 Rust 借用
+## Data ownership and Rust borrows
 
-- 实体上的能力/数据用 `Component`，如速度、生命、阵营；世界唯一的配置或共享进度用 `Resource`。不要把所有实体数据复制进一个全局可变对象绕开 ECS。
-- `Query<&mut Transform, With<Player>>` 与 `Query<&mut Transform, With<Enemy>>` 不保证互斥：实体可以同时拥有两个标记。逻辑应互斥时用 `Without` 表达；确实需要重叠且顺序访问时使用 `ParamSet`，结束 `p0()` 的借用后再取 `p1()`。不要靠添加 `Mutex` 或 clone 整个世界消除 B0001。
-- `Query::single()` 在 0.20.1 返回 `Result`。零个/多个玩家在加载或切场景时是否正常，由业务决定；正常的过渡状态用 `let Ok(...) = ... else { return; }`，不要把所有错误都无条件吞掉。
-- Bevy 的 change detection 追踪可变解引用，不自动比较字段是否相等。重复写入相同 `Transform`/UI 数据也可能触发下游重算。对热点中的可比较值使用 `set_if_neq`，或先比较再写；新增组件仍会被视为变化。
+- Per-entity data or abilities, such as velocity, health or faction, are a `Component`; one-of-a-kind world configuration or shared progress is a `Resource`. Do not copy every entity's data into one global mutable object to get around the ECS.
+- `Query<&mut Transform, With<Player>>` and `Query<&mut Transform, With<Enemy>>` are not guaranteed disjoint: one entity can carry both markers. When the logic should be exclusive, say so with `Without`; when overlap is real and access is sequential, use `ParamSet` and finish the `p0()` borrow before taking `p1()`. Do not silence B0001 by adding a `Mutex` or cloning the whole world.
+- `Query::single()` returns a `Result` in 0.20.1. Whether zero or several players are normal during loading or a scene switch is a game decision; for a normal transition use `let Ok(...) = ... else { return; }`, and do not swallow every error unconditionally.
+- Bevy's change detection tracks mutable dereferences; it does not compare field values. Writing the same `Transform` or UI data again can still trigger downstream work. In hot paths use `set_if_neq` for comparable values, or compare before writing; a newly added component still counts as changed.
 
-## 调度不是函数声明顺序
+## The schedule is not the order functions are declared
 
 ```rust
 app.add_systems(Update, (spawn_projectile, resolve_projectile).chain());
 ```
 
-`Commands` 是延迟写入；在默认调度构建设置下，0.20.1 的 `.chain()` / `.after()` / `.before()` 会在必要的依赖边插入 `ApplyDeferred`，让下游系统看到前面的命令。仅写 `(a, b)` 不提供顺序。`chain_ignore_deferred()` 等明确省略该同步；关闭自动插入时也需自行处理。0.20 新增 `chain_weak()` / `after_weak()` / `before_weak()`，Bevy 内置的渲染、`PostUpdate` UI 等调度已改用弱顺序；自己的 `.chain()` 语义不变，但若依赖“内置系统一定先跑完”且该依赖不体现在 ECS 访问上，需显式 `.after(...)`。
+`Commands` are deferred writes. With the default schedule build settings, 0.20.1's `.chain()` / `.after()` / `.before()` insert `ApplyDeferred` on the dependency edges that need it, so downstream systems see earlier commands. Writing just `(a, b)` gives no order. `chain_ignore_deferred()` and similar explicitly skip that sync; if automatic insertion is turned off, handle it yourself. 0.20 adds `chain_weak()` / `after_weak()` / `before_weak()`, and Bevy's own rendering and `PostUpdate` UI schedules now use weak ordering. Your own `.chain()` keeps its meaning, but if you rely on "the built-in system always finishes first" and that dependency is not visible in ECS access, add an explicit `.after(...)`.
 
-0.20 观察者写法：`On<Add, A>` → `On<Add<A>>`，`On<E, B>` 不再带 Bundle 泛型。状态切换 `NextState::set_if_neq` → `set_if_different`（旧名已弃用）；组件/资源上的 `set_if_neq` 不受影响。`iter_many*` 现在逐项返回 `Result`。
+0.20 observer syntax: `On<Add, A>` → `On<Add<A>>`, and `On<E, B>` no longer takes a bundle generic. For state transitions, `NextState::set_if_neq` → `set_if_different` (the old name is deprecated); `set_if_neq` on components and resources is unaffected. `iter_many*` now returns a `Result` per item.
 
-只为存在数据依赖的系统排序；把全游戏链成串会损失并行机会。`.after(foo)` 不会自动注册 `foo`，且不能为两个不同 schedule 建立跨 schedule 的先后边。先定位系统实际所在的 `PreUpdate` / `FixedUpdate` / `Update` / `PostUpdate`。
+Order only systems with a real data dependency; chaining the whole game loses parallelism. `.after(foo)` does not register `foo`, and cannot create an ordering edge across two different schedules. First find out which of `PreUpdate` / `FixedUpdate` / `Update` / `PostUpdate` the system actually runs in.
 
-修改 `Transform` 后立即读取 `GlobalTransform`，可能读到传播前结果。需要最终世界坐标的系统安排在 `PostUpdate` 的 `TransformSystems::Propagate` 之后；需要最终 UI 尺寸的读取安排在 `UiSystems::Layout` 之后。不要通过盲等若干帧掩盖顺序错误。
+Reading `GlobalTransform` right after changing `Transform` can return the value from before propagation. Systems that need final world positions run after `TransformSystems::Propagate` in `PostUpdate`; reads of final UI sizes run after `UiSystems::Layout`. Do not hide an ordering bug by waiting a few frames.
 
-## 输入与时间步
+## Input and timesteps
 
-连续运动使用时间步缩放，例如方向先 `normalize_or_zero()`，再乘速度和秒数，避免斜向更快。碰撞/物理模拟采用固定时间步时，在 `FixedUpdate` 使用固定模拟时间；摄像机、UI 和视觉插值可保持帧更新。
+Scale continuous motion by the timestep: for example `normalize_or_zero()` the direction first, then multiply by speed and seconds, so diagonals are not faster. When collision or physics simulation uses a fixed timestep, use fixed simulation time in `FixedUpdate`; cameras, UI and visual interpolation can stay on the frame update.
 
-一帧中固定更新可能执行零次或多次。直接在 `FixedUpdate` 读取帧级 `just_pressed`，可能丢一次按下或重复应用。用与该版本官方固定时间步示例一致的输入采集顺序：把一次性动作记入待消费状态，模拟步消费后清除；连续方向可保留到下次采样。不要在第一步消费时顺带清掉仍按住的方向。
+A frame can run the fixed update zero or several times. Reading the per-frame `just_pressed` directly in `FixedUpdate` can drop a press or apply it twice. Follow the input-gathering order of that version's official fixed-timestep example: record one-shot actions as pending state, consume and clear them in the simulation step, and keep continuous directions until the next sample. Do not clear a direction that is still held when the first step consumes it.
 
-暂停用玩法状态及系统运行条件表达；明确哪些时钟继续。`Time<Virtual>` 可暂停/缩放，`Time<Real>` 不受游戏暂停影响，`Time<Fixed>` 用于固定模拟。菜单动画若应继续，不应误接暂停的模拟时钟。
+Express pause with gameplay states and system run conditions, and decide which clocks keep running. `Time<Virtual>` can pause and scale, `Time<Real>` ignores game pause, and `Time<Fixed>` drives fixed simulation. Menu animations that should keep playing must not be wired to the paused simulation clock.
 
-## 状态、消息与重开
+## States, messages and restarting
 
-`States` / `NextState` 管理菜单、游玩、结算等真正互斥状态；`OnEnter` 创建该状态内容，`OnExit` 清理或使用 `DespawnOnExit`。`NextState::set` 请求转移，不能认为同一系统后半段已经进入新状态。已有 `DefaultPlugins` 与精简 `App` 的插件集合不同；精简测试需显式添加 `StatesPlugin`。
+`States` / `NextState` manage truly exclusive states such as menu, playing and results; `OnEnter` creates that state's content, and `OnExit` cleans it up or `DespawnOnExit` does. `NextState::set` requests a transition; the rest of the same system is not yet in the new state. `DefaultPlugins` and a trimmed test `App` register different plugins; a trimmed test must add `StatesPlugin` explicitly.
 
-重开同时处理状态所属实体和持久 `Resource`：销毁关卡不自动清零比分、冷却或输入队列。选择哪些跨关保留由游戏设计决定。可执行示例验证状态退出清理；实际游戏另测比分等资源重置。
+Restarting handles both state-owned entities and persistent `Resource`s: despawning the level does not reset score, cooldowns or input queues. What carries across levels is a game design decision. The runnable example checks state-exit cleanup; test resource resets such as score in the real game.
 
-0.20.1 中缓冲消息用 `Message` / `MessageWriter` / `MessageReader`，观察者事件用 `Event` / `On`。前者适合调度中的批量处理，后者适合触发观察者；不要照搬旧版 `EventReader`。临时缓冲消息不适合当暂停菜单期间无限保存的任务队列，需要持久积压时显式存入资源。
+In 0.20.1, buffered messages use `Message` / `MessageWriter` / `MessageReader`, and observer events use `Event` / `On`. The first suits batch processing inside the schedule, the second triggering observers; do not copy the old `EventReader`. Temporary buffered messages are not a queue that survives an open pause menu indefinitely; when you need a persistent backlog, store it in a resource.
 
-依据：[Query](https://docs.rs/bevy/0.20.1/bevy/ecs/system/struct.Query.html)、[调度顺序与延迟命令](https://docs.rs/bevy/0.20.1/bevy/ecs/schedule/trait.IntoScheduleConfigs.html)、同版本 crate 的 `examples/ecs`、`examples/time`、`examples/movement/physics_in_fixed_timestep.rs`。项目使用其他版本时查对应源码。
+Sources: [Query](https://docs.rs/bevy/0.20.1/bevy/ecs/system/struct.Query.html), [schedule ordering and deferred commands](https://docs.rs/bevy/0.20.1/bevy/ecs/schedule/trait.IntoScheduleConfigs.html), and the same version's `examples/ecs`, `examples/time` and `examples/movement/physics_in_fixed_timestep.rs`. Check that version's source when the project uses a different one.

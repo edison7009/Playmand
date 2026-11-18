@@ -1,25 +1,25 @@
-# Bevy 验证与分发
+# Bevy verification and distribution
 
-## 按技术改动选择验证
+## Choose checks by the kind of change
 
-| 改动 | 合适的检查 | 覆盖不到的部分 |
+| Change | Suitable check | What it does not cover |
 | --- | --- | --- |
-| Query、Commands、状态、资源生命周期 | 精简 `App` 注册实际系统，推进 schedule，检查执行后的 World；示例见 [ecs-patterns](../examples/ecs-patterns/src/lib.rs) | 渲染与真实窗口输入 |
-| 帧率相关移动/冷却 | 可控时间步推进模拟，检查位移、次数及暂停/恢复；固定步测试显式配置时间插件和时间策略 | 操作手感 |
-| 按键、鼠标、UI 行为 | 通过项目输入路径操作，检查状态和反馈；精简测试中注意输入插件会在帧边界清理瞬时状态 | 合成输入不证明 OS 焦点或中文 IME |
-| GLB、动画、UI、相机、材质 | 使用真实渲染路径，等资源与场景就绪，检查图像或动作时间序列 | 一张截图不能证明整段动画、全部交互或性能 |
-| 性能 | 同配置 release 构建，同场景、视口、前后台状态及预热条件下采样 | 实体计数不等于显存，离线编码帧率不等于实时 FPS |
+| Queries, commands, states, resource lifecycle | Register the real systems in a trimmed `App`, advance the schedule, and check the World afterwards; see [ecs-patterns](../examples/ecs-patterns/src/lib.rs) | Rendering and real window input |
+| Frame-rate-dependent movement or cooldowns | Advance the simulation with a controlled timestep and check displacement, counts and pause/resume; fixed-step tests configure the time plugin and time strategy explicitly | Game feel |
+| Keys, mouse, UI behaviour | Drive the project's input path and check state and feedback; in trimmed tests, input plugins clear one-shot state at frame boundaries | Synthetic input does not prove OS focus or a Chinese IME |
+| GLB, animation, UI, cameras, materials | Use the real render path, wait for assets and the scene to be ready, and check images or a time series of motion | One screenshot does not prove a whole animation, every interaction or performance |
+| Performance | Sample a release build with the same config, scene, viewport, foreground/background state and warm-up | Entity counts are not VRAM, and an offline encode's frame rate is not runtime FPS |
 
-精简 `App` 只注册该规则依赖的插件；游戏使用 `DefaultPlugins` 不代表逻辑测试也必须启动 GPU。`MinimalPlugins` 不包括所有状态/资源/渲染功能，缺哪个插件应由实际系统依赖决定。正常帧更新测试不要用直接改最终比分替代输入和规则执行。
+A trimmed `App` registers only the plugins the rule depends on; a game using `DefaultPlugins` does not mean logic tests must start the GPU. `MinimalPlugins` does not include every state, resource or rendering feature; add the plugins the actual systems need. Normal frame-update tests should run input and rules, not write the final score directly.
 
-这些检查按任务需要选择，遵守项目已有必做检查。`cargo check` 不执行系统，因此无法发现所有 Query 初始化冲突；`cargo test` 通过也不证明画面正确。无法运行 GPU 时，完成可用检查并明确留下画面验证缺口。
+Pick these checks as the task needs and follow the project's required checks. `cargo check` does not run systems, so it cannot find every query initialization conflict, and `cargo test` passing does not prove the image is right. When the GPU cannot run, complete the available checks and state the visual verification gap clearly.
 
-## 资源路径与玩家包
+## Asset paths and player builds
 
-`AssetServer` 的路径相对资产源，不应写开发机器的绝对路径。原生默认文件资产源的根目录受启动环境和 `AssetPlugin` 配置影响；通过该版本 `bevy_asset::io::file` 源码确认，不假设始终跟随 shell 当前目录。包内固定资源布局和启动入口，避免开发期环境变量掩盖缺文件。
+`AssetServer` paths are relative to the asset source; do not write absolute paths from the development machine. The root of the default native file asset source depends on the launch environment and `AssetPlugin` settings; confirm it in that version's `bevy_asset::io::file` source rather than assuming it follows the shell's current folder. Fix the in-package asset layout and the launch entry point so development-time environment variables do not hide missing files.
 
-打包时包含 exe、资产目录及实际动态库依赖；GLTF 外部纹理/bin、字体、音效也属于依赖。`dynamic_linking` 只作为明确选择的开发配置，玩家包需处理真实运行库依赖。存档应写入项目选择的用户数据目录，不能默认写只读安装目录或覆盖玩家现有存档做测试。
+A package includes the exe, the asset folder and the real dynamic library dependencies; external GLTF textures/bins, fonts and sounds are dependencies too. `dynamic_linking` is only for an explicitly chosen development configuration; player builds must handle real runtime library dependencies. Save files go to the user-data folder the project chose, not to a read-only install folder by default, and tests must not overwrite a player's existing saves.
 
-把本次构建放入独立分发目录，在离开源码树和不同工作目录的条件下启动，检查加载日志、画面、输入及本次改动涉及的保存/退出路径。包生成成功与包能够运行是两个不同结果。
+Put this build into a separate distribution folder, launch it away from the source tree and from a different working folder, and check load logs, the image, input, and any save/exit paths this change touches. Generating a package and that package running are two different results.
 
-交付说明保留启动命令、实际通过的检查及尚未验证项即可；需要交接时沿用项目记录，不要求每个游戏任务生成一套新报告。
+Hand-off notes keep the launch command, the checks that actually passed and what is still unverified; for hand-over, use the project's existing records instead of producing a new report for every game task.

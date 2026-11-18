@@ -1,56 +1,56 @@
 # Blender + MCP → Bevy
 
-Blender 承担游戏资产制作，MCP 提供 AI 操作入口，Bevy 使用导出的资产实现游戏。需要建模、材质、骨骼、动画或资产修正时读取本页；已有合适 GLB 可直接接入，不必重新制作。
+Blender makes the game's assets, MCP gives the AI a way to operate it, and Bevy uses the exported assets in the game. Read this page for modelling, materials, rigs, animation or asset fixes; a suitable existing GLB can go straight into the game without being rebuilt.
 
-## 连接到真正的 Blender 场景
+## Connect to the real Blender scene
 
-查看宿主实际提供的 MCP 工具及参数，确认所连 Blender 的版本、当前 `.blend` 路径、目标场景与对象；不要把另一个窗口或服务的场景当成本任务文件。主机上的文件路径与云端工作目录可能不同，导出后必须把产物放到 Bevy 能访问的位置。云端的 localhost 不会自动指向用户电脑。
+Look at the MCP tools and parameters the host actually provides, and confirm the connected Blender version, the current `.blend` path, the target scene and objects. Do not treat a scene from another window or service as this task's file. File paths on the host can differ from a cloud working folder, so put exported files where Bevy can reach them. In the cloud, localhost does not point at the user's computer.
 
-一种可选实现是第三方 [ahujasid/blender-mcp](https://github.com/ahujasid/blender-mcp)。它由宿主侧 MCP 服务和 Blender 内插件组成，两端都需要配置、启动。按该项目当前安装说明接入所用宿主；不要把 Claude Desktop 的配置直接写到 Claude Code 或 Codex，也不要覆盖已有 MCP 配置。采用可追溯的服务/插件版本，升级后重新核对工具 schema。
+One optional implementation is the third-party [ahujasid/blender-mcp](https://github.com/ahujasid/blender-mcp). It has an MCP server on the host side and an add-on inside Blender; both must be configured and running. Follow that project's current install instructions for the host in use; do not write a Claude Desktop config into Claude Code or Codex, and do not overwrite existing MCP configuration. Use a traceable server/add-on version, and re-check the tool schema after upgrading.
 
-该实现的 [服务源码](https://github.com/ahujasid/blender-mcp/blob/main/src/blender_mcp/server.py) 提供以下能力，可作为映射参考；工具名称与参数以连接后列出的为准：
+That implementation's [server source](https://github.com/ahujasid/blender-mcp/blob/main/src/blender_mcp/server.py) provides the capabilities below, useful as a mapping; the tool names and parameters you get after connecting are authoritative:
 
-| 目的 | 示例工具名 | 实际使用 |
+| Purpose | Example tool | Actual use |
 | --- | --- | --- |
-| 了解当前场景 | `get_scene_info` | 找目标对象、材质及场景结构 |
-| 检查某个资产 | `get_object_info` | 核对尺寸、变换和几何信息；缺失字段再读 bpy |
-| 查看造型与编辑结果 | `get_viewport_screenshot` | 检查轮廓、比例、摆放；不是 Bevy 渲染结果 |
-| 精确建模、数据检查、导出 | `execute_blender_code` | 在 Blender 内运行 bpy，按实际 schema 传入代码 |
+| Understand the current scene | `get_scene_info` | Find target objects, materials and scene structure |
+| Inspect one asset | `get_object_info` | Check size, transform and geometry; read bpy for missing fields |
+| See shape and edits | `get_viewport_screenshot` | Check silhouette, proportions and placement; this is not Bevy's render |
+| Precise modelling, data checks, export | `execute_blender_code` | Run bpy inside Blender, passing code per the real schema |
 
-以上不是 MCP 协议规定的标准工具名。另一实现可能提供专门的建模/导出工具，优先使用其合适接口。Playmand 不自带这些服务，也不假设存在 Bevy MCP；运行侧 MCP 若可用，同样先核对真实状态查询、输入、截图能力。
+These are not tool names defined by the MCP protocol. Another implementation may offer dedicated modelling or export tools; prefer its proper interface. Playmand does not ship these servers and does not assume a Bevy MCP exists; if a runtime-side MCP is available, check its real state queries, input and screenshot abilities first in the same way.
 
-连接失败时分开检查：宿主是否发现服务、服务是否连到 Blender 插件、只读场景查询是否成功。能查场景但截图失败，可能是视口上下文问题；不能据此重装整个环境。没有 MCP 时，可用已安装 Blender 的后台模式执行离线脚本，但这不等于 MCP 已连接；需要交互视口的能力仍单独处理。
+When connecting fails, check separately whether the host found the server, whether the server reached the Blender add-on, and whether a read-only scene query succeeds. Scene queries working while screenshots fail can be a viewport context problem; it is not a reason to reinstall everything. Without MCP, an installed Blender can run offline scripts in background mode, but that does not mean MCP is connected; features that need the interactive viewport are a separate matter.
 
-## 建模与编辑
+## Modelling and editing
 
-用适合当前形体的基础几何、修改器或已有资产。宝箱盖、门、轮子等需要独立运动或交互的部件保持可独立控制，原点放在正确的铰链/转轴位置；只有确实共用变换和交互的部件才考虑合并。素材来源和制作方式服从用户要求，不统一禁止外部资产。
+Use base geometry, modifiers or existing assets that fit the form. Parts that move or are used independently, such as a chest lid, a door or a wheel, stay independently controllable, with the origin on the correct hinge or axis; merge parts only when they truly share transforms and interaction. Asset sources and methods follow the user's requirements; external assets are not banned across the board.
 
-复用工程约定的集合、对象和材质命名。创建资产放入明确的集合；重复请求时先查询已有对象再修改，避免堆出 `.001` 副本。修改现有场景时只选择本任务对象，不用全选删除清空用户场景。保存可编辑 `.blend` 源文件，GLB 作为导出产物。
+Reuse the project's naming for collections, objects and materials. Put new assets in a clear collection; on repeated requests, query existing objects and modify them instead of piling up `.001` copies. When editing an existing scene, select only this task's objects; never select all and delete to clear the user's scene. Save the editable `.blend` source; the GLB is an export product.
 
-通过代码操作时尽量使用 `bpy.data` 数据接口；必须用 `bpy.ops` 时确认 Object/Edit/Pose 模式、活动对象、选择集和所需编辑器上下文。遇到 `poll() failed` 应修正上下文，不能靠反复重试。API 和导出选项以当前 Blender 为准，可通过 RNA 查询实际参数；参考 [Blender Operators 说明](https://docs.blender.org/api/main/info_gotchas_operators.html)。
+When working in code, prefer the `bpy.data` data API. When `bpy.ops` is required, confirm Object/Edit/Pose mode, the active object, the selection and the editor context it needs. On `poll() failed`, fix the context instead of retrying. APIs and export options follow the current Blender; query actual parameters through RNA, and see [Blender operators gotchas](https://docs.blender.org/api/main/info_gotchas_operators.html).
 
-按游戏镜头距离决定细节，按碰撞/旋转需要设置原点，按单位约定设置尺寸。网格、UV、材质槽与纹理预算来自当前项目，不给所有游戏套同一个面数上限。共享 mesh/material datablock 的修改会影响其他引用对象；需要独立变体时先复制对应数据。绑定角色不要盲目应用全体变换或破坏骨骼层级。
+Choose detail by the game's camera distance, set origins for collision and rotation, and set sizes by the unit convention. Mesh, UV, material-slot and texture budgets come from the current project; do not apply one polygon cap to every game. Editing a shared mesh or material datablock affects every object that uses it; copy the data first when you need an independent variant. Do not blindly apply all transforms to a rigged character or break its bone hierarchy.
 
-实际查看截图或渲染，检查整体比例、穿插、悬空和材质表现；必要时切换视角。动画查看多个时刻及循环接缝，不能只看第一帧。发现具体缺陷再修改，以需求和可见结果判断完成，不规定调用次数或至少几轮。代码执行成功不证明造型或权重正确。
+Actually look at screenshots or renders, and check overall proportions, intersections, floating parts and materials, switching views when needed. For animation, look at several moments and the loop seam, not just the first frame. Fix concrete defects, and judge completion by the requirements and visible results, not by a number of calls or rounds. Code that runs without error does not prove the shape or weights are right.
 
-长时间烘焙、渲染或生成可能超过 MCP 请求超时。超时后先查对象、输出文件和任务状态，避免重复创建。实现支持异步任务时使用其完成信号；否则可把已保存的独立文件交给 Blender CLI 处理，完成后重新检查结果。不要在不知道前一次是否已执行的情况下原样重发场景修改。
+Long bakes, renders or generation can exceed the MCP request timeout. After a timeout, check objects, output files and task state first so you do not create duplicates. Use the implementation's completion signal when it supports async tasks; otherwise hand an already-saved standalone file to the Blender CLI, and inspect the result afterwards. Do not resend a scene edit unchanged when you do not know whether the previous one ran.
 
-## 导出适合 Bevy 的 GLB
+## Export a GLB that suits Bevy
 
-选择本次资产根及必要后代；带骨骼的模型还要包含骨架和动画依赖。检查导出器的选择/集合范围，避免带上制作参考物、测试地面或渲染相机。材质、动画、坐标转换的具体选项随 Blender/exporter 版本核对，不整段复制旧版参数表。
+Select this asset's root and the descendants it needs; rigged models also need the armature and animation dependencies. Check the exporter's selection/collection scope so reference objects, test floors or render cameras are not included. Check material, animation and coordinate-conversion options against the Blender and exporter version; do not copy an old version's whole option table.
 
-| 接入问题 | Blender / 导出侧处理 | Bevy 侧核对 |
+| Integration problem | Blender / export side | Bevy side |
 | --- | --- | --- |
-| 尺寸或朝向错误 | 明确单位与原点，检查 glTF 的 Y-up 转换；避免再手工重复转轴 | `Transform`、地面接触、面向、包围盒及碰撞尺度 |
-| 程序材质变白或效果丢失 | 按导出器支持的 PBR 节点组织材质；不支持的程序效果烘焙为纹理或在引擎重做 | 纹理路径、颜色空间、透明模式及支持的 glTF 扩展 |
-| 动画漏导或片段合并 | 核对 action/slot/NLA 与导出模式、片段名和帧范围；约束驱动效果需要时烘焙到目标骨架 | 实际 `Gltf` 动画列表、player/graph 绑定和播放时长 |
-| 面数或顶点数超预期 | 检查 modifier 的导出结果、三角化和 UV/硬边拆点，不只读编辑前统计 | 实际网格、材质数量和目标场景性能 |
-| 动作滑步、武器脱手 | 明确 root motion 归属、挂点、权重与约束烘焙 | 代码位移是否重复叠加，实例骨骼/挂点是否正确 |
+| Wrong size or facing | Set units and origin explicitly, check glTF's Y-up conversion, and do not rotate the axes again by hand | `Transform`, ground contact, facing, bounding box and collision scale |
+| Procedural material turns white or loses effects | Build materials from PBR nodes the exporter supports; bake unsupported procedural effects to textures or rebuild them in the engine | Texture paths, colour space, alpha mode and supported glTF extensions |
+| Animation missing or clips merged | Check action/slot/NLA against the export mode, clip names and frame ranges; bake constraint-driven motion onto the target skeleton when needed | The actual `Gltf` animation list, player/graph binding and playback length |
+| More faces or vertices than expected | Check modifier results as exported, triangulation and UV/hard-edge splits, not only pre-edit stats | Actual mesh, material count and target scene performance |
+| Foot sliding, weapon leaves the hand | Decide who owns root motion, and set attachment points, weights and baked constraints | Whether code movement is added twice, and whether instance bones and attachment points are correct |
 
-glTF 与 Blender 的材质/动画能力并不完全相同；稳定概念可参考 [Blender glTF 手册](https://docs.blender.org/manual/en/4.0/addons/import_export/scene_gltf2.html)，新版本导出参数查本机帮助和对应版本文档。GLB 便于集中交付；仍要确认贴图等依赖实际嵌入或随包存在，而非只检查扩展名。
+glTF and Blender do not support exactly the same materials and animation. See the [Blender glTF manual](https://docs.blender.org/manual/en/4.0/addons/import_export/scene_gltf2.html) for stable concepts, and the local help and matching docs for newer export options. GLB is convenient to deliver as one file; still confirm textures and other dependencies are actually embedded or shipped, not just that the extension is right.
 
-保存 `.blend` 后导出到项目资产目录的明确路径。外部下载或生成的素材保留来源与许可。导出后在独立场景回读能发现部分缺失，但最终还要在 Bevy 的真实相机/灯光下检查尺寸、材质、动画片段与循环接缝。不要用 Blender 视口截图替代游戏画面验收。
+Save the `.blend`, then export to an explicit path in the project's asset folder. Keep source and licence for downloaded or generated assets. Re-importing into a separate scene after export catches some gaps, but finally check size, materials, animation clips and loop seams in Bevy under the real camera and lights. A Blender viewport screenshot does not replace checking the game's own image.
 
-继续接入：[Bevy 资源与动画](assets-animation.md)、[渲染与 UI](rendering.md)、[包内验证](verification.md)。
+Continue with: [Bevy assets and animation](assets-animation.md), [rendering and UI](rendering.md), [build verification](verification.md).
 
-资料核对：2026-09-13。工具映射依据上述 MCP 上游文档和源码；本仓库本版尚未执行 Blender MCP 连接、场景修改或导出实测。
+Checked 2026-09-13. The tool mapping is based on the MCP upstream docs and source above; this version of the repository has not yet run a Blender MCP connection, scene edit or export end to end.

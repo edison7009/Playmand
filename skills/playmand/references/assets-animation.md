@@ -1,14 +1,14 @@
-# Bevy 资源、GLB 与动画
+# Bevy assets, GLB and animation
 
-基线：Bevy 0.20.1。这里的符号已对照同版本 crate 源码；本仓库的无窗口 ECS 示例不验证 GLB 或 GPU 渲染。
+Baseline: Bevy 0.20.1. The symbols here were checked against that version's crate source; this repository's windowless ECS example does not verify GLB or GPU rendering.
 
-需要制作或修正源模型、材质、骨骼和动画时，使用 [Blender 与 MCP](blender-mcp.md) 操作源资产并导出，再按本页接入 Bevy。
+To create or fix source models, materials, rigs and animation, use [Blender and MCP](blender-mcp.md) on the source asset and export it, then bring it into Bevy with this page.
 
-## 加载与实例化是不同阶段
+## Loading and instancing are different stages
 
-`AssetServer::load` 立即返回句柄，不代表资产加载完成。`get_load_states` 可区分根资产、直接依赖和递归依赖状态；需要整条依赖就绪时使用 `is_loaded_with_dependencies`。加载失败应呈现错误或回退，不能一直停在 Loading。
+`AssetServer::load` returns a handle immediately; that does not mean the asset has finished loading. `get_load_states` separates the root asset, direct dependencies and recursive dependencies; when the whole dependency tree must be ready, use `is_loaded_with_dependencies`. A failed load should show an error or a fallback, not stay on "Loading" forever.
 
-0.20.1 的 GLB 子场景加载写法：
+Loading a GLB sub-scene in 0.20.1:
 
 ```rust
 commands.spawn(WorldAssetRoot(
@@ -16,31 +16,31 @@ commands.spawn(WorldAssetRoot(
 ));
 ```
 
-这段放在具有 `Commands` / `Res<AssetServer>` 的系统中，并启用 GLTF 与渲染所需插件/features。`Scene(0)` 只是示例，实际索引或名称来自目标文件。GLTF 可能依赖外部纹理或 bin 文件，分发时也必须带上。
+Put this in a system that has `Commands` / `Res<AssetServer>`, with the GLTF and rendering plugins/features enabled. `Scene(0)` is only an example; the real index or name comes from the target file. A GLTF may depend on external textures or a bin file, which must also ship with the game.
 
-等待 `On<WorldInstanceReady>` 后再搜索实例后代实体、网格和动画播放器。根资产加载、场景子实体创建、动画图绑定、GPU 第一帧显示各有不同的就绪条件。不要用“等待 32 帧”替代这些条件。
+Wait for `On<WorldInstanceReady>` before searching the instance's descendants for entities, meshes and animation players. Root asset loading, scene child creation, animation graph binding and the first GPU frame each have their own readiness condition. Do not replace them with "wait 32 frames".
 
-## 根资产、共享句柄与局部修改
+## Root assets, shared handles and local changes
 
-需要同一文件的多个场景/动画时，可持有 `Handle<Gltf>`，待 `Assets<Gltf>::get` 成功后从 `scenes` / `named_scenes` 与 `animations` / `named_animations` 取得句柄。保留根句柄或实际使用的强句柄维持所需资产生命周期。不要每帧重新发起相同加载。
+When you need several scenes or animations from one file, hold a `Handle<Gltf>`, and once `Assets<Gltf>::get` succeeds, take handles from `scenes` / `named_scenes` and `animations` / `named_animations`. Keep the root handle, or the strong handles you actually use, to keep the assets alive. Do not issue the same load again every frame.
 
-多个实体使用同一个网格/材质句柄会共享资产。改 `Assets<StandardMaterial>` 中该句柄的值会影响所有引用者。只有一个角色需要染色时，克隆对应材质值、`materials.add` 一次，再替换该实例网格上的 `MeshMaterial3d`；不要每帧生成材质。预览与主角色可以共享不可变资产，但需要独立的场景实体、骨骼姿态和播放状态。
+Entities that use the same mesh or material handle share the asset. Changing that handle's value in `Assets<StandardMaterial>` affects everyone who uses it. When only one character should be tinted, clone the material value, `materials.add` it once, and swap that instance's `MeshMaterial3d`; do not create materials every frame. A preview and the main character can share immutable assets, but need their own scene entities, bone poses and playback state.
 
-反复切换角色时，按实例根清理所属实体，并移除不再使用的资源句柄/缓存项。仅隐藏实体不等于卸载资产；仅卸载 GLB 根也不保证所有子资产已无强引用。用相同状态下的实体、资产和活动相机计数判断生命周期，不能凭一次工作集上升判断泄漏。
+When switching characters repeatedly, clean up the entities owned by each instance root and drop resource handles or cache entries that are no longer used. Hiding an entity does not unload its assets, and unloading the GLB root does not guarantee nothing else holds strong references to its sub-assets. Judge lifetime by entity, asset and active-camera counts in the same state, not by one rise in working-set memory.
 
-## 让动画真正播到当前模型
+## Make the animation actually play on this model
 
-0.20.1 的动画接线涉及：
+Wiring animation in 0.20.1 involves:
 
-1. 将目标 `Handle<AnimationClip>` 放入 `AnimationGraph::from_clip`，取得图和 `AnimationNodeIndex`；索引属于该图，不能拿任意动画数组下标代替。
-2. 把图放入 `Assets<AnimationGraph>`，保留返回句柄。
-3. 在 `WorldInstanceReady` 对应的实例后代中找到 `AnimationPlayer`；它未必在你创建的根实体上。
-4. 给该播放器实体插入 `AnimationGraphHandle`，再 `player.play(index).repeat()`。切换和混合需要时参考 `AnimationTransitions`。
+1. Pass the target `Handle<AnimationClip>` to `AnimationGraph::from_clip` to get the graph and an `AnimationNodeIndex`; the index belongs to that graph and cannot be replaced by an arbitrary animation-array index.
+2. Add the graph to `Assets<AnimationGraph>` and keep the returned handle.
+3. Find the `AnimationPlayer` among the descendants of the instance that `WorldInstanceReady` refers to; it is not necessarily on the root entity you spawned.
+4. Insert `AnimationGraphHandle` on that player entity, then call `player.play(index).repeat()`. For switching and blending, see `AnimationTransitions`.
 
-这个接线不负责自动重定向任意骨架。动画目标名称/路径、骨架层级、导出绑定姿势必须匹配。T-pose 先查 clip、图、player 和目标绑定；角色滑步再查动画根位移与代码移动是否重复叠加。不要为隐藏错误而给骨骼逐帧写全局硬编码姿势。
+This wiring does not retarget arbitrary skeletons. Animation target names/paths, skeleton hierarchy and the exported bind pose must match. For a T-pose, check the clip, graph, player and target binding first; for sliding feet, check whether the animation's root motion and the code's movement are applied twice. Do not hide errors by writing hard-coded global bone poses every frame.
 
-## 素材对游戏结果的影响
+## How assets affect the result
 
-模型导入完成后核对尺寸、坐标轴、原点、法线、透明模式和纹理颜色空间；先调整明确的问题，避免同时改相机、曝光和材质。没有目标风格素材时，根据宿主已有生成工具或用户提供的资产准备素材，并在游戏中实际检查。占位几何能验证机制，但不等于达到了用户指定的画面风格。
+After importing a model, check size, axes, origin, normals, alpha mode and texture colour space; fix the clear problems first, rather than changing camera, exposure and materials all at once. When no assets in the target style exist, prepare them with the host's available generation tools or assets the user provides, and check them in the game. Placeholder geometry can prove a mechanic, but does not reach the visual style the user asked for.
 
-API 与接线依据：[GLTF API](https://docs.rs/bevy/0.20.1/bevy/gltf/index.html)、[AssetServer](https://docs.rs/bevy/0.20.1/bevy/asset/struct.AssetServer.html)、同版本官方 `examples/animation/animated_mesh.rs` 与 `animated_mesh_control.rs`。通过 [版本定位工具](../scripts/inspect_bevy.py) 找到本地对应示例，避免依赖不断变化的 main 分支。
+API and wiring sources: [GLTF API](https://docs.rs/bevy/0.20.1/bevy/gltf/index.html), [AssetServer](https://docs.rs/bevy/0.20.1/bevy/asset/struct.AssetServer.html), and that version's official `examples/animation/animated_mesh.rs` and `animated_mesh_control.rs`. Use the [version locator](../scripts/inspect_bevy.py) to find the matching local examples instead of relying on the ever-changing main branch.

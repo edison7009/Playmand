@@ -141,7 +141,7 @@ The cost is a steep learning curve: ownership, borrowing, lifetimes, plus Bevy's
 
 The technical baseline is **Bevy 0.20.1 / Rust 1.97.1**. For other versions, check that version's source; existing projects should not be upgraded just to match the examples. Reference material is read on demand per problem; the full entry point is [SKILL.md](skills/playmand/SKILL.md).
 
-> The skill's reference docs are currently written in Chinese. Agents read them fine regardless of the language you prompt in.
+> A Chinese copy of the skill and its references is in [docs/zh-CN/playmand](docs/zh-CN/playmand/README.md). Agents load the English version, and answer in whatever language you prompt in.
 
 ## Installation
 
