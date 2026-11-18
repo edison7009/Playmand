@@ -1,7 +1,7 @@
 ---
 name: playmand
 license: MIT
-description: Make games and visual work in Rust. Real-time 2D/3D games with Bevy (the default engine) and game physics with Avian; frame-by-frame recorded animations and videos (product demos, logo animations, GIFs, promo clips); interactive WebGL2 effects for a web page or Tauri app in Rust compiled to WebAssembly (card packs, holographic cards, 3D companions); and models, materials and animation through Blender MCP. Picks the right Rust tool for the task and always follows the engine the user names. Covers version matching, ECS scheduling, input state, physics, GLB, UI rendering, performance, native and web builds, fixed-clock recording, seamless loops and encoding. Use when creating or improving a Rust game, an animated video, a web effect or their assets; when this skill is invoked to start a new game or animation and no engine is named, default to Rust + Bevy.
+description: Make games and visual work in Rust. Real-time 2D/3D games with Bevy (the default engine), physics with Avian, audio with Kira, debug tools with egui, small 2D games with Macroquad and custom GPU work with wgpu; frame-by-frame recorded animations and videos (product demos, logo animations, GIFs, promo clips); interactive WebGL2 effects for a web page or Tauri app in Rust compiled to WebAssembly (card packs, holographic cards, 3D companions); and models, materials and animation through Blender MCP. Picks the right Rust tool for the task and always follows the engine the user names. Covers version matching, ECS scheduling, input state, physics, GLB, UI rendering, performance, native and web builds, fixed-clock recording, seamless loops and encoding. Use when creating or improving a Rust game, an animated video, a web effect or their assets; when this skill is invoked to start a new game or animation and no engine is named, default to Rust + Bevy.
 ---
 
 # Playmand
@@ -18,6 +18,10 @@ Bevy is the default, not the only choice. Pick by what the user is making; if th
 | --- | --- | --- |
 | A real-time 2D/3D game, or a scene that will also be recorded | Rust + Bevy | [Rust and Bevy toolchain](references/bevy.md), [ECS](references/ecs.md) |
 | Collisions, rigid bodies, triggers, falling and stacking | Avian inside Bevy (Rapier when the project already uses it) | [Physics](references/physics.md) |
+| Music, sound effects, fades, mixer channels | Kira (bevy_kira_audio in Bevy) | [Audio](references/audio.md) |
+| Debug panels, tweak sliders, inspectors, in-game tools | egui (bevy_egui in Bevy) | [egui](references/egui.md) |
+| A small 2D game where a light, quick build matters more than ECS (or the user asks for Macroquad) | Macroquad, on its own | [Macroquad](references/macroquad.md) |
+| Custom render passes, GPU compute, rendering without an engine | wgpu (Bevy's own in a Bevy project) | [wgpu](references/wgpu.md) |
 | A video, GIF or looping animation | Bevy on a fixed clock, then an encoder | [Animation and video recording](references/video.md) |
 | An effect inside an existing web page or Tauri/React window | Rust → WebAssembly + WebGL2, no engine | [Rust → WebAssembly web effects](references/web-wasm.md) |
 | Models, materials, rigs, animation clips | Blender through MCP, exported to GLB | [Blender and MCP](references/blender-mcp.md) |
@@ -49,6 +53,10 @@ It calls `cargo metadata` offline and locked, and prints the Bevy crates the wor
 | New project, version/API errors, slow builds, Windows linking, plugin compatibility | [Rust and Bevy toolchain](references/bevy.md) |
 | Component/resource design, query conflicts, when commands become visible, frame timing, input, pause/restart | [ECS, scheduling and gameplay state](references/ecs.md) |
 | Rigid bodies, colliders, collision events, sensors, gravity, fixed-step and deterministic physics | [Physics with Avian](references/physics.md) |
+| Music, sound effects, decibels, tweens, mixer tracks, testing audio without speakers | [Audio with Kira](references/audio.md) |
+| Debug panels and tools, immediate-mode UI, driving UI in tests | [egui](references/egui.md) |
+| Small standalone 2D games, fixed-step rules, tiny web builds | [Macroquad](references/macroquad.md) |
+| Devices, compute and render passes, reading GPU results back | [wgpu](references/wgpu.md) |
 | Blender modelling/materials/animation, MCP connection and operations, exporting GLB into Bevy | [Blender and MCP](references/blender-mcp.md) |
 | GLB, scene instances, animation, skeletons, shared assets and per-instance changes | [Assets and animation](references/assets-animation.md) |
 | 2D/3D cameras, lighting, UI, black screens, previews, multiple passes, frame rate | [Rendering, UI and performance](references/rendering.md) |
@@ -80,3 +88,7 @@ The [physics example](examples/physics-avian/src/lib.rs) runs real Avian 0.8 on 
 cd examples/physics-avian
 cargo test --locked
 ```
+
+## Runnable audio, UI, 2D and GPU examples
+
+Each runs headless with `cargo test --locked` from its folder under `examples/`: [`audio-kira`](examples/audio-kira/src/lib.rs) (levels, fades, pauses through a mock sound card), [`ui-egui`](examples/ui-egui/src/lib.rs) (clicks and typing fed into egui), [`macroquad-2d`](examples/macroquad-2d/src/lib.rs) (a paddle game's rules; `cargo run` opens the game) and [`gpu-wgpu`](examples/gpu-wgpu/src/lib.rs) (a compute shader and a render pass read back; it skips on a machine with no GPU adapter at all).

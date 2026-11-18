@@ -117,7 +117,7 @@ Codex 中使用 `$playmand`。在 Claude Code 中一行即可安装（其他 Age
 
 ## Playmand 是什么
 
-**Playmand 是用 Rust 做游戏与视觉创作的 Skill，默认引擎为 Bevy。它帮 AI 按任务选对 Rust 工具（游戏和录制视频用 Bevy，物理用 Avian，网页和 Tauri 应用里的特效用 Rust → WebAssembly），把设计实现为可玩的 2D / 3D 游戏、逐帧录制的动画，或页面里的特效。Playmand 的发展方向见[路线图](docs/zh-CN/roadmap.md)。**
+**Playmand 是用 Rust 做游戏与视觉创作的 Skill，默认引擎为 Bevy。它帮 AI 按任务选对 Rust 工具（游戏和录制视频用 Bevy，物理用 Avian，音频用 Kira，调试工具用 egui，小型 2D 游戏用 Macroquad，自定义 GPU 工作用 wgpu，网页和 Tauri 应用里的特效用 Rust → WebAssembly），把设计实现为可玩的 2D / 3D 游戏、逐帧录制的动画，或页面里的特效。Playmand 的发展方向见[路线图](docs/zh-CN/roadmap.md)。**
 
 核心是 Rust + Bevy 的具体开发能力：正确使用当前版本的 API、组织 ECS 与玩法状态、接入模型动画、实现 UI 和渲染、定位性能问题并构建游戏。Codex、Claude Code 及其他支持技能的工具是使用它的宿主。
 

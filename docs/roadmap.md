@@ -32,12 +32,12 @@ Assets (Blender through MCP) and encoding (FFmpeg, AVFoundation) serve all three
 - [x] An **engine selector** in `SKILL.md`: pick by task, respect the user's engine.
 - [x] **Physics with Avian** (Bevy-native ECS physics): a guide and a headless example with collisions, sensors and determinism. Rapier is covered as the alternative.
 
-### Phase 2 — the pieces most games need
+### Phase 2 — the pieces most games need (done)
 
-- [ ] **Audio with Kira** (music, sound effects, crossfades).
-- [ ] **egui** for debug panels and in-game tools.
-- [ ] **Macroquad** for tiny 2D games and the smallest WebAssembly builds.
-- [ ] **wgpu** notes shared by the web effects lane and custom render passes.
+- [x] **Audio with Kira** (music, sound effects, crossfades), tested through a mock sound card.
+- [x] **egui** for debug panels and in-game tools, with real input events in tests.
+- [x] **Macroquad** for small 2D games and light web builds (434 KB of WebAssembly, 150 KB gzipped, for the example game).
+- [x] **wgpu** for custom render passes and GPU compute, run in CI on software adapters.
 
 ### Phase 3 — only when a real demo needs it
 

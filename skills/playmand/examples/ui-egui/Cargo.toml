@@ -10,4 +10,4 @@ license = "MIT"
 
 [dependencies]
 # The egui that bevy_egui 0.43 (Bevy 0.20) is built on: not the newest egui.
-egui = "=0.36.0"
+egui = "=0.36.2"

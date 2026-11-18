@@ -117,7 +117,7 @@ Use `$playmand` in Codex. In Claude Code, install it in one line (see [Installat
 
 ## What Playmand is
 
-**Playmand is a Rust skill for games and visual creation, with Bevy as the default engine. It helps AI coding agents pick the right Rust tool for the job (Bevy for games and recorded video, Avian for physics, Rust → WebAssembly for effects inside web pages and Tauri apps) and turn designs into playable 2D / 3D games, animations recorded frame by frame, or effects on a page. Where Playmand is heading: [roadmap](docs/roadmap.md).**
+**Playmand is a Rust skill for games and visual creation, with Bevy as the default engine. It helps AI coding agents pick the right Rust tool for the job (Bevy for games and recorded video, Avian for physics, Kira for audio, egui for debug tools, Macroquad for small 2D games, wgpu for custom GPU work, Rust → WebAssembly for effects inside web pages and Tauri apps) and turn designs into playable 2D / 3D games, animations recorded frame by frame, or effects on a page. Where Playmand is heading: [roadmap](docs/roadmap.md).**
 
 At its core is hands-on Rust + Bevy expertise: using the API of the version you actually have, structuring ECS and gameplay state, wiring up model animation, building UI and rendering, tracking down performance problems, and shipping builds. Codex, Claude Code and other skill-capable tools are the hosts that run it.
 

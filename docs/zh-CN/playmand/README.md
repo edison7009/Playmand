@@ -14,6 +14,10 @@ Bevy 是默认，但不是唯一选择。按用户要做的东西来选；用户
 | --- | --- | --- |
 | 实时 2D/3D 游戏，或之后要录制的场景 | Rust + Bevy | [Rust 与 Bevy 工具链](references/bevy.md)、[ECS](references/ecs.md) |
 | 碰撞、刚体、触发区、掉落与堆叠 | 在 Bevy 里用 Avian（项目已在用 Rapier 时用 Rapier） | [物理](references/physics.md) |
+| 音乐、音效、淡入淡出、混音声道 | Kira（在 Bevy 中用 bevy_kira_audio） | [音频](references/audio.md) |
+| 调试面板、调参滑杆、检查器、游戏内工具 | egui（在 Bevy 中用 bevy_egui） | [egui](references/egui.md) |
+| 更看重轻量和快速构建、不需要 ECS 的小型 2D 游戏（或用户指定 Macroquad） | Macroquad，独立使用 | [Macroquad](references/macroquad.md) |
+| 自定义渲染通道、GPU 计算、不用引擎的渲染 | wgpu（Bevy 项目里用 Bevy 自带的） | [wgpu](references/wgpu.md) |
 | 视频、动图或循环动画 | Bevy 固定时钟录制，再编码 | [演示动画与视频录制](references/video.md) |
 | 现有网页或 Tauri/React 窗口里的特效 | Rust → WebAssembly + WebGL2，不用引擎 | [Rust → WebAssembly 网页特效](references/web-wasm.md) |
 | 模型、材质、骨骼、动画片段 | 通过 MCP 驱动 Blender，导出 GLB | [Blender 与 MCP](references/blender-mcp.md) |
@@ -45,6 +49,10 @@ python scripts/inspect_bevy.py --manifest-path /absolute/game/Cargo.toml
 | 新建工程、版本/API 报错、编译慢、Windows 链接、插件兼容 | [Rust 与 Bevy 工具链](references/bevy.md) |
 | 组件/资源设计、Query 冲突、Commands 可见性、帧时序、输入、暂停/重开 | [ECS、调度与玩法状态](references/ecs.md) |
 | 刚体、碰撞体、碰撞事件、传感器、重力、固定步长与确定性物理 | [用 Avian 做物理](references/physics.md) |
+| 音乐、音效、分贝、Tween、混音轨、不用扬声器测试音频 | [用 Kira 做音频](references/audio.md) |
+| 调试面板与工具、即时模式界面、在测试中驱动界面 | [egui](references/egui.md) |
+| 独立的小型 2D 游戏、固定步长规则、小体积网页构建 | [Macroquad](references/macroquad.md) |
+| 设备、计算与渲染通道、读回 GPU 结果 | [wgpu](references/wgpu.md) |
 | Blender 建模/材质/动画、MCP 连接与操作、GLB 导出并接入 Bevy | [Blender 与 MCP](references/blender-mcp.md) |
 | GLB、场景实例、动画、骨骼、共享资产与实例隔离 | [资源与动画](references/assets-animation.md) |
 | 2D/3D 相机、灯光、UI、黑屏、预览、多 pass、帧率 | [渲染、UI 与性能](references/rendering.md) |
@@ -76,3 +84,7 @@ cargo test --locked
 cd examples/physics-avian
 cargo test --locked
 ```
+
+## 可执行的音频、界面、2D 与 GPU 示例
+
+都可在 `examples/` 下对应目录里用 `cargo test --locked` 无窗口运行：[`audio-kira`](../../../skills/playmand/examples/audio-kira/src/lib.rs)（通过模拟声卡检查电平、淡入淡出、暂停）、[`ui-egui`](../../../skills/playmand/examples/ui-egui/src/lib.rs)（向 egui 输入点击和键入）、[`macroquad-2d`](../../../skills/playmand/examples/macroquad-2d/src/lib.rs)（挡板游戏的规则；`cargo run` 打开游戏）和 [`gpu-wgpu`](../../../skills/playmand/examples/gpu-wgpu/src/lib.rs)（读回计算着色器和渲染通道的结果；在完全没有 GPU 适配器的机器上会跳过）。

@@ -3,7 +3,7 @@
 //! These tests feed real pointer and text events into one context, frame by
 //! frame, and check the state the UI is bound to.
 //!
-//! egui 0.36 is the version bevy_egui 0.43 uses with Bevy 0.20.
+//! egui 0.36 (0.36.2 as resolved by bevy_egui 0.43.1) is what Bevy 0.20 projects get.
 
 #[cfg(test)]
 mod tests {
