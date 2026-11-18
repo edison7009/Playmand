@@ -156,6 +156,7 @@ Bevy 的 ECS 架构围绕数据组织游戏逻辑，支持在条件允许时并�
 | [Blender 与 MCP](docs/zh-CN/playmand/references/blender-mcp.md) | 连接与能力发现、场景编辑、模型/材质/动画制作、GLB 导出及 Bevy 接入 |
 | [资源与动画](docs/zh-CN/playmand/references/assets-animation.md) | GLB 子场景、实例就绪、动画图/播放器接线、材质与骨骼实例隔离 |
 | [渲染、UI 与性能](docs/zh-CN/playmand/references/rendering.md) | 2D/3D 相机、灯光、图层、UI 布局、截图与预览相机生命周期 |
+| [美术方向：先有图，再动手](docs/zh-CN/playmand/references/art-direction.md) | 动手前先拿到目标效果图：来自用户的参考图、宿主自带的生图能力，给用户生图软件（Gemini、豆包、ChatGPT……）的提示词、用户接入的生图 API，或找来的现成图片作参考；然后定风格、做一致的素材、抠图，并和目标图对比验收 |
 | [动态图形与视频制作](docs/zh-CN/playmand/references/motion-graphics.md) | 产品演示、讲解、数据故事和社交短视频：分镜、品牌包、节奏、16:9 / 9:16 / 1:1 安全区、字幕、音轨、导出检查 |
 | [演示动画与视频录制](docs/zh-CN/playmand/references/video.md) | 离屏或窗口录制、无缝循环、辉光、带声音的 WebP/GIF/MP4 编码 |
 | [用 Avian 做物理](docs/zh-CN/playmand/references/physics.md) | 刚体与碰撞体、碰撞事件与传感器、快速物体不穿墙、无窗口物理测试 |

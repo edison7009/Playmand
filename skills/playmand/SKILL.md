@@ -10,6 +10,10 @@ A skill for making games and visual work in Rust, with Bevy as the default engin
 
 New games default to Rust + Bevy and should deliver the gameplay, visuals and content the user asked for. Existing Bevy projects keep their pinned version and structure. When the user explicitly chooses another engine, respect it, and never migrate an existing project on another engine automatically. Small prototypes are for testing technical questions; they do not replace the full game the user asked for, and this skill does not impose a fixed number of iterations or a report template.
 
+## Start from a picture
+
+For new visual work where the look matters (a new game, a video, a web effect, a character or scene) and no reference exists, get a picture of the target before building: an agent matches a picture well, and invents a look from words badly. Use the user's references if they gave any. Otherwise there are four ways, and the user chooses: the host's own image generation if this session has it (Codex, for example, or an image tool); the user's image app, with prompts you write ("I think you want something like this. Paste one into your image app (Gemini, Doubao, ChatGPT...) and send me the one you like."), the default when nothing else is set up; an image API the user connects with their own key, for batches (say the cost first); or existing pictures the user (or a web search) finds, as references only: a named franchise is someone else's, so design an original in its genre. Offer 2–3 short prompts in different directions. Then settle a style sheet from the chosen image, make matching assets, and compare the built result with it. Skip this for fixes, logic and existing projects, or when the user says to just build; never block on it. Details, prompt structure, asset prompts and the cut-out script: [Art direction](references/art-direction.md).
+
 ## Pick the tool
 
 Bevy is the default, not the only choice. Pick by what the user is making; if the user names an engine or library, use it, and never move an existing project to another engine on your own.
@@ -64,6 +68,7 @@ Before the first build of a project (or after a toolchain, dependency or feature
 | Blender modelling/materials/animation, MCP connection and operations, exporting GLB into Bevy | [Blender and MCP](references/blender-mcp.md) |
 | GLB, scene instances, animation, skeletons, shared assets and per-instance changes | [Assets and animation](references/assets-animation.md) |
 | 2D/3D cameras, lighting, UI, black screens, previews, multiple passes, frame rate | [Rendering, UI and performance](references/rendering.md) |
+| Getting a picture of the target first, prompts for the user's image app, style sheet, asset prompts, cut-outs | [Art direction](references/art-direction.md) |
 | Planning a video: shot list, brand kit, timing, 16:9 / 9:16 / 1:1 safe areas, captions, soundtrack, export checks | [Motion graphics and video production](references/motion-graphics.md) |
 | Recording: offscreen or window capture, seamless loops, bloom, encoding | [Animation and video recording](references/video.md) |
 | Effects inside a web page or Tauri app with Rust → WebAssembly and WebGL2 (card packs, holographic cards, voxel companions), no engine | [Rust → WebAssembly web effects](references/web-wasm.md) |
