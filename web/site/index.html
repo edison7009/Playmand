@@ -106,6 +106,7 @@ const scene = new SupplyScene(canvas);
 const chars = ['echo', 'sprout', 'twin', 'zip', 'puff'];
 const layers = ['body', 'eyes', 'joy', 'wince', 'smile', 'open'];
 await Promise.all(chars.flatMap((c, ci) => layers.map(async (l, li) => {
+  if (c === 'echo' && li >= 4) return; // Echo's beak is its mouth
   try { scene.add_art(ci, li, await load(`art/${c}-${l}.webp`)); } catch { /* this character has no such layer */ }
 })));
 scene.set_copy('Playmand', 'CARD PACK', zh ? '沿此撕开 →' : 'TEAR HERE →', zh ? '卡包' : 'Card pack', zh ? '五张卡' : '5 cards');
