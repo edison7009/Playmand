@@ -14,6 +14,7 @@ so the games and videos it builds actually look good.
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-skill-f5f5f5)](https://code.claude.com/docs/en/skills)
 [![Codex](https://img.shields.io/badge/Codex-skill-f5f5f5)](https://learn.chatgpt.com/docs/build-skills)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![skills.sh](https://skills.sh/b/edison7009/Playmand)](https://skills.sh/edison7009/Playmand)
 
 **English** | [简体中文](README.zh-CN.md)
 
