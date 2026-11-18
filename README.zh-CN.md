@@ -99,10 +99,10 @@
 1920x1080，导出 MP4，另导出一份 WebP 放进 README。
 ```
 
-Codex 中使用 `$playmand`。安装只需一条命令（详见 [安装](#安装)）：
+Codex 中使用 `$playmand`。在 Claude Code 中一行即可安装（其他 Agent 见 [安装](#安装)）：
 
-```sh
-python scripts/install_skill.py --user --target both
+```text
+/plugin install playmand --marketplace edison7009/Playmand
 ```
 
 ## Playmand 是什么
@@ -141,6 +141,22 @@ Bevy 的 ECS 架构围绕数据组织游戏逻辑，支持在条件允许时并�
 技术示例基线为 **Bevy 0.20.1 / Rust 1.97.1**。其他版本需查对应源码，已有项目不应为套用示例而升级。辅助资料按问题读取，完整入口见 [SKILL.md](skills/playmand/SKILL.md)。
 
 ## 安装
+
+**Claude Code（2.1.275 及以上）**：直接从本仓库安装插件：
+
+```text
+/plugin install playmand --marketplace edison7009/Playmand
+```
+
+较旧版本先运行 `/plugin marketplace add edison7009/Playmand`，再运行 `/plugin install playmand@playmand`。
+
+**任何支持 Skill 的 Agent（通过 [skills.sh](https://skills.sh)）**：需要 Node.js：
+
+```sh
+npx skills add edison7009/Playmand
+```
+
+**Codex 和 Claude Code，使用自带安装器**：需要选择个人或项目范围，或不想装 Node.js 时使用：
 
 要求已安装 Codex 或 Claude Code，以及 Python 3.9+。安装器仅使用 Python 标准库；游戏开发所需的引擎、编译器、图形与输入工具按目标项目准备。它不会自动安装或购买这些工具。
 

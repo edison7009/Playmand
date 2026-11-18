@@ -99,10 +99,10 @@ enemies that chase you, loot and leveling. Bright pixel art, punchy hit feedback
 from glowing particles, 1920x1080, exported as MP4 and as a WebP for the README.
 ```
 
-Use `$playmand` in Codex. Setup takes one command (see [Installation](#installation)):
+Use `$playmand` in Codex. In Claude Code, install it in one line (see [Installation](#installation) for other agents):
 
-```sh
-python scripts/install_skill.py --user --target both
+```text
+/plugin install playmand --marketplace edison7009/Playmand
 ```
 
 ## What Playmand is
@@ -143,6 +143,22 @@ The technical baseline is **Bevy 0.20.1 / Rust 1.97.1**. For other versions, che
 > The skill's reference docs are currently written in Chinese. Agents read them fine regardless of the language you prompt in.
 
 ## Installation
+
+**Claude Code (2.1.275 or later).** Install the plugin straight from this repository:
+
+```text
+/plugin install playmand --marketplace edison7009/Playmand
+```
+
+On older versions, run `/plugin marketplace add edison7009/Playmand`, then `/plugin install playmand@playmand`.
+
+**Any agent that reads skills (via [skills.sh](https://skills.sh)).** This needs Node.js:
+
+```sh
+npx skills add edison7009/Playmand
+```
+
+**Codex and Claude Code with the bundled installer.** Use this to choose personal or project scope, or to install without Node.js:
 
 Requires Codex or Claude Code, and Python 3.9+. The installer uses only the Python standard library. The engine, compiler, graphics and input tools a game needs are prepared per project; the installer never installs or purchases them.
 
