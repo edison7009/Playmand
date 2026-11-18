@@ -25,6 +25,15 @@ Repeated rewards stay short; rare ones may be long. If progress can be partial, 
 - **Form changes land after the change.** When a transformation finishes at the very end of its animation, add a short landing (rings, particles) after it, then report completion.
 - Colours: the product's accent for common tiers, gold for rare ones, and the character's own colour in particles so the effect belongs to it.
 
+## When rewards come faster than the effect
+
+Players mash the button that gives the common reward. If every trigger restarts the effect from zero, a trigger that arrives before the impact moment pushes the impact back again, so fast tapping produces no impacts, no sound and a number that does not move. Instead:
+
+- **Never restart an effect that has not reached its impact.** Let it finish, and queue the next level, or speed through the queue, so each level gets its own impact in order.
+- **Or let the display catch up:** apply the real level immediately, and let the shown XP bar and number chase it, firing one impact each time the shown bar crosses a level. This reads like a counter rolling up.
+- When one trigger grants several levels, play one effect at the highest tier reached and show "+N".
+- Test it at the speed players actually tap (every 0.1 to 0.3 s): count impacts over a few seconds and check that the shown number keeps moving.
+
 ## Describe it as data, test it once
 
 Write the effect as a function of `(tier, t)` that returns plain numbers: hop, squash, glow, ring ages, particle ages. Renderers only read them. Then test what matters, without a GPU: each tier is stronger than the last; the gain tier never has an impact; the hop crouches before it rises; at `t = 1` everything is back to rest (hop 0, squash 1, no rings, no particles); reduced motion keeps only a glow.
@@ -46,4 +55,5 @@ Replace motion with a short, steady glow: no hop, spin, flash, camera push or pa
 - A celebration that loops, or one that blocks the next action for seconds on a reward players repeat.
 - The sound firing after the visuals on a fixed timer, or before the reward is actually granted.
 - Effects left mid-way at the end of the span (a ring still expanding, the character still squashed).
+- Rapid triggers restarting the effect, so the impact never arrives and the number stalls until the end.
 - A cancelled effect finishing anyway because one queued frame still ran.
