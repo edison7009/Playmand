@@ -133,7 +133,7 @@ Bevy's ECS architecture organizes game logic around data, runs systems in parall
 
 The cost is a steep learning curve: ownership, borrowing, lifetimes, plus Bevy's queries, scheduling and resource management all have to be understood. Build times, version churn and hard-to-diagnose errors also slow iteration. Fast at runtime does not mean fast to develop.
 
-**That is exactly where Playmand and agents fit together: keep the performance and engineering strengths of Rust + Bevy, and let the agent carry more of the implementation, API verification and debugging, lowering the cost of working with this stack.** You focus on gameplay, style and feel; Playmand gives the agent engine and asset-pipeline knowledge so it guesses fewer APIs and hits fewer pitfalls. Actual development speed and game quality are still measured on real projects and controlled evaluations.
+**That is exactly where Playmand and agents fit together: keep the performance and engineering strengths of Rust + Bevy, and let the agent carry more of the implementation, API verification and debugging, lowering the cost of working with this stack.** You focus on gameplay, style and feel; Playmand gives the agent engine and asset-pipeline knowledge so it guesses fewer APIs and hits fewer pitfalls. Actual development speed and game quality are still measured on real projects and controlled evaluations. So far, with-skill and without-skill agents were equally correct on tasks whose answer is in the crates' source (the skill mainly saved time); on design tasks the skill made results more complete, and blind grading also exposed gaps that we then fixed. Method, raw results and caveats: [evaluation](docs/evaluation.md).
 
 ## What's Included
 
