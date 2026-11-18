@@ -36,6 +36,7 @@ guard let outDir = option("-o") else {
 let trim = flag("--trim")
 let pad = Int(option("--pad") ?? "16") ?? 16
 let maxSide = option("--max").flatMap { Int($0) }
+if let maxSide, maxSide <= 0 { fail("--max must be a positive number of pixels") }
 guard !args.isEmpty else { fail("no input images") }
 
 let fm = FileManager.default
@@ -109,8 +110,16 @@ for url in inputs {
         let s = CGFloat(maxSide) / max(cut.extent.width, cut.extent.height)
         cut = cut.applyingFilter("CILanczosScaleTransform", parameters: [kCIInputScaleKey: s, kCIInputAspectRatioKey: 1.0])
     }
-    let name = url.deletingPathExtension().lastPathComponent + ".png"
-    let out = URL(fileURLWithPath: outDir).appendingPathComponent(name)
+    // Two inputs with the same name (from different folders) must not
+    // overwrite each other: disambiguate with -2, -3, ...
+    var name = url.deletingPathExtension().lastPathComponent + ".png"
+    var out = URL(fileURLWithPath: outDir).appendingPathComponent(name)
+    var n = 2
+    while fm.fileExists(atPath: out.path) {
+        name = url.deletingPathExtension().lastPathComponent + "-\(n).png"
+        out = URL(fileURLWithPath: outDir).appendingPathComponent(name)
+        n += 1
+    }
     do {
         try context.writePNGRepresentation(of: cut, to: out, format: .RGBA8, colorSpace: CGColorSpace(name: CGColorSpace.sRGB)!)
     } catch {
