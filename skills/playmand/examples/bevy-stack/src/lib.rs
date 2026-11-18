@@ -192,9 +192,9 @@ mod tests {
         .insert_resource(TimeUpdateStrategy::ManualDuration(Duration::from_secs_f32(
             frame,
         )))
-        // What bevy_egui's plugin would set up; the context comes later.
+        // What bevy_egui's plugin sets up, in the same schedule; the context comes later.
         .init_resource::<EguiWantsInput>()
-        .add_systems(PreUpdate, write_egui_wants_input_system);
+        .add_systems(PostUpdate, write_egui_wants_input_system);
         app.finish();
         app
     }
@@ -283,6 +283,9 @@ mod tests {
                 .drop_without_applying_deltas();
         }
         app.world_mut().spawn(panel);
+        // bevy_egui updates EguiWantsInput in PostUpdate, so the game reads the
+        // previous frame's value; a real pointer rests on the panel before it clicks.
+        app.update();
         click(&mut app);
         assert!(
             app.world()

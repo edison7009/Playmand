@@ -47,7 +47,8 @@ jobs:
       - shell: bash
         run: |
           cd skills/playmand/examples/bevy-stack
-          if cargo +1.97.1 tree --locked -i bevy_audio >/dev/null 2>&1; then echo "bevy_audio is in the build"; exit 1; fi
+          # `cargo tree` exits 0 with "nothing to print" when a package is locked but unused.
+          if cargo +1.97.1 tree --locked -i bevy_audio 2>/dev/null | grep -q '^bevy_audio v'; then echo "bevy_audio is in the build"; exit 1; fi
           cargo +1.97.1 tree --locked -i egui --depth 0
           cargo +1.97.1 tree --locked -i kira --depth 0
 
