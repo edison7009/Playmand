@@ -40,7 +40,7 @@ fn debug_panel(mut contexts: EguiContexts, mut settings: ResMut<DebugSettings>) 
 
 The whole UI is rebuilt every frame from your state, and each widget returns a `Response` saying what happened to it this frame: `clicked()` is true on the frame the button is released, `changed()` when a value was edited, `has_focus()` while a field has the keyboard. Bind widgets straight to the state they edit (`&mut settings.show_colliders`). Widgets in a loop need distinct ids: wrap each row in `ui.push_id(index, |ui| ...)`.
 
-Keep the UI from stealing game input: when egui wants the pointer or keyboard (`ctx.egui_wants_pointer_input()`, `ctx.egui_wants_keyboard_input()`; older egui called them `wants_pointer_input` and `wants_keyboard_input`), skip game actions bound to clicks and keys.
+Keep the UI from stealing game input. In Bevy the simplest guard is a run condition: `fire.run_if(not(egui_wants_any_pointer_input))` (from `bevy_egui::input`); the [stack example](../examples/bevy-stack/src/lib.rs) shows it stops a click on a panel. Outside Bevy, when egui wants the pointer or keyboard (`ctx.egui_wants_pointer_input()`, `ctx.egui_wants_keyboard_input()`; older egui called them `wants_pointer_input` and `wants_keyboard_input`), skip game actions bound to clicks and keys.
 
 ## Checking it headless
 

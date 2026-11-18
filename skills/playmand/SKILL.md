@@ -92,6 +92,15 @@ cd examples/physics-avian
 cargo test --locked
 ```
 
+## Runnable stack: Bevy, Avian, Kira and egui together
+
+The [stack example](examples/bevy-stack/src/lib.rs) puts Bevy 0.20, Avian 0.8, bevy_kira_audio 0.27 and bevy_egui 0.43 in one headless app and checks what only shows up when they share it: a ball landing on a pressure plate opens the door and plays one click at 30, 60, 144 and 240 fps; a click on an egui panel does not reach the game. CI also checks that Bevy's own audio stays out of the build and that every crate resolves one egui and one kira. It compiles the whole stack, so the first run takes minutes.
+
+```sh
+cd examples/bevy-stack
+cargo test --locked
+```
+
 ## Runnable audio, UI, 2D and GPU examples
 
 Each runs headless with `cargo test --locked` from its folder under `examples/`: [`audio-kira`](examples/audio-kira/src/lib.rs) (levels, fades, pauses through a mock sound card), [`ui-egui`](examples/ui-egui/src/lib.rs) (clicks and typing fed into egui), [`macroquad-2d`](examples/macroquad-2d/src/lib.rs) (a paddle game's rules; `cargo run` opens the game) [`gpu-wgpu`](examples/gpu-wgpu/src/lib.rs) (a compute shader and a render pass read back; it skips on a machine with no GPU adapter at all) and [`feedback-tiers`](examples/feedback-tiers/src/lib.rs) (level-up beats as data and a cancellable player; no dependencies).

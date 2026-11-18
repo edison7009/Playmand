@@ -88,6 +88,15 @@ cd examples/physics-avian
 cargo test --locked
 ```
 
+## 可执行的整套技术栈：Bevy、Avian、Kira 与 egui 一起
+
+[整套示例](../../../skills/playmand/examples/bevy-stack/src/lib.rs) 把 Bevy 0.20、Avian 0.8、bevy_kira_audio 0.27 和 bevy_egui 0.43 放进同一个无窗口应用，检查只有放在一起才会出现的问题：球落到压力板上，门打开，并且在 30、60、144、240 fps 下都只播放一次点击声；点在 egui 面板上的鼠标点击不会传给游戏。CI 还会检查 Bevy 自带的音频没有进入构建，以及所有 crate 只解析到一个 egui 和一个 kira。它要编译整套依赖，第一次运行需要几分钟。
+
+```sh
+cd examples/bevy-stack
+cargo test --locked
+```
+
 ## 可执行的音频、界面、2D 与 GPU 示例
 
 都可在 `examples/` 下对应目录里用 `cargo test --locked` 无窗口运行：[`audio-kira`](../../../skills/playmand/examples/audio-kira/src/lib.rs)（通过模拟声卡检查电平、淡入淡出、暂停）、[`ui-egui`](../../../skills/playmand/examples/ui-egui/src/lib.rs)（向 egui 输入点击和键入）、[`macroquad-2d`](../../../skills/playmand/examples/macroquad-2d/src/lib.rs)（挡板游戏的规则；`cargo run` 打开游戏）[`gpu-wgpu`](../../../skills/playmand/examples/gpu-wgpu/src/lib.rs)（读回计算着色器和渲染通道的结果；在完全没有 GPU 适配器的机器上会跳过）和 [`feedback-tiers`](../../../skills/playmand/examples/feedback-tiers/src/lib.rs)（把升级节拍写成数据，加一个可取消的播放器；无依赖）。

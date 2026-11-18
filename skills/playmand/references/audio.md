@@ -1,6 +1,6 @@
 # Audio with Kira
 
-Baseline: Kira 0.12.6; in Bevy 0.20 through bevy_kira_audio 0.27.1. Verified by the [audio example](../examples/audio-kira/src/lib.rs), which runs Kira headless in CI on Windows and Linux. The bevy_kira_audio plugin itself is not exercised there (it needs an audio device); its setup below is from the 0.27.1 source and README.
+Baseline: Kira 0.12.6; in Bevy 0.20 through bevy_kira_audio 0.27.1. Verified by the [audio example](../examples/audio-kira/src/lib.rs), which runs Kira headless in CI on Windows and Linux. The plugin itself runs headless in the [stack example](../examples/bevy-stack/src/lib.rs) next to Avian and egui; with no sound card it logs a warning and keeps going, so that example checks what the game asked to play, not what was heard.
 
 Use Kira when a game needs more than "play a sound": music that fades between tracks, mixer tracks with their own volume (music, effects, voice), pausing everything on a menu, filters and reverb.
 
@@ -12,7 +12,9 @@ bevy = { version = "=0.20.1", default-features = false, features = ["2d", "3d", 
 bevy_kira_audio = "=0.27.1"  # ogg by default; add "mp3", "wav" or "flac" as needed
 ```
 
-**Turn off Bevy's own `audio` feature**: it is on in Bevy's defaults and conflicts with bevy_kira_audio. Bevy's defaults minus `audio` are `2d`, `3d`, `ui`.
+**Turn off Bevy's own `audio` feature**: it is on in Bevy's defaults. With it on, `bevy::prelude::*` and `bevy_kira_audio::prelude::*` both export `AudioSource`, `AudioPlugin` and more, and the build fails with "`AudioSource` is ambiguous" (checked in the [stack example](../examples/bevy-stack/src/lib.rs)). Bevy's defaults minus `audio` are `2d`, `3d`, `ui`.
+
+Keep at least one format feature: bevy_kira_audio 0.27.1 with `default-features = false` and no format does not compile (an unresolved `FromFileError` import).
 
 ```rust
 use bevy::prelude::*;

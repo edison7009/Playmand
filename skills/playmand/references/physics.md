@@ -60,6 +60,7 @@ Assert outcomes, not frames: a dropped ball rests at its radius above the floor 
 
 ## Pitfalls
 
+- A trigger that fires on its own: a sensor that touches the floor or a wall it sits on reports that contact too. Check which entity entered (a `Player` or `Ball` marker), not just that the sensor was involved.
 - A collider with no `RigidBody` is static.
 - Tunnelling: fast, thin objects can pass through each other in one step. Make colliders thicker, lower speeds, or enable swept continuous collision (`SweptCcd`) on the fast body.
 - Scaling a `Transform` scales its collider; keep visual meshes and colliders in the same units (1 unit = 1 m works best with the default gravity).

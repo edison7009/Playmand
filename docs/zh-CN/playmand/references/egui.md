@@ -40,7 +40,7 @@ fn debug_panel(mut contexts: EguiContexts, mut settings: ResMut<DebugSettings>) 
 
 每一帧都根据你的状态重建整个界面，每个控件返回一个 `Response`，说明这一帧它发生了什么：按钮松开的那一帧 `clicked()` 为真，数值被修改时 `changed()` 为真，输入框拿着键盘焦点时 `has_focus()` 为真。控件直接绑定它要修改的状态（`&mut settings.show_colliders`）。循环里的控件需要不同的 id：每一行用 `ui.push_id(index, |ui| ...)` 包起来。
 
-别让界面抢走游戏输入：egui 需要指针或键盘时（`ctx.egui_wants_pointer_input()`、`ctx.egui_wants_keyboard_input()`；旧版 egui 叫 `wants_pointer_input` 和 `wants_keyboard_input`），跳过绑定在点击和按键上的游戏操作。
+别让界面抢走游戏输入。在 Bevy 里最简单的做法是加运行条件：`fire.run_if(not(egui_wants_any_pointer_input))`（来自 `bevy_egui::input`）；[整套示例](../../../../skills/playmand/examples/bevy-stack/src/lib.rs)验证了它能挡住点在面板上的点击。在 Bevy 之外，egui 需要指针或键盘时（`ctx.egui_wants_pointer_input()`、`ctx.egui_wants_keyboard_input()`；旧版 egui 叫 `wants_pointer_input` 和 `wants_keyboard_input`），跳过绑定在点击和按键上的游戏操作。
 
 ## 无窗口检查
 

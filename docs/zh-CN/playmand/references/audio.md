@@ -1,6 +1,6 @@
 # 用 Kira 做音频
 
-基线：Kira 0.12.6；在 Bevy 0.20 中通过 bevy_kira_audio 0.27.1 使用。验证来源是[音频示例](../../../../skills/playmand/examples/audio-kira/src/lib.rs)，它在 CI 中于 Windows 和 Linux 上无声卡运行 Kira。bevy_kira_audio 插件本身没有在那里测试（它需要音频设备），下面的接入方式来自 0.27.1 的源码和 README。
+基线：Kira 0.12.6；在 Bevy 0.20 中通过 bevy_kira_audio 0.27.1 使用。验证来源是[音频示例](../../../../skills/playmand/examples/audio-kira/src/lib.rs)，它在 CI 中于 Windows 和 Linux 上无声卡运行 Kira。bevy_kira_audio 插件本身在[整套示例](../../../../skills/playmand/examples/bevy-stack/src/lib.rs)中与 Avian、egui 一起无窗口运行；没有声卡时它只记一条警告并继续运行，所以那里检查的是游戏要求播放了什么，而不是实际听到了什么。
 
 游戏需要的不只是“播一个声音”时用 Kira：在曲目间淡入淡出的音乐、各有音量的混音轨（音乐、音效、语音）、菜单打开时全部暂停、滤波和混响。
 
@@ -12,7 +12,9 @@ bevy = { version = "=0.20.1", default-features = false, features = ["2d", "3d", 
 bevy_kira_audio = "=0.27.1"  # 默认支持 ogg；按需加 "mp3"、"wav"、"flac"
 ```
 
-**关掉 Bevy 自带的 `audio` feature**：它在 Bevy 默认 feature 里，与 bevy_kira_audio 冲突。去掉 `audio` 后的 Bevy 默认 feature 是 `2d`、`3d`、`ui`。
+**关掉 Bevy 自带的 `audio` feature**：它在 Bevy 默认 feature 里。开着它时，`bevy::prelude::*` 和 `bevy_kira_audio::prelude::*` 都导出 `AudioSource`、`AudioPlugin` 等名字，构建会报错"`AudioSource` is ambiguous"（已在[整套示例](../../../../skills/playmand/examples/bevy-stack/src/lib.rs)中验证）。去掉 `audio` 后的 Bevy 默认 feature 是 `2d`、`3d`、`ui`。
+
+至少保留一个音频格式 feature：bevy_kira_audio 0.27.1 用 `default-features = false` 且不开任何格式时无法编译（`FromFileError` 导入失败）。
 
 ```rust
 use bevy::prelude::*;
