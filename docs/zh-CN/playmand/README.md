@@ -42,6 +42,8 @@ python scripts/inspect_bevy.py --manifest-path /absolute/game/Cargo.toml
 
 它调用离线、锁定的 `cargo metadata`，输出工作区解析到的 Bevy crate、源码目录和版本文档链接。缺少依赖时给出 Cargo 原始错误；按项目需要获取依赖后再运行。[工具链指南](references/bevy.md) 包含构建配置和 API 查找方法。
 
+项目第一次构建前（以及更换工具链、依赖或 feature，或第一次构建 `--release` 之前），先告诉用户这一步会比较久以及原因：Cargo 要把所有依赖下载并编译一遍，Bevy 需要几分钟（Apple M4 上从零开始的调试构建 6 分 15 秒，`target/` 约 7 GB）；之后只重新编译改动的代码，通常几秒（同一台机器 3 秒）。让构建进度可见，不要把它误判为卡死，也不要把它计入迭代速度的比较。
+
 ## 按当前技术问题读取
 
 | 工作 | 专项资料 |

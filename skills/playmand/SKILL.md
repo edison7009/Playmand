@@ -46,6 +46,8 @@ python scripts/inspect_bevy.py --manifest-path /absolute/game/Cargo.toml
 
 It calls `cargo metadata` offline and locked, and prints the Bevy crates the workspace resolved, their source folders and links to that version's docs. If dependencies are missing, it shows Cargo's original error; fetch dependencies as the project requires and run it again. The [toolchain guide](references/bevy.md) covers build setup and how to look up APIs.
 
+Before the first build of a project (or after a toolchain, dependency or feature change, or the first `--release`), tell the user it will take a while and why: Cargo downloads and compiles every dependency once, which takes several minutes for Bevy (6 min 15 s for a clean debug build on an Apple M4, about 7 GB of `target/`), and later builds only recompile the changed code, usually in seconds (3 s on the same machine). Run that build where its progress is visible, do not mistake it for a hang, and do not count it when judging iteration speed.
+
 ## Read only what the task needs
 
 | Task | Reference |

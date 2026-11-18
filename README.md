@@ -201,6 +201,14 @@ After installing, open a new session in your game project, confirm the skill is 
 
 The installer skips identical content and exits without overwriting when it finds a same-named directory with different contents. Build output (`target`) and Python caches are not copied and do not count as conflicts. To update: `git pull`, review the diff, move the old install outside the skill discovery directory for safekeeping, then reinstall; installed copies do not sync automatically. The source of truth is `skills/playmand` in this repository.
 
+## First build is slow, later builds are fast
+
+The first time a Rust game builds, Cargo downloads and compiles every dependency once. For a Bevy game that takes several minutes: a clean debug build of a small Bevy app took **6 min 15 s** on an Apple M4 (10 cores) with the crates already downloaded, and used 6.8 GB in `target/`. Allow longer on slower machines or when crates still have to be downloaded. Nothing is stuck while it runs.
+
+After that, Cargo reuses the compiled dependencies and rebuilds only your own code. On the same machine, editing the game and building again took **3 s**. Lighter stacks are fast from the start: the Macroquad and egui examples build from scratch in 4 s and 10 s.
+
+Expect another long build only when you delete `target/`, change the Rust toolchain, add or upgrade dependencies, change features, or build `--release` for the first time. The skill tells you before the first build so the wait is not a surprise.
+
 ## Usage
 
 New game in Codex:
