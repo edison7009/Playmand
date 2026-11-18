@@ -14,7 +14,17 @@ license = "MIT"
 render = ["dep:bevy", "dep:png"]
 
 [dependencies]
-bevy = { version = "=0.20.1", default-features = false, features = ["2d", "system_font_discovery"], optional = true }
+# No window, gamepad or clipboard: an offscreen renderer needs only the 2D
+# renderer, text and the app core. ("2d" would pull in winit, which needs
+# Wayland and X11 libraries on Linux.)
+bevy = { version = "=0.20.1", default-features = false, features = [
+    "default_app",
+    "2d_bevy_render",
+    "std",
+    "multi_threaded",
+    "default_font",
+    "system_font_discovery",
+], optional = true }
 png = { version = "0.18", optional = true }
 
 [[bin]]

@@ -38,6 +38,7 @@ commands.spawn(ReadbackOnce::texture(target.clone()))
 - **预热**：第一次截取前先渲染约 30 次更新，让管线、字体和字形图集准备好。
 - 目标格式是 `Rgba8UnormSrgb` 时，读回的就是 sRGB 的 RGBA 字节，直接写成 PNG 即可。
 - 用 CSS 字体族列表指定字体需要开启 Bevy 的 `system_font_discovery` feature（Linux 上还需要 fontconfig）；按句柄加载字体文件则不需要。
+- 不要编译窗口系统：Bevy 的 `2d`、`3d` feature 都包含 `default_platform`（winit、手柄、剪贴板），在 Linux 上需要 Wayland 和 X11 的开发库。离屏渲染只需要 `default_app`、`2d_bevy_render`（或 `3d_bevy_render`）、`std`、`multi_threaded` 和一个字体 feature；这样也就没有 `WinitPlugin` 需要禁用。
 
 ## 窗口截图，逐帧截图
 

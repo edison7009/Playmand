@@ -22,7 +22,6 @@ use bevy::{
     sprite_render::AlphaMode2d,
     text::{FontSize, Justify, TextBounds, TextLayout, TextLayoutInfo},
     window::ExitCondition,
-    winit::WinitPlugin,
 };
 use playmand_motion_video::*;
 
@@ -131,12 +130,12 @@ fn main() {
     App::new()
         .add_plugins(
             DefaultPlugins
+                // No window at all: built without winit, so nothing to disable.
                 .set(WindowPlugin {
                     primary_window: None,
                     exit_condition: ExitCondition::DontExit,
                     ..default()
-                })
-                .disable::<WinitPlugin>(),
+                }),
         )
         .add_plugins(ScheduleRunnerPlugin::run_loop(Duration::ZERO))
         .insert_resource(ClearColor(rgb(PLAYMAND.paper)))
@@ -502,7 +501,9 @@ fn animate(
                 match particle(i as u32, age, 0.9) {
                     Some(([dx, dy], fade, size)) => {
                         let reach = 300.0 * u;
-                        tf.translation = Vec3::new(dx * reach, rule_y + dy * reach, 0.5);
+                        // Distinct depths: overlapping shapes at equal z draw in an unspecified order.
+                        tf.translation =
+                            Vec3::new(dx * reach, rule_y + dy * reach, 0.5 + i as f32 * 0.001);
                         tf.scale = Vec3::splat(9.0 * u * size);
                         alpha *= fade;
                     }

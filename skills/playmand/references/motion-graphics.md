@@ -141,3 +141,4 @@ Check every export, not just that the command succeeded:
 - Odd frame sizes (H.264 refuses them) and skewed 9:16 frames from unstripped readback padding.
 - Numbers or claims on screen with no source.
 - Mesh2d shapes that will fade made with `ColorMaterial::from_color(opaque colour)`: it picks an opaque blend mode, which ignores alpha later, so the shape never fades and stays on screen in every shot. Set `alpha_mode: AlphaMode2d::Blend` yourself.
+- Overlapping shapes at the same depth: their draw order is unspecified and changed between two builds of the example. Give each its own z (`0.5 + i * 0.001`) so every render is identical.

@@ -141,3 +141,4 @@ ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate,durat
 - 帧尺寸是奇数（H.264 不接受），或者读回的行填充没去掉，导致 9:16 画面歪斜。
 - 画面上出现没有来源的数字或说法。
 - 要做淡入淡出的 Mesh2d 图形用 `ColorMaterial::from_color(不透明颜色)` 创建：它会选择不透明的混合模式，之后改透明度不起作用，图形就不会淡出，在每个镜头里都挂着。要自己设置 `alpha_mode: AlphaMode2d::Blend`。
+- 重叠的图形深度值相同：绘制顺序没有保证，示例在两次编译之间就变过。给每个图形一个自己的 z 值（`0.5 + i * 0.001`），每次渲染才会完全一致。

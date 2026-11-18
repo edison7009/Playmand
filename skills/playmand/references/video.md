@@ -38,6 +38,7 @@ commands.spawn(ReadbackOnce::texture(target.clone()))
 - **Warm-up**: render about 30 updates before the first capture so pipelines, fonts and the glyph atlas are ready.
 - The bytes are sRGB RGBA when the target is `Rgba8UnormSrgb`; write them straight to PNG.
 - Text with a CSS family list needs Bevy's `system_font_discovery` feature (and fontconfig on Linux); a font file loaded by handle does not.
+- Build without a window system: Bevy's `2d` and `3d` features include `default_platform` (winit, gamepads, clipboard), which needs Wayland and X11 development libraries on Linux. An offscreen renderer only needs `default_app`, `2d_bevy_render` (or `3d_bevy_render`), `std`, `multi_threaded` and a font feature; then there is no `WinitPlugin` to disable.
 
 ## Window capture, one screenshot per frame
 
