@@ -48,7 +48,11 @@ Write each prompt in this order, in the user's language (image apps handle Chine
 
 ## Step 2: settle the style
 
-When the chosen image comes back, look at it and write a short **style sheet** in the project (`art/STYLE.md`): palette as hex values, light (direction, warmth, contrast), materials, edges and outlines, level of detail, mood words, and what to avoid. Keep the chosen image as `art/target.png`. Every later prompt and every check refers to these two files.
+When the chosen image comes back, look at it and write two things in the project, which every later prompt and check refers to:
+
+- `art/target.png` — the chosen image itself, kept unchanged.
+- `art/STYLE.md` — the **style sheet**: palette as hex values, light (direction, warmth, contrast), materials, edges and outlines, level of detail, mood words, and what to avoid.
+- The **technical frame** in the same file: engine and 2D/3D, camera view, native display size, asset dimensions, world scale, transparency, filtering, animation frames, texture budget, and target platforms. Locking this before generating assets stops them coming back at the wrong size, palette or format.
 
 ## Step 3: assets that match
 
@@ -67,9 +71,14 @@ swiftc -O scripts/cutout.swift -o cutout          # macOS 14+, offline, free
 ./cutout art/incoming -o art/cut --trim --pad 16 --max 1024
 ```
 
-It writes a transparent PNG per image and prints each subject's share of the frame; a share near 0% or 100% means the cut-out failed (busy background, subject touching the edges): ask for that image again on a plain background. Look at every result on a contrasting colour before using it. On other systems, any background-removal tool works the same way.
+It writes a transparent PNG per image and prints each subject's share of the frame; a share near 0% or 100% means the cut-out failed (busy background, subject touching the edges): ask for that image again on a plain background. Then two checks, because a file can be wrong without looking wrong:
 
-Keep an asset list in `art/README.md`: name, file, **size in the game** (metres, pixels or seconds), and where it came from. Without the in-game size, code scales assets wrongly.
+- **Fake transparency**: an RGBA file where every pixel is fully opaque means the background was baked in or the transparency is a fake checkerboard. Reject it.
+- **Look at every result on a checkerboard or a contrasting colour**, not a white background, and inspect a contact sheet of the whole set together at real size before using them.
+
+On other systems, any background-removal tool works the same way.
+
+Keep a manifest in `art/README.md`: name, file, **size in the game** (metres, pixels or seconds), and — per asset — its source, licence or generation note, and any edits. Without the in-game size, code scales assets wrongly; without the source and licence, nothing can be shipped or re-made.
 
 ## Step 4: build, then compare with the target
 
