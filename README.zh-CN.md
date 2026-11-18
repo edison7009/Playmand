@@ -133,7 +133,7 @@ Bevy 的 ECS 架构围绕数据组织游戏逻辑，支持在条件允许时并�
 
 代价是代码门槛较高：所有权、借用、生命周期，以及 Bevy 的查询、调度和资源管理，都需要开发者理解。构建耗时、版本变化和复杂错误排查也会增加迭代成本。运行效率高，并不意味着开发过程天然更快。
 
-**这正是 Playmand 与 Agent 结合的核心：发挥 Rust + Bevy 的性能与工程优势，让 Agent 承担更多代码实现、API 查证和问题定位，降低驾驭这套技术栈的成本。** 用户把精力放在玩法、风格和体验判断上，Playmand 为 Agent 补充引擎与资产制作知识，帮助它少猜接口、少踩技术陷阱。实际开发效率与游戏质量，仍通过具体项目和对照评估检验。目前的对照评测里：答案能在依赖源码中查到的题，有无技能都做对了，技能主要省时间；设计题上技能让方案更完整，盲评也暴露了指南的空白，并已据此修正。方法、原始结果和局限见[评估用例](docs/evaluation.md)。
+**这正是 Playmand 与 Agent 结合的核心：发挥 Rust + Bevy 的性能与工程优势，让 Agent 承担更多代码实现、API 查证和问题定位，降低驾驭这套技术栈的成本。** 用户把精力放在玩法、风格和体验判断上，Playmand 为 Agent 补充引擎与资产制作知识，帮助它少猜接口、少踩技术陷阱。实际开发效率与游戏质量，仍通过具体项目和对照评估检验。目前的对照评测里：答案能在依赖源码中查到的题，有无技能都做对了，技能主要省时间；设计题（升级手感）上，盲评起初更喜欢不用技能的方案，暴露了指南的空白；修正指南和示例后，技能组方案以 20 分对 16 分胜出。方法、原始结果和局限见[评估用例](docs/evaluation.md)。
 
 ## 提供什么
 
@@ -145,8 +145,15 @@ Bevy 的 ECS 架构围绕数据组织游戏逻辑，支持在条件允许时并�
 | [资源与动画](docs/zh-CN/playmand/references/assets-animation.md) | GLB 子场景、实例就绪、动画图/播放器接线、材质与骨骼实例隔离 |
 | [渲染、UI 与性能](docs/zh-CN/playmand/references/rendering.md) | 2D/3D 相机、灯光、图层、UI 布局、截图与预览相机生命周期 |
 | [演示动画与视频录制](docs/zh-CN/playmand/references/video.md) | 固定时钟逐帧录制、无缝循环、辉光、WebP/GIF/MP4 编码 |
+| [用 Avian 做物理](docs/zh-CN/playmand/references/physics.md) | 刚体与碰撞体、碰撞事件与传感器、快速物体不穿墙、无窗口物理测试 |
+| [用 Kira 做音频](docs/zh-CN/playmand/references/audio.md) | 按分贝管理音乐和音效声道、淡入淡出与交叉淡化、暂停、无声卡检查电平 |
+| [用 egui 做调试面板](docs/zh-CN/playmand/references/egui.md) | bevy_egui 接入与调度、egui 版本对齐、点面板不影响游戏 |
+| [用 Macroquad 做小型 2D 游戏](docs/zh-CN/playmand/references/macroquad.md) | 什么时候比 Bevy 合适、固定步长规则、小体积网页构建 |
+| [用 wgpu 做自定义 GPU 工作](docs/zh-CN/playmand/references/wgpu.md) | 计算与渲染通道、读回结果、没有 GPU 时的处理 |
+| [Rust → WebAssembly 网页特效](docs/zh-CN/playmand/references/web-wasm.md) | 网页和 Tauri 应用里的 WebGL2 特效：首帧快、体积、隐藏时暂停、释放 GPU 内存 |
+| [游戏手感：奖励与升级](docs/zh-CN/playmand/references/feedback.md) | 分层反馈、预备与冲击、狂点时也跟得上、安全取消、减少动态效果 |
 | [版本检查脚本](skills/playmand/scripts/inspect_bevy.py) | 从 Cargo 实际解析图报告 Bevy 版本、features、源码位置和文档入口 |
-| [可运行 Rust 示例](skills/playmand/examples/ecs-patterns/src/lib.rs) | 四项真实 Bevy ECS 行为测试，可用于理解 API 或缩小故障 |
+| [可运行示例](docs/zh-CN/playmand/README.md) | 在 Windows 和 Linux 的 CI 中运行的小型 Rust 工程：Bevy ECS、Avian 物理、Kira 音频、egui、Macroquad、wgpu、游戏手感，以及[整套技术栈一起运行](skills/playmand/examples/bevy-stack/src/lib.rs)（Bevy + Avian + Kira + egui 放在同一个应用里） |
 
 技术示例基线为 **Bevy 0.20.1 / Rust 1.97.1**。其他版本需查对应源码，已有项目不应为套用示例而升级。辅助资料按问题读取，完整入口见 [SKILL.md](skills/playmand/SKILL.md)（英文，Agent 实际加载的版本）；中文副本见 [docs/zh-CN/playmand](docs/zh-CN/playmand/README.md)。
 
@@ -252,7 +259,7 @@ cd skills/playmand/examples/ecs-patterns
 cargo test --locked
 ```
 
-打包脚本使用明确的公开文件清单，生成 `dist/playmand-0.3.0.zip` 和 SHA-256 清单。GitHub Actions 在 Windows 与 Linux 上运行相同测试。宿主行为验证和引擎/GPU 验证的范围分别记录在 [VALIDATION.md](VALIDATION.md)，不以安装通过宣称任意游戏都能自动完成。
+打包脚本使用明确的公开文件清单，生成 `dist/playmand-0.4.0.zip` 和 SHA-256 清单。GitHub Actions 在 Windows 与 Linux 上运行相同测试。宿主行为验证和引擎/GPU 验证的范围分别记录在 [VALIDATION.md](VALIDATION.md)，不以安装通过宣称任意游戏都能自动完成。
 
 ## 许可证
 

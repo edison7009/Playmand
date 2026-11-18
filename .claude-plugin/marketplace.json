@@ -4,18 +4,37 @@
     "name": "edison7009"
   },
   "metadata": {
-    "description": "Rust + Bevy skill for AI coding agents: games and frame-by-frame videos, with Blender MCP asset work."
+    "description": "Rust skill for AI coding agents: games with Bevy, physics, audio and debug UI, recorded videos, WebAssembly effects for web pages, and Blender MCP assets."
   },
   "plugins": [
     {
       "name": "playmand",
       "source": "./",
-      "description": "Make your AI agent fluent in Rust + Bevy for games and videos: version-matched Bevy 0.20 APIs, ECS and gameplay state, GLB animation, UI and rendering, frame-by-frame recording, and Blender MCP assets.",
-      "version": "0.3.0",
+      "description": "Make your AI agent fluent in game and visual work in Rust: picks the right tool (Bevy by default, Avian physics, Kira audio, egui debug UI, Macroquad, wgpu, Rust to WebAssembly for web effects), with version-matched Bevy 0.20 APIs, tested examples, game-feel guidance, frame-by-frame video and Blender MCP assets.",
+      "version": "0.4.0",
       "license": "MIT",
-      "keywords": ["rust", "bevy", "gamedev", "ecs", "video", "animation", "blender", "mcp"],
+      "keywords": [
+        "rust",
+        "bevy",
+        "gamedev",
+        "ecs",
+        "avian",
+        "physics",
+        "kira",
+        "audio",
+        "egui",
+        "macroquad",
+        "wgpu",
+        "webassembly",
+        "video",
+        "animation",
+        "blender",
+        "mcp"
+      ],
       "strict": false,
-      "skills": ["./skills/playmand"]
+      "skills": [
+        "./skills/playmand"
+      ]
     }
   ]
 }

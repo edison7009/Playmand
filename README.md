@@ -133,7 +133,7 @@ Bevy's ECS architecture organizes game logic around data, runs systems in parall
 
 The cost is a steep learning curve: ownership, borrowing, lifetimes, plus Bevy's queries, scheduling and resource management all have to be understood. Build times, version churn and hard-to-diagnose errors also slow iteration. Fast at runtime does not mean fast to develop.
 
-**That is exactly where Playmand and agents fit together: keep the performance and engineering strengths of Rust + Bevy, and let the agent carry more of the implementation, API verification and debugging, lowering the cost of working with this stack.** You focus on gameplay, style and feel; Playmand gives the agent engine and asset-pipeline knowledge so it guesses fewer APIs and hits fewer pitfalls. Actual development speed and game quality are still measured on real projects and controlled evaluations. So far, with-skill and without-skill agents were equally correct on tasks whose answer is in the crates' source (the skill mainly saved time); on design tasks the skill made results more complete, and blind grading also exposed gaps that we then fixed. Method, raw results and caveats: [evaluation](docs/evaluation.md).
+**That is exactly where Playmand and agents fit together: keep the performance and engineering strengths of Rust + Bevy, and let the agent carry more of the implementation, API verification and debugging, lowering the cost of working with this stack.** You focus on gameplay, style and feel; Playmand gives the agent engine and asset-pipeline knowledge so it guesses fewer APIs and hits fewer pitfalls. Actual development speed and game quality are still measured on real projects and controlled evaluations. So far, with-skill and without-skill agents were equally correct on tasks whose answer is in the crates' source (the skill mainly saved time); on a design task (level-up feel), blind grading first preferred the agent without the skill, which exposed a gap in the guide; after fixing the guide and example, the skill's solution scored 20/20 against 16/20 and was preferred. Method, raw results and caveats: [evaluation](docs/evaluation.md).
 
 ## What's Included
 
@@ -145,8 +145,15 @@ The cost is a steep learning curve: ownership, borrowing, lifetimes, plus Bevy's
 | [Assets and animation](skills/playmand/references/assets-animation.md) | GLB sub-scenes, instance readiness, animation graph/player wiring, per-instance material and skeleton isolation |
 | [Rendering, UI and performance](skills/playmand/references/rendering.md) | 2D/3D cameras, lighting, layers, UI layout, screenshots and preview camera lifecycle |
 | [Animation and video recording](skills/playmand/references/video.md) | Fixed-clock frame capture, seamless loops, bloom, WebP/GIF/MP4 encoding |
+| [Physics with Avian](skills/playmand/references/physics.md) | Bodies and colliders, collision events and sensors, fast objects not tunnelling, headless physics tests |
+| [Audio with Kira](skills/playmand/references/audio.md) | Music and effect channels in decibels, fades and crossfades, pausing, checking levels without a sound card |
+| [Debug panels with egui](skills/playmand/references/egui.md) | bevy_egui setup and schedule, matching egui versions, keeping panel clicks out of the game |
+| [Small 2D games with Macroquad](skills/playmand/references/macroquad.md) | When Macroquad fits better than Bevy, fixed-step rules, small web builds |
+| [Custom GPU work with wgpu](skills/playmand/references/wgpu.md) | Compute and render passes, reading results back, running with no GPU |
+| [Web effects in Rust → WebAssembly](skills/playmand/references/web-wasm.md) | WebGL2 effects for web pages and Tauri apps: fast first paint, size, pausing when hidden, freeing GPU memory |
+| [Game feel: rewards and level-ups](skills/playmand/references/feedback.md) | Tiered feedback, anticipation and impact, rewards that keep up when players mash, cancelling safely, reduced motion |
 | [Version inspection script](skills/playmand/scripts/inspect_bevy.py) | Reports Bevy version, features, source locations and docs links from Cargo's actual resolved graph |
-| [Runnable Rust example](skills/playmand/examples/ecs-patterns/src/lib.rs) | Four real Bevy ECS behavior tests, for understanding the API or narrowing down a bug |
+| [Runnable examples](skills/playmand/SKILL.md) | Small Rust projects run in CI on Windows and Linux: Bevy ECS, Avian physics, Kira audio, egui, Macroquad, wgpu, game feel, and [the whole stack together](skills/playmand/examples/bevy-stack/src/lib.rs) (Bevy + Avian + Kira + egui in one app) |
 
 The technical baseline is **Bevy 0.20.1 / Rust 1.97.1**. For other versions, check that version's source; existing projects should not be upgraded just to match the examples. Reference material is read on demand per problem; the full entry point is [SKILL.md](skills/playmand/SKILL.md).
 
@@ -255,7 +262,7 @@ cd skills/playmand/examples/ecs-patterns
 cargo test --locked
 ```
 
-The packaging script uses an explicit public-file allowlist and produces `dist/playmand-0.3.0.zip` plus a SHA-256 manifest. GitHub Actions runs the same tests on Windows and Linux. Host behavior and engine/GPU validation scopes are documented in [VALIDATION.md](VALIDATION.md); passing installation does not imply any game will be completed automatically.
+The packaging script uses an explicit public-file allowlist and produces `dist/playmand-0.4.0.zip` plus a SHA-256 manifest. GitHub Actions runs the same tests on Windows and Linux. Host behavior and engine/GPU validation scopes are documented in [VALIDATION.md](VALIDATION.md); passing installation does not imply any game will be completed automatically.
 
 ## License
 

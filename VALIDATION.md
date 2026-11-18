@@ -1,3 +1,18 @@
+# Playmand 0.4.0 验证
+
+0.4.0 把 Playmand 从"Bevy 技能"扩展为 Rust 游戏与视觉创作的入口：入口新增按任务选工具的表，以及物理（Avian）、音频（Kira）、调试界面（egui）、小型 2D（Macroquad）、自定义 GPU（wgpu）、网页特效（Rust → WebAssembly）和游戏手感的参考资料。技术基线不变：**Bevy 0.20.1 / Rust 1.97.1**。
+
+| 检查 | 结果与范围 | 复现入口 |
+| --- | --- | --- |
+| 各示例在 CI 中运行 | Windows 与 Linux：`ecs-patterns`、`physics-avian`、`feedback-tiers`、`bevy-stack`（Bevy + Avian + bevy_kira_audio + bevy_egui 一起）、`audio-kira`、`ui-egui`、`macroquad-2d`（含 wasm32 构建）、`gpu-wgpu`（Linux 用 lavapipe 软件 GPU、Windows 用 WARP）；`web/` 的 fmt、test、clippy | `.github/workflows/check.yml`，各示例目录 `cargo test --locked` |
+| 整套依赖的一致性 | CI 检查 `bevy-stack` 不构建 Bevy 自带的音频，且 egui、kira 各只解析到一个版本 | 同上 |
+| 网页特效 | `web/` 的卡包演示（WebGL2，代码 gzip 后 58 KB）部署在 playmand.com，并在浏览器中逐帧检查过 | `web/build.sh` |
+| 有无技能的对照评测 | 三批共 7 题；只要答案能在依赖源码或 README 中查到，两组都做对，技能主要减少试错；设计题上技能让方案更完整，评测也发现并修正了指南的空白 | [评估用例](docs/evaluation.md) |
+
+尚未验证：bevy_kira_audio 在真实声卡上的播放（CI 没有声卡，只检查游戏请求播放了什么）；bevy_egui 面板在真实窗口中的显示；wgpu 在真实独立显卡上的结果；Blender MCP 的连接与建模。
+
+以下 0.3.0 说明保留为历史：
+
 # Playmand 0.3.0 验证
 
 0.3.0 将技术基线升级到 **Bevy 0.20.1 / Rust 1.97.1**（Bevy 0.20.1 声明的最低 Rust 版本）。ECS 示例改用新版本依赖后重新执行；参考资料中出现的 Bevy 类型、方法与字段已逐项对照 0.20.1 crate 源码，并按官方 0.19→0.20 迁移指南补充调度弱顺序、观察者泛型、`NextState::set_if_different`、`Interaction` 弃用、默认字号与 2D 色调映射等变化。旧名 `SceneRoot` / `SceneInstanceReady` 仅作为旧教程识别保留。

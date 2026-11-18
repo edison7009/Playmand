@@ -1,4 +1,4 @@
 interface:
   display_name: "Playmand"
-  short_description: "Rust + Bevy games and videos, with Blender MCP assets"
-  default_prompt: "Use $playmand to build this game or video in Rust + Bevy, using the connected Blender MCP when 3D assets need to be made or edited."
+  short_description: "Games, videos and web effects in Rust: Bevy, Avian, Kira, egui and more"
+  default_prompt: "Use $playmand to build this in Rust: pick the right tool (Bevy by default), and use the connected Blender MCP when 3D assets need to be made or edited."

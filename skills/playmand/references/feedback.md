@@ -29,10 +29,10 @@ Repeated rewards stay short; rare ones may be long. If progress can be partial, 
 
 Players mash the button that gives the common reward. If every trigger restarts the effect from zero, a trigger that arrives before the impact moment pushes the impact back again, so fast tapping produces no impacts, no sound and a number that does not move. Instead:
 
-- **Never restart an effect that has not reached its impact.** Let it finish, and queue the next level, or speed through the queue, so each level gets its own impact in order.
+- **Never restart an effect that has not reached its impact.** Queue the next level; once the current effect passes its impact, the next one may take over at once, so each level gets its own impact in order.
 - **Or let the display catch up:** apply the real level immediately, and let the shown XP bar and number chase it, firing one impact each time the shown bar crosses a level. This reads like a counter rolling up.
 - When one trigger grants several levels, play one effect at the highest tier reached and show "+N".
-- Keep the shown level close to the real one: while levels are queued, play each one shorter (down to about a third of its span) so the display stays within a level or two, instead of merging many levels into one late "+6".
+- Keep the shown level close to the real one: while levels are queued, play each one faster, down to about a third of its span, and speed up the one already playing too (keep its progress, so the animation does not jump). Do not merge many levels into one late "+6". The [example](../examples/feedback-tiers/src/lib.rs)'s `Rewards` does this: at ten feeds a second every level still gets its own impact and the display stays within three levels.
 - Test it at the speed players actually tap (every 0.1 to 0.3 s): count impacts over a few seconds and check that the shown number keeps moving.
 
 ## Describe it as data, test it once

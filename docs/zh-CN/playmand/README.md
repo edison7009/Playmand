@@ -99,4 +99,4 @@ cargo test --locked
 
 ## 可执行的音频、界面、2D 与 GPU 示例
 
-都可在 `examples/` 下对应目录里用 `cargo test --locked` 无窗口运行：[`audio-kira`](../../../skills/playmand/examples/audio-kira/src/lib.rs)（通过模拟声卡检查电平、淡入淡出、暂停）、[`ui-egui`](../../../skills/playmand/examples/ui-egui/src/lib.rs)（向 egui 输入点击和键入）、[`macroquad-2d`](../../../skills/playmand/examples/macroquad-2d/src/lib.rs)（挡板游戏的规则；`cargo run` 打开游戏）[`gpu-wgpu`](../../../skills/playmand/examples/gpu-wgpu/src/lib.rs)（读回计算着色器和渲染通道的结果；在完全没有 GPU 适配器的机器上会跳过）和 [`feedback-tiers`](../../../skills/playmand/examples/feedback-tiers/src/lib.rs)（把升级节拍写成数据，加一个可取消的播放器；无依赖）。
+都可在 `examples/` 下对应目录里用 `cargo test --locked` 无窗口运行：[`audio-kira`](../../../skills/playmand/examples/audio-kira/src/lib.rs)（通过模拟声卡检查电平、淡入淡出、暂停）、[`ui-egui`](../../../skills/playmand/examples/ui-egui/src/lib.rs)（向 egui 输入点击和键入）、[`macroquad-2d`](../../../skills/playmand/examples/macroquad-2d/src/lib.rs)（挡板游戏的规则；`cargo run` 打开游戏）[`gpu-wgpu`](../../../skills/playmand/examples/gpu-wgpu/src/lib.rs)（读回计算着色器和渲染通道的结果；在完全没有 GPU 适配器的机器上会跳过）和 [`feedback-tiers`](../../../skills/playmand/examples/feedback-tiers/src/lib.rs)（把升级节拍写成数据，加一个可取消的播放器，以及玩家狂点时也能跟上的奖励队列；无依赖）。

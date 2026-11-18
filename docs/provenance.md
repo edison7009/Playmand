@@ -1,5 +1,9 @@
 # 来源与适用边界
 
+## 0.4.0：Rust 创作的入口
+
+新增的物理、音频、调试界面、Macroquad、wgpu、网页特效与游戏手感资料，依据 crates.io 上 Avian 0.8.0、Kira 0.12.6、bevy_kira_audio 0.27.1、egui 0.36.2、bevy_egui 0.43.1、Macroquad 0.4.16、wgpu 30 的 crate 源码，以及仓库里在 CI 中运行的示例；游戏手感一页来自为 EchoBird 宠物做的升级效果和两批对照评测，2026-11-18 核对。
+
 ## 0.3.0：升级到 Bevy 0.20.1
 
 技术基线由 Bevy 0.19.1 / Rust 1.95.0 升级到 Bevy 0.20.1 / Rust 1.97.1。依据为 crates.io 发布的 0.20.1 crate 源码与 [官方 0.19→0.20 迁移指南](https://bevy.org/learn/migration-guides/0-19-to-0-20/)，2026-11-17 核对。
