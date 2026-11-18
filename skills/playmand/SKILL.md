@@ -57,6 +57,7 @@ It calls `cargo metadata` offline and locked, and prints the Bevy crates the wor
 | Debug panels and tools, immediate-mode UI, driving UI in tests | [egui](references/egui.md) |
 | Small standalone 2D games, fixed-step rules, tiny web builds | [Macroquad](references/macroquad.md) |
 | Devices, compute and render passes, reading GPU results back | [wgpu](references/wgpu.md) |
+| Game feel: level-ups and rewards that feel earned, squash and stretch, impact timing, cancellation, reduced motion | [Game feel and feedback](references/feedback.md) |
 | Blender modelling/materials/animation, MCP connection and operations, exporting GLB into Bevy | [Blender and MCP](references/blender-mcp.md) |
 | GLB, scene instances, animation, skeletons, shared assets and per-instance changes | [Assets and animation](references/assets-animation.md) |
 | 2D/3D cameras, lighting, UI, black screens, previews, multiple passes, frame rate | [Rendering, UI and performance](references/rendering.md) |
@@ -91,4 +92,4 @@ cargo test --locked
 
 ## Runnable audio, UI, 2D and GPU examples
 
-Each runs headless with `cargo test --locked` from its folder under `examples/`: [`audio-kira`](examples/audio-kira/src/lib.rs) (levels, fades, pauses through a mock sound card), [`ui-egui`](examples/ui-egui/src/lib.rs) (clicks and typing fed into egui), [`macroquad-2d`](examples/macroquad-2d/src/lib.rs) (a paddle game's rules; `cargo run` opens the game) and [`gpu-wgpu`](examples/gpu-wgpu/src/lib.rs) (a compute shader and a render pass read back; it skips on a machine with no GPU adapter at all).
+Each runs headless with `cargo test --locked` from its folder under `examples/`: [`audio-kira`](examples/audio-kira/src/lib.rs) (levels, fades, pauses through a mock sound card), [`ui-egui`](examples/ui-egui/src/lib.rs) (clicks and typing fed into egui), [`macroquad-2d`](examples/macroquad-2d/src/lib.rs) (a paddle game's rules; `cargo run` opens the game) [`gpu-wgpu`](examples/gpu-wgpu/src/lib.rs) (a compute shader and a render pass read back; it skips on a machine with no GPU adapter at all) and [`feedback-tiers`](examples/feedback-tiers/src/lib.rs) (level-up beats as data and a cancellable player; no dependencies).

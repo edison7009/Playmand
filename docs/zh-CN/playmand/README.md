@@ -53,6 +53,7 @@ python scripts/inspect_bevy.py --manifest-path /absolute/game/Cargo.toml
 | 调试面板与工具、即时模式界面、在测试中驱动界面 | [egui](references/egui.md) |
 | 独立的小型 2D 游戏、固定步长规则、小体积网页构建 | [Macroquad](references/macroquad.md) |
 | 设备、计算与渲染通道、读回 GPU 结果 | [wgpu](references/wgpu.md) |
+| 游戏手感：有分量的升级与奖励、挤压与拉伸、冲击时机、取消、减少动态效果 | [游戏手感与反馈](references/feedback.md) |
 | Blender 建模/材质/动画、MCP 连接与操作、GLB 导出并接入 Bevy | [Blender 与 MCP](references/blender-mcp.md) |
 | GLB、场景实例、动画、骨骼、共享资产与实例隔离 | [资源与动画](references/assets-animation.md) |
 | 2D/3D 相机、灯光、UI、黑屏、预览、多 pass、帧率 | [渲染、UI 与性能](references/rendering.md) |
@@ -87,4 +88,4 @@ cargo test --locked
 
 ## 可执行的音频、界面、2D 与 GPU 示例
 
-都可在 `examples/` 下对应目录里用 `cargo test --locked` 无窗口运行：[`audio-kira`](../../../skills/playmand/examples/audio-kira/src/lib.rs)（通过模拟声卡检查电平、淡入淡出、暂停）、[`ui-egui`](../../../skills/playmand/examples/ui-egui/src/lib.rs)（向 egui 输入点击和键入）、[`macroquad-2d`](../../../skills/playmand/examples/macroquad-2d/src/lib.rs)（挡板游戏的规则；`cargo run` 打开游戏）和 [`gpu-wgpu`](../../../skills/playmand/examples/gpu-wgpu/src/lib.rs)（读回计算着色器和渲染通道的结果；在完全没有 GPU 适配器的机器上会跳过）。
+都可在 `examples/` 下对应目录里用 `cargo test --locked` 无窗口运行：[`audio-kira`](../../../skills/playmand/examples/audio-kira/src/lib.rs)（通过模拟声卡检查电平、淡入淡出、暂停）、[`ui-egui`](../../../skills/playmand/examples/ui-egui/src/lib.rs)（向 egui 输入点击和键入）、[`macroquad-2d`](../../../skills/playmand/examples/macroquad-2d/src/lib.rs)（挡板游戏的规则；`cargo run` 打开游戏）[`gpu-wgpu`](../../../skills/playmand/examples/gpu-wgpu/src/lib.rs)（读回计算着色器和渲染通道的结果；在完全没有 GPU 适配器的机器上会跳过）和 [`feedback-tiers`](../../../skills/playmand/examples/feedback-tiers/src/lib.rs)（把升级节拍写成数据，加一个可取消的播放器；无依赖）。

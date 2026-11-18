@@ -39,6 +39,10 @@ Assets (Blender through MCP) and encoding (FFmpeg, AVFoundation) serve all three
 - [x] **Macroquad** for small 2D games and light web builds (434 KB of WebAssembly, 150 KB gzipped, for the example game).
 - [x] **wgpu** for custom render passes and GPU compute, run in CI on software adapters.
 
+### Alongside: craft
+
+- [x] **Game feel and feedback**: tiered rewards, squash and stretch, impact timing, safe cancellation and reduced motion, from the pet level-up effects; an engine-free example tests the beats and the player.
+
 ### Phase 3 — only when a real demo needs it
 
 Fyrox (full 3D editor workflow), nannou (generative art; check its maintenance status first), Lightyear (multiplayer), Lyon and Vello (vector graphics). Each arrives with the demo that needed it.
