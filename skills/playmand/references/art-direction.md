@@ -30,6 +30,8 @@ Whichever way, the rest is the same: settle the style, make the assets, build, a
 
 ## Who makes the art
 
+First ask what kind of work it is and what assets the user has: the [skill's entry](../SKILL.md#ask-what-the-user-wants-and-what-they-have) lists what to make yourself and what to ask for, by kind of work.
+
 The target picture says what the result should look like; the next question is where each asset comes from. Give each layer to whoever does it best:
 
 | What | Who makes it | Why |

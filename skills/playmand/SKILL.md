@@ -12,6 +12,19 @@ The look comes first. Logic and gameplay are quick to write; what makes the work
 
 New games default to Rust + Bevy and should deliver the gameplay, visuals and content the user asked for. Existing Bevy projects keep their pinned version and structure. When the user explicitly chooses another engine, respect it, and never migrate an existing project on another engine automatically. Small prototypes are for testing technical questions; they do not replace the full game the user asked for, and this skill does not impose a fixed number of iterations or a report template.
 
+## Ask what the user wants and what they have
+
+Before new visual work, ask in one short message what kind of work it is, which style they want (an example picture is best), and which assets they already have. What to make yourself and what to ask for depends on the kind of work:
+
+| Kind of work | Make it yourself | Ask the user for |
+| --- | --- | --- |
+| Graphic design: posters, flat illustration, slides, social images, UI | Layout, type, flat or vector art, simple generated images | The style or an example, the copy, the brand kit |
+| Effects: web effects, particles, shaders, titles, motion graphics | All of it, in code | A style reference, the copy |
+| Video | Flat motion graphics, titles, charts and effects | The kind of video (product demo, explainer, promo, social short...), and the footage, product shots, logo, music or voice it needs |
+| Games | Code, gameplay, effects, light, motion, UI, simple stylised art | Polished 3D models, characters and scene assets: these cannot be generated at quality here, so they come from the user, an artist, an asset store or a generator the user runs |
+
+If a game or a video needs assets the user does not have, say plainly what it will look like without them (placeholders or a simpler stylised look) and point to sources they can use; do not try to sculpt detailed characters or scenes from code. Skip the questions when the user already gave references and assets, or for fixes and existing projects.
+
 ## Start from a picture
 
 For new visual work where the look matters (a new game, a video, a web effect, a character or scene) and no reference exists, get a picture of the target before building: an agent matches a picture well, and invents a look from words badly. Use the user's references if they gave any. Otherwise there are four ways, and the user chooses: the host's own image generation if this session has it (Codex, for example, or an image tool); the user's image app, with prompts you write ("I think you want something like this. Paste one into your image app (Gemini, Doubao, ChatGPT...) and send me the one you like."), the default when nothing else is set up; an image API the user connects with their own key, for batches (say the cost first); or existing pictures the user (or a web search) finds, as references only: a named franchise is someone else's, so design an original in its genre. Offer 2–3 short prompts in different directions. Then settle a style sheet from the chosen image, make matching assets, and compare the built result with it. Skip this for fixes, logic and existing projects, or when the user says to just build; never block on it. Details, prompt structure, asset prompts and the cut-out script: [Art direction](references/art-direction.md).
