@@ -1,3 +1,18 @@
+# Playmand 0.5.0 验证
+
+0.5.0 补齐素材能力：先问清用户要什么、有什么；美术谁来做；素材从哪里来、授权与素材清单；检查模型、图片和音频；在 Blender 里修整模型并接入 Bevy。网站第二屏上线了雨夜港口的动态海报。技术基线不变：**Bevy 0.20.1 / Rust 1.97.1**。
+
+| 检查 | 结果与范围 | 复现入口 |
+| --- | --- | --- |
+| 素材检查脚本 | `check_asset.py`（仅标准库）有 10 个单元测试，覆盖 GLB 尺寸与三角面上限、厘米单位（180 个单位高的角色）与悬空原点、必需的 Draco 扩展判定失败、内嵌 JPEG 的尺寸与功能开关、无 scenes 时子节点不重复计算、PNG 假透明与调色板透明、24 位 EXTENSIBLE 格式 WAV、静音 WAV 输出合法 JSON、WAV 削波与开头静音、OGG Vorbis 的编码与时长；实际跑过一个 446 万三角面的 Blender 导出 GLB（测得高 23.8 米）、一条 24 秒音轨和 WebP/PNG 美术图 | `python3 -m unittest tests.test_check_asset` |
+| 模型四视图预览 | `render_glb.py` 用 Blender 5.3 后台模式渲染同一个 GLB 的正面、侧面、背面、四分之三视图并拼成总览图，约 36 秒 | `blender -b -P skills/playmand/scripts/render_glb.py -- model.glb sheet.png` |
+| 引擎相关结论 | 素材流程指南中的 Bevy 说明（不支持 Draco/meshopt/量化网格、默认只播 Ogg Vorbis、JPEG/WebP/KTX2 需功能开关、0.20 用 `WorldAssetRoot` 加载 glTF 场景）逐条对照 Bevy 0.20.1 源码核对 | `bevy_gltf-0.20.1/src/lib.rs`、`bevy-0.20.1/Cargo.toml` |
+| 网站第二屏 | 雨夜港口动态海报单独打包（gzip 后 32 KB），滚动到附近才加载；首屏卡包仍为 66 KB。浏览器中验证了桌面 16:9、4:3、手机竖屏和中英文页面；CI 对该包跑 clippy | `web/build.sh`，`.github/workflows/check.yml` |
+
+尚未验证：图生 3D 服务产出的模型从检查、Blender 修整到在 Bevy 中运行的完整流程（本次没有使用外部生成服务）；`render_glb.py` 在 Windows 和 Linux 上的运行。
+
+---
+
 # Playmand 0.4.0 验证
 
 0.4.0 把 Playmand 从"Bevy 技能"扩展为 Rust 游戏与视觉创作的入口：入口新增按任务选工具的表，以及物理（Avian）、音频（Kira）、调试界面（egui）、小型 2D（Macroquad）、自定义 GPU（wgpu）、网页特效（Rust → WebAssembly）和游戏手感的参考资料。技术基线不变：**Bevy 0.20.1 / Rust 1.97.1**。

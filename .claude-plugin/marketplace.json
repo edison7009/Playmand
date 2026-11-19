@@ -11,7 +11,7 @@
       "name": "playmand",
       "source": "./",
       "description": "Make your AI agent fluent in game and visual work in Rust: picks the right tool (Bevy by default, Avian physics, Kira audio, egui debug UI, Macroquad, wgpu, Rust to WebAssembly for web effects), with version-matched Bevy 0.20 APIs, tested examples, game-feel guidance, frame-by-frame video and Blender MCP assets.",
-      "version": "0.4.0",
+      "version": "0.5.0",
       "license": "MIT",
       "keywords": [
         "rust",

@@ -165,6 +165,7 @@ The cost is a steep learning curve: ownership, borrowing, lifetimes, plus Bevy's
 | [Assets and animation](skills/playmand/references/assets-animation.md) | GLB sub-scenes, instance readiness, animation graph/player wiring, per-instance material and skeleton isolation |
 | [Rendering, UI and performance](skills/playmand/references/rendering.md) | 2D/3D cameras, lighting, layers, UI layout, screenshots and preview camera lifecycle |
 | [Art direction: start from a picture](skills/playmand/references/art-direction.md) | Gets a picture of the target before building: from the user's references, the host's own image generation, prompts for the user's image app (Gemini, Doubao, ChatGPT…), an image API the user connects, or existing pictures found as references; then a style sheet, matching assets, cut-outs and a side-by-side check |
+| [Asset pipeline](skills/playmand/references/asset-pipeline.md) | Where assets come from (the user, open-licence libraries, generators), a manifest with sizes and licences, a checker for models, images and audio, a four-view model preview, fixing models in Blender and bringing them into Bevy |
 | [Procedural realism](skills/playmand/references/procedural-realism.md) | Making code-built 3D look real: a modelling kit, damage, baked wear, decals, wet materials, light, synthesized sound and review hooks |
 | [Motion graphics and video production](skills/playmand/references/motion-graphics.md) | Product demos, explainers, data stories and social shorts: shot list, brand kit, timing, 16:9 / 9:16 / 1:1 safe areas, captions, soundtrack, export checks |
 | [Animation and video recording](skills/playmand/references/video.md) | Offscreen or window capture, seamless loops, bloom, WebP/GIF/MP4 encoding with sound |
@@ -285,7 +286,7 @@ cd skills/playmand/examples/ecs-patterns
 cargo test --locked
 ```
 
-The packaging script uses an explicit public-file allowlist and produces `dist/playmand-0.4.0.zip` plus a SHA-256 manifest. GitHub Actions runs the same tests on Windows and Linux. Host behavior and engine/GPU validation scopes are documented in [VALIDATION.md](VALIDATION.md); passing installation does not imply any game will be completed automatically.
+The packaging script uses an explicit public-file allowlist and produces `dist/playmand-0.5.0.zip` plus a SHA-256 manifest. GitHub Actions runs the same tests on Windows and Linux. Host behavior and engine/GPU validation scopes are documented in [VALIDATION.md](VALIDATION.md); passing installation does not imply any game will be completed automatically.
 
 ## License
 
