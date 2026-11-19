@@ -14,4 +14,8 @@ cargo build --release --locked --target wasm32-unknown-unknown
 TARGET=${CARGO_TARGET_DIR:-target}
 "$BINDGEN" --target web --no-typescript --remove-name-section --remove-producers-section \
   --out-dir site/pkg --out-name playmand "$TARGET/wasm32-unknown-unknown/release/playmand_web.wasm"
-ls -l site/pkg
+# The harbor shot: its own package, fetched only when the visitor scrolls to it.
+cargo build --release --locked --target wasm32-unknown-unknown --no-default-features --features harbor
+"$BINDGEN" --target web --no-typescript --remove-name-section --remove-producers-section \
+  --out-dir site/pkg-harbor --out-name harbor "$TARGET/wasm32-unknown-unknown/release/playmand_web.wasm"
+ls -l site/pkg site/pkg-harbor

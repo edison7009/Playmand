@@ -8,6 +8,7 @@
 //! This module holds the pure, testable logic (timing, springs, the tear
 //! path and card layout); `scene`, `pet_scene` and `gl` hold the WebGL side.
 
+pub mod harbor;
 pub mod mat;
 // The voxel pets are optional (`--features pets`): the card pack page does
 // not need them, and leaving them out keeps the WebAssembly small.
@@ -19,16 +20,21 @@ pub mod pet_models;
 pub mod pet_pose;
 
 #[cfg(target_arch = "wasm32")]
+#[cfg_attr(not(feature = "cards"), allow(dead_code))]
 mod gl;
+#[cfg(all(target_arch = "wasm32", feature = "harbor"))]
+mod harbor_scene;
+#[cfg(all(target_arch = "wasm32", feature = "harbor"))]
+pub use harbor_scene::HarborScene;
 #[cfg(all(target_arch = "wasm32", feature = "pets"))]
 mod pet_scene;
-#[cfg(target_arch = "wasm32")]
+#[cfg(all(target_arch = "wasm32", feature = "cards"))]
 mod scene;
-#[cfg(target_arch = "wasm32")]
+#[cfg(all(target_arch = "wasm32", any(feature = "cards", feature = "pets")))]
 mod shaders;
 #[cfg(all(target_arch = "wasm32", feature = "pets"))]
 pub use pet_scene::PetScene;
-#[cfg(target_arch = "wasm32")]
+#[cfg(all(target_arch = "wasm32", feature = "cards"))]
 pub use scene::SupplyScene;
 
 /// Pack width / height, and the share of the height taken by each heat seal.

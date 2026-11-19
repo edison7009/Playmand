@@ -2,6 +2,8 @@
 # itself is always revalidated so a new build shows up straight away.
 /pkg/*
   Cache-Control: public, max-age=86400
+/pkg-harbor/*
+  Cache-Control: public, max-age=86400
 /art/*
   Cache-Control: public, max-age=86400
 /

@@ -95,3 +95,4 @@ jobs:
       - run: cargo +1.93.0 clippy --locked --manifest-path web/Cargo.toml --target wasm32-unknown-unknown -- -D warnings
       - run: cargo +1.93.0 test --locked --manifest-path web/Cargo.toml --features pets
       - run: cargo +1.93.0 clippy --locked --manifest-path web/Cargo.toml --target wasm32-unknown-unknown --features pets -- -D warnings
+      - run: cargo +1.93.0 clippy --locked --manifest-path web/Cargo.toml --target wasm32-unknown-unknown --no-default-features --features harbor -- -D warnings

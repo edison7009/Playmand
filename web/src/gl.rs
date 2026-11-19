@@ -89,6 +89,14 @@ impl Program {
     pub fn f3v(&mut self, gl: &Gl, name: &'static str, v: &[f32]) {
         gl.uniform3fv_with_f32_array(self.loc(gl, name).as_ref(), v);
     }
+    #[cfg(feature = "harbor")]
+    pub fn f2v(&mut self, gl: &Gl, name: &'static str, v: &[f32]) {
+        gl.uniform2fv_with_f32_array(self.loc(gl, name).as_ref(), v);
+    }
+    #[cfg(feature = "harbor")]
+    pub fn f4v(&mut self, gl: &Gl, name: &'static str, v: &[f32]) {
+        gl.uniform4fv_with_f32_array(self.loc(gl, name).as_ref(), v);
+    }
     pub fn fv(&mut self, gl: &Gl, name: &'static str, v: &[f32]) {
         gl.uniform1fv_with_f32_array(self.loc(gl, name).as_ref(), v);
     }

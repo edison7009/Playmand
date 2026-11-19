@@ -10,8 +10,14 @@ publish = false
 [workspace]
 
 [features]
+default = ["cards"]
+# The card pack page (SupplyScene).
+cards = []
 # The voxel pets scene (PetScene). Off for the card pack page.
 pets = []
+# The harbor shot (HarborScene), built as its own small package so the card
+# pack page stays as light as it was.
+harbor = []
 
 [lib]
 crate-type = ["cdylib", "rlib"]

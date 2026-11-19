@@ -97,6 +97,12 @@
 
 Rust 编译成 WebAssembly，在普通网页里直接用 WebGL2 绘制：没有游戏引擎，也没有 JavaScript 3D 库，代码仅 66 KB（WebAssembly + JS，gzip 压缩后）。沿随机裂口撕开铝箔卡包，五张卡从开口升起并依次翻成正面，每张都有真实厚度、随倾斜反光的透明涂层，以及浮在卡面上方的角色。角色用 Bevy 建模渲染。它最初是 [EchoBird](https://github.com/edison7009/EchoBird) 的 TokenPet 功能。源码与构建说明见 [`web/`](https://github.com/edison7009/Playmand/tree/main/web)，经验总结写进了技能的[网页特效指南](docs/zh-CN/playmand/references/web-wasm.md)。
 
+### 两张图，一个活起来的镜头
+
+<a href="https://playmand.com/zh/"><img src="assets/demo-harbor.webp" alt="雨夜港口里站着一台胸口发出橙色光芒的巨型机甲，探照灯扫过雨幕，水从装甲上倾泻而下，起重机后方闪电划过" width="100%"></a>
+
+机甲和港口的原图来自生图软件，是 Rust 让它们活了起来：三层雨、来回扫的探照灯、闪烁的起重机信号灯、雾、海面波纹、闪电、从装甲上倾泻的水流和待机呼吸，全部由 Rust + WebAssembly 用 WebGL2 实时绘制，代码仅 32 KB，放在 [playmand.com](https://playmand.com/zh/) 的第二屏。每一帧都是时间的函数，所以同一份代码也能录成 24 秒无缝循环的视频，音轨来自同一条时间线。方法见技能的[美术方向指南](docs/zh-CN/playmand/references/art-direction.md)。
+
 ### 用 Rust 离屏渲染的宣传片
 
 <img src="assets/demo-promo.webp" alt="9 秒宣传片：Playmand 标题逐字弹入并迸发粒子，柱状图显示 Rust 的执行时间为 C 的 1.04 倍，并与 C++、C#、JavaScript 对比，最后是带播放按钮标志和 playmand.com 的结尾卡" width="100%">
