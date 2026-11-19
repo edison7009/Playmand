@@ -97,11 +97,11 @@ Source: [`pelican.rs`](demos/src/bin/pelican.rs), [`galaxy.rs`](demos/src/bin/ga
 
 Rust compiled to WebAssembly, drawing straight into WebGL2 in an ordinary web page: no engine and no JavaScript 3D library, and only 66 KB of code (WebAssembly + JS, gzipped). Tear a foil pack along a random line; five cards rise out of the slit and turn face up, each with real thickness, a clear coat that catches the light as it tilts and a character floating above the art. The characters were modelled and rendered with Bevy. It began as the TokenPet feature of [EchoBird](https://github.com/edison7009/EchoBird). Source and build notes: [`web/`](https://github.com/edison7009/Playmand/tree/main/web); what we learned is in the skill's [web effects guide](skills/playmand/references/web-wasm.md).
 
-### Two pictures, one living shot
+### Two pictures, one living poster
 
 <a href="https://playmand.com/#shot"><img src="assets/demo-harbor.webp" alt="A giant mecha with a glowing orange core stands in a rainy night harbour; searchlights sweep through the rain, water pours off its armour and lightning flashes behind the cranes" width="100%"></a>
 
-The mecha and the harbour came from an image app; Rust made them alive. Rain in three layers, sweeping searchlights, flickering crane lamps, fog, rippling water, lightning, water pouring off the armour and an idle breath, all drawn live with WebGL2 from Rust and WebAssembly in 32 KB of code, on the second screen of [playmand.com](https://playmand.com/). Every frame is a function of time, so the same code also records a seamless 24-second video with a soundtrack from the same timeline. Method: the skill's [art direction guide](skills/playmand/references/art-direction.md).
+A dynamic poster, not character animation: the mecha and the harbour are two still pictures from an image app, and the mecha itself does not act. What moves is drawn live around them with WebGL2 from Rust and WebAssembly in 32 KB of code: rain in three layers, sweeping searchlights, flickering crane lamps, fog, rippling water, lightning and water running off the armour. It is the second screen of [playmand.com](https://playmand.com/). Every frame is a function of time, so the same code also records a seamless 24-second video with a soundtrack from the same timeline. Method: the skill's [art direction guide](skills/playmand/references/art-direction.md).
 
 ### A promo video, rendered offscreen in Rust
 
