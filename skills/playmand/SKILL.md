@@ -8,7 +8,7 @@ description: Make games and visual work in Rust. Real-time 2D/3D games with Bevy
 
 A skill for making games and visual work in Rust, with Bevy as the default engine and asset creation through Blender and MCP. Rust + Bevy runs the game and its interaction; the same scene code can also be recorded frame by frame on a fixed clock into a GIF or video. Blender makes models, materials, rigs and animation, and MCP lets the AI drive and inspect those tools. Codex, Claude Code and similar agents are hosts; the skill is not tied to one model or one MCP implementation.
 
-The look comes first. Logic and gameplay are quick to write; what makes the work stand out is how it looks, so agree on a picture of the target before building new visual work, and judge the result against that picture, not against "it compiles".
+The look comes first. Logic and gameplay are quick to write; what makes the work stand out is how it looks, so agree on a picture of the target before building new visual work, and judge the result against that picture, not against "it compiles". Code makes light, effects, motion and stylised forms well; detailed characters and creatures come from a generator or an artist, and code makes them move (see [who makes the art](references/art-direction.md#who-makes-the-art)).
 
 New games default to Rust + Bevy and should deliver the gameplay, visuals and content the user asked for. Existing Bevy projects keep their pinned version and structure. When the user explicitly chooses another engine, respect it, and never migrate an existing project on another engine automatically. Small prototypes are for testing technical questions; they do not replace the full game the user asked for, and this skill does not impose a fixed number of iterations or a report template.
 
@@ -70,7 +70,8 @@ Before the first build of a project (or after a toolchain, dependency or feature
 | Blender modelling/materials/animation, MCP connection and operations, exporting GLB into Bevy | [Blender and MCP](references/blender-mcp.md) |
 | GLB, scene instances, animation, skeletons, shared assets and per-instance changes | [Assets and animation](references/assets-animation.md) |
 | 2D/3D cameras, lighting, UI, black screens, previews, multiple passes, frame rate | [Rendering, UI and performance](references/rendering.md) |
-| Getting a picture of the target first, prompts for the user's image app, style sheet, asset prompts, cut-outs | [Art direction](references/art-direction.md) |
+| Getting a picture of the target first, prompts for the user's image app, style sheet, asset prompts, cut-outs, and who makes each asset (code or a generator) | [Art direction](references/art-direction.md) |
+| Making code-built 3D look real: modelling kit, damage, baked wear, decals, wet materials, light, synthesized sound, review hooks | [Procedural realism](references/procedural-realism.md) |
 | Planning a video: shot list, brand kit, timing, 16:9 / 9:16 / 1:1 safe areas, captions, soundtrack, export checks | [Motion graphics and video production](references/motion-graphics.md) |
 | Recording: offscreen or window capture, seamless loops, bloom, encoding | [Animation and video recording](references/video.md) |
 | Effects inside a web page or Tauri app with Rust → WebAssembly and WebGL2 (card packs, holographic cards, voxel companions), no engine | [Rust → WebAssembly web effects](references/web-wasm.md) |

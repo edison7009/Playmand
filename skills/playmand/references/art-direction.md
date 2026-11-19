@@ -28,6 +28,21 @@ If the user gave references or art, use them. Otherwise there are four ways to g
 
 Whichever way, the rest is the same: settle the style, make the assets, build, and check against the picture.
 
+## Who makes the art
+
+The target picture says what the result should look like; the next question is where each asset comes from. Give each layer to whoever does it best:
+
+| What | Who makes it | Why |
+| --- | --- | --- |
+| Light, atmosphere, weather, particles, shaders, effects, motion, camera, UI animation, data visuals, generative art | Code | Code makes these well, original and fast at runtime |
+| Stylised geometry: voxels, low poly, clean geometric or toy-like forms | Code | Simple forms suit code; style hides the lack of sculpting |
+| Hard-surface realism: props, containers, buildings, vehicles, machines, weapons | Code, with the full realism stack, or a generator | Possible from code, but only with wear, decals, damage, wet shading, lighting and many review rounds: see [Making code-built 3D look real](procedural-realism.md) |
+| Organic or detailed characters: people, creatures, faces, a hero mecha with hundreds of plates | A generator (image-to-3D, image generation) or an artist | Primitives built from code read as toys or balloons; even the best code-built showcases bring characters in this way |
+
+Then code does what it is best at with those assets: rigging and posing, motion, lighting, effects, cameras, performance, recording and shipping. For a character that has to move (turn, raise an arm, close a hand), use a real 3D model; a picture can only sway, breathe and be lit.
+
+Image-to-3D services (several have free web tiers) turn a picture or a three-view sheet into a textured GLB; the user can run them like an image app, or connect one by API. Then clean the model in Blender: decimate, split it at the joints, set pivots, separate hands so they can close, fix materials (emissive parts, wetness), and export for the engine.
+
 ## Step 1: two or three directions
 
 Offer 2–3 clearly different directions, each a short label and one prompt, so the user chooses by looking rather than by describing:
@@ -88,7 +103,7 @@ Engines add what a still picture cannot: motion, light that moves, particles, ca
 
 ## 2D characters in a 3D scene
 
-Generated illustrations look better than code-built models. A scene can be 3D (board, terrain, lights, particles, camera) with the characters as cut-out 2D art standing in it: a quad facing the camera, a soft blob shadow under it, a rim of light, a little bob and squash. Full-screen cut-ins of the same art make skills and wins feel big. Turning images into 3D models needs a paid or GPU-heavy service; offer it only if the user wants it.
+For characters that only idle, generated illustrations look better than code-built models. A scene can be 3D (board, terrain, lights, particles, camera) with the characters as cut-out 2D art standing in it: a quad facing the camera, a soft blob shadow under it, a rim of light, a little bob and squash. Full-screen cut-ins of the same art make skills and wins feel big. A picture can breathe, sway and catch moving light, but it cannot turn its head, raise an arm or make a fist convincingly, whether warped as one mesh or cut into parts: for that motion, get a 3D model (see [Who makes the art](#who-makes-the-art)).
 
 ## Pitfalls
 
@@ -98,3 +113,5 @@ Generated illustrations look better than code-built models. A scene can be 3D (b
 - Small icons generated small: muddy at game size.
 - Prompts naming another company's game, characters or artist. Describe the genre and mood instead.
 - No in-game sizes recorded: assets scaled wrongly in code.
+- Sculpting a detailed character or mecha from primitives in code: it comes out a toy or a balloon. Get the model from a generator or an artist and spend the effort on making it move and look lit.
+- Animating a flat picture to fake big 3D motion (a head turn, a raised arm): it reads as a cut-out. Use a 3D model.

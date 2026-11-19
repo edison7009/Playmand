@@ -4,7 +4,7 @@
 
 用 Rust 做游戏和视觉创作的技能，默认引擎为 Bevy，并包含 Blender 与 MCP 资产制作能力。Rust + Bevy 实现游戏运行与交互，也可把同一套场景代码按固定时钟逐帧录制成动图或视频；Blender 制作模型、材质、骨骼与动画，MCP 让 AI 操作和观察这些工具。Codex、Claude Code 等是宿主，不绑定特定模型或某一家 MCP 实现。
 
-画面优先。逻辑和玩法很快就能写出来，让作品脱颖而出的是它的样子：做新的视觉作品前，先和用户对齐一张目标效果图，做完后拿成品和这张图对比，而不是以"能编译"为准。
+画面优先。逻辑和玩法很快就能写出来，让作品脱颖而出的是它的样子：做新的视觉作品前，先和用户对齐一张目标效果图，做完后拿成品和这张图对比，而不是以"能编译"为准。光影、特效、动作和风格化造型交给代码；细节丰富的角色和生物从生成工具或艺术家那里来，再由代码让它动起来（见[美术谁来做](references/art-direction.md#美术谁来做)）。
 
 新建游戏默认 Rust + Bevy，按用户要求完成玩法、画面和内容。已有 Bevy 项目沿用锁定版本及结构；用户明确选择其他引擎时尊重选择，已有其他引擎项目不自动迁移。小样用于验证技术疑点，不替代用户要求的完整游戏，也不规定固定开发轮次或汇报模板。
 
@@ -66,7 +66,8 @@ python scripts/inspect_bevy.py --manifest-path /absolute/game/Cargo.toml
 | Blender 建模/材质/动画、MCP 连接与操作、GLB 导出并接入 Bevy | [Blender 与 MCP](references/blender-mcp.md) |
 | GLB、场景实例、动画、骨骼、共享资产与实例隔离 | [资源与动画](references/assets-animation.md) |
 | 2D/3D 相机、灯光、UI、黑屏、预览、多 pass、帧率 | [渲染、UI 与性能](references/rendering.md) |
-| 先拿到目标效果图、给用户生图软件的提示词、风格设定、素材提示词、抠图 | [美术方向](references/art-direction.md) |
+| 先拿到目标效果图、给用户生图软件的提示词、风格设定、素材提示词、抠图，以及每样素材该由谁来做（代码还是生成工具） | [美术方向](references/art-direction.md) |
+| 让代码做出的 3D 看起来真实：建模工具箱、损伤、烤入磨损、贴花、湿润材质、光、合成声音、审查接口 | [程序化写实](references/procedural-realism.md) |
 | 规划视频：分镜、品牌包、节奏、16:9 / 9:16 / 1:1 安全区、字幕、音轨、导出检查 | [动态图形与视频制作](references/motion-graphics.md) |
 | 录制：离屏或窗口截图、无缝循环、辉光效果、编码 | [演示动画与视频录制](references/video.md) |
 | 在网页或 Tauri 应用里用 Rust → WebAssembly 与 WebGL2 做特效（卡包、全息卡片、体素小伙伴），不用引擎 | [Rust → WebAssembly 网页特效](references/web-wasm.md) |
