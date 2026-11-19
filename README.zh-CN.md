@@ -165,6 +165,7 @@ Bevy 的 ECS 架构围绕数据组织游戏逻辑，支持在条件允许时并�
 | [资源与动画](docs/zh-CN/playmand/references/assets-animation.md) | GLB 子场景、实例就绪、动画图/播放器接线、材质与骨骼实例隔离 |
 | [渲染、UI 与性能](docs/zh-CN/playmand/references/rendering.md) | 2D/3D 相机、灯光、图层、UI 布局、截图与预览相机生命周期 |
 | [美术方向：先有图，再动手](docs/zh-CN/playmand/references/art-direction.md) | 动手前先拿到目标效果图：来自用户的参考图、宿主自带的生图能力，给用户生图软件（Gemini、豆包、ChatGPT……）的提示词、用户接入的生图 API，或找来的现成图片作参考；然后定风格、做一致的素材、抠图，并和目标图对比验收 |
+| [平面设计](docs/zh-CN/playmand/references/graphic-design.md) | 用一套版式输出海报、社交配图、链接分享图和幻灯片：300 dpi 带出血的印刷尺寸、各平台安全区、字号层级，以及重叠、可读字号和对比度检查，在 CPU 上渲染 |
 | [素材流程](docs/zh-CN/playmand/references/asset-pipeline.md) | 素材从哪里来（用户、授权清晰的素材库、生成工具）、记录尺寸和授权的素材清单、模型/图片/音频检查脚本、四视图模型预览、在 Blender 里修整模型并接入 Bevy |
 | [程序化写实](docs/zh-CN/playmand/references/procedural-realism.md) | 让代码做出的 3D 看起来真实：建模工具箱、损伤、烤入磨损、贴花、湿润材质、光、合成声音和审查接口 |
 | [动态图形与视频制作](docs/zh-CN/playmand/references/motion-graphics.md) | 产品演示、讲解、数据故事和社交短视频：分镜、品牌包、节奏、16:9 / 9:16 / 1:1 安全区、字幕、音轨、导出检查 |
@@ -177,7 +178,7 @@ Bevy 的 ECS 架构围绕数据组织游戏逻辑，支持在条件允许时并�
 | [Rust → WebAssembly 网页特效](docs/zh-CN/playmand/references/web-wasm.md) | 网页和 Tauri 应用里的 WebGL2 特效：首帧快、体积、隐藏时暂停、释放 GPU 内存 |
 | [游戏手感：奖励与升级](docs/zh-CN/playmand/references/feedback.md) | 分层反馈、预备与冲击、狂点时也跟得上、安全取消、减少动态效果 |
 | [版本检查脚本](skills/playmand/scripts/inspect_bevy.py) | 从 Cargo 实际解析图报告 Bevy 版本、features、源码位置和文档入口 |
-| [可运行示例](docs/zh-CN/playmand/README.md) | 在 Windows 和 Linux 的 CI 中运行的小型 Rust 工程：Bevy ECS、Avian 物理、Kira 音频、egui、Macroquad、wgpu、游戏手感、[视频](skills/playmand/examples/motion-video/src/lib.rs)，以及[整套技术栈一起运行](skills/playmand/examples/bevy-stack/src/lib.rs)（Bevy + Avian + Kira + egui 放在同一个应用里） |
+| [可运行示例](docs/zh-CN/playmand/README.md) | 在 Windows 和 Linux 的 CI 中运行的小型 Rust 工程：Bevy ECS、Avian 物理、Kira 音频、egui、Macroquad、wgpu、游戏手感、[平面设计](skills/playmand/examples/poster-design/src/lib.rs)、[视频](skills/playmand/examples/motion-video/src/lib.rs)，以及[整套技术栈一起运行](skills/playmand/examples/bevy-stack/src/lib.rs)（Bevy + Avian + Kira + egui 放在同一个应用里） |
 
 技术示例基线为 **Bevy 0.20.1 / Rust 1.97.1**。其他版本需查对应源码，已有项目不应为套用示例而升级。辅助资料按问题读取，完整入口见 [SKILL.md](skills/playmand/SKILL.md)（英文，Agent 实际加载的版本）；中文副本见 [docs/zh-CN/playmand](docs/zh-CN/playmand/README.md)。
 

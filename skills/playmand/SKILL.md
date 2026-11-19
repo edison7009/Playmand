@@ -18,7 +18,7 @@ Before new visual work, ask in one short message what kind of work it is, which 
 
 | Kind of work | Make it yourself | Ask the user for |
 | --- | --- | --- |
-| Graphic design: posters, flat illustration, slides, social images, UI | Layout, type, flat or vector art, simple generated images | The style or an example, the copy, the brand kit |
+| Graphic design: posters, flat illustration, slides, social images, UI | Layout, type, flat or vector art, simple generated images ([graphic design](references/graphic-design.md)) | The style or an example, the copy, the brand kit |
 | Effects: web effects, particles, shaders, titles, motion graphics | All of it, in code | A style reference, the copy |
 | Video | Flat motion graphics, titles, charts and effects | The kind of video (product demo, explainer, promo, social short...), and the footage, product shots, logo, music or voice it needs |
 | Games | Code, gameplay, effects, light, motion, UI, simple stylised art | Polished 3D models, characters and scene assets: these cannot be generated at quality here, so they come from the user, an artist, an asset store or a generator the user runs |
@@ -84,6 +84,7 @@ Before the first build of a project (or after a toolchain, dependency or feature
 | GLB, scene instances, animation, skeletons, shared assets and per-instance changes | [Assets and animation](references/assets-animation.md) |
 | 2D/3D cameras, lighting, UI, black screens, previews, multiple passes, frame rate | [Rendering, UI and performance](references/rendering.md) |
 | Getting a picture of the target first, prompts for the user's image app, style sheet, asset prompts, cut-outs, and who makes each asset (code or a generator) | [Art direction](references/art-direction.md) |
+| Posters, flyers, social images, link previews and slides as images: formats with bleed and safe areas, type and layout, contrast and size checks, print export | [Graphic design](references/graphic-design.md) |
 | Getting assets (user files, open-licence libraries, generators), licences and the manifest, checking models, images and audio, fixing models in Blender, bringing them into Bevy | [Asset pipeline](references/asset-pipeline.md) |
 | Making code-built 3D look real: modelling kit, damage, baked wear, decals, wet materials, light, synthesized sound, review hooks | [Procedural realism](references/procedural-realism.md) |
 | Planning a video: shot list, brand kit, timing, 16:9 / 9:16 / 1:1 safe areas, captions, soundtrack, export checks | [Motion graphics and video production](references/motion-graphics.md) |
@@ -123,6 +124,16 @@ The [stack example](examples/bevy-stack/src/lib.rs) puts Bevy 0.20, Avian 0.8, b
 ```sh
 cd examples/bevy-stack
 cargo test --locked
+```
+
+## Runnable graphic design
+
+The [poster-design example](examples/poster-design/src/lib.rs) lays one piece of content out for A4 and A3 print (300 dpi, bleed), a 4:5 post, a 9:16 story, a link preview and a 16:9 slide, measured with a bundled open-licence variable font, and checks every layout for safe areas, overlaps, legible sizes and contrast; it renders on the CPU with tiny-skia, no GPU needed.
+
+```sh
+cd examples/poster-design
+cargo test --locked              # layouts and checks for every format
+cargo run --release -- out       # PNGs and a contact sheet
 ```
 
 ## Runnable video

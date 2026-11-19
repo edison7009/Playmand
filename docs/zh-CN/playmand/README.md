@@ -33,7 +33,7 @@ Bevy 是默认，但不是唯一选择。按用户要做的东西来选；用户
 
 | 作品类型 | 自己做 | 需要用户提供 |
 | --- | --- | --- |
-| 平面设计：海报、扁平插画、PPT、社交配图、界面 | 版式、文字、扁平或矢量美术、简单的生成图片 | 风格或示例图、文案、品牌包 |
+| 平面设计：海报、扁平插画、PPT、社交配图、界面 | 版式、文字、扁平或矢量美术、简单的生成图片（[平面设计](references/graphic-design.md)） | 风格或示例图、文案、品牌包 |
 | 特效：网页特效、粒子、着色器、标题动画、动态图形 | 全部，用代码做 | 风格参考、文案 |
 | 视频 | 平面动态图形、标题、图表和特效 | 视频类型（产品演示、讲解、宣传片、社交短视频……），以及需要的实拍素材、产品图、logo、音乐或配音 |
 | 游戏 | 代码、玩法、特效、光影、动作、界面、简单的风格化美术 | 精美的 3D 模型、角色和场景素材：这些在这里生成不到可用的质量，要由用户、艺术家、素材商店或用户自己运行的生成工具提供 |
@@ -80,6 +80,7 @@ python scripts/inspect_bevy.py --manifest-path /absolute/game/Cargo.toml
 | GLB、场景实例、动画、骨骼、共享资产与实例隔离 | [资源与动画](references/assets-animation.md) |
 | 2D/3D 相机、灯光、UI、黑屏、预览、多 pass、帧率 | [渲染、UI 与性能](references/rendering.md) |
 | 先拿到目标效果图、给用户生图软件的提示词、风格设定、素材提示词、抠图，以及每样素材该由谁来做（代码还是生成工具） | [美术方向](references/art-direction.md) |
+| 海报、传单、社交配图、链接分享图和图片形式的幻灯片：带出血和安全区的画幅、字体与版式、对比度和字号检查、印刷导出 | [平面设计](references/graphic-design.md) |
 | 获取素材（用户文件、授权清晰的素材库、生成工具）、授权与素材清单、检查模型/图片/音频、在 Blender 里修整模型、接入 Bevy | [素材流程](references/asset-pipeline.md) |
 | 让代码做出的 3D 看起来真实：建模工具箱、损伤、烤入磨损、贴花、湿润材质、光、合成声音、审查接口 | [程序化写实](references/procedural-realism.md) |
 | 规划视频：分镜、品牌包、节奏、16:9 / 9:16 / 1:1 安全区、字幕、音轨、导出检查 | [动态图形与视频制作](references/motion-graphics.md) |
@@ -119,6 +120,16 @@ cargo test --locked
 ```sh
 cd examples/bevy-stack
 cargo test --locked
+```
+
+## 可执行的平面设计示例
+
+[poster-design 示例](../../../skills/playmand/examples/poster-design/src/lib.rs)把同一份内容排成 A4 和 A3 印刷版（300 dpi，带出血）、4:5 配图、9:16 故事、链接分享图和 16:9 幻灯片，用随附的开源授权可变字体测量文字，并检查每种版式的安全区、重叠、可读字号和对比度；在 CPU 上用 tiny-skia 渲染，不需要显卡。
+
+```sh
+cd examples/poster-design
+cargo test --locked              # 每种画幅的版式和检查
+cargo run --release -- out       # 输出 PNG 和总览图
 ```
 
 ## 可执行的视频示例
