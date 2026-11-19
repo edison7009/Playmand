@@ -23,7 +23,21 @@
 <style>
   :root { --ink: #24221f; --soft: #77716a; --line: #d9d4cb; }
   * { box-sizing: border-box; }
-  html { height: 100%; }
+  html { height: 100%; scroll-snap-type: y mandatory; }
+  /* Each screen snaps into place: a scroll never stops between two. */
+  .hero, .shot, .night { scroll-snap-align: start; scroll-snap-stop: always; }
+  /* Sound on/off, on the right with the language menu and GitHub. */
+  header .sound { pointer-events: auto; display: flex; align-items: center; gap: 6px; margin-left: auto; font: inherit; font-size: 13px; color: inherit; cursor: pointer;
+    padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: rgb(255 255 255 / .7); }
+  header.dark .sound { color: #fff; border-color: rgb(255 255 255 / .28); background: rgb(10 14 24 / .45); }
+  header .sound .wave { display: none; } header .sound[aria-pressed="true"] .wave { display: inline; } header .sound[aria-pressed="true"] .mute { display: none; }
+  /* Screen switcher: three marks at the middle of the right edge. */
+  .dots { position: fixed; z-index: 3; right: 18px; top: 50%; transform: translateY(-50%); display: grid; gap: 10px; }
+  .dots button { width: 34px; height: 34px; border-radius: 999px; cursor: pointer; font: 600 12px/1 ui-monospace, Menlo, monospace; letter-spacing: .05em;
+    color: var(--soft); border: 1px solid var(--line); background: rgb(255 255 255 / .7); transition: all .25s ease; }
+  .dots button[aria-current="true"] { color: #fff; background: var(--ink); border-color: var(--ink); }
+  .dots.dark button { color: rgb(255 255 255 / .7); border-color: rgb(255 255 255 / .28); background: rgb(10 14 24 / .45); }
+  .dots.dark button[aria-current="true"] { color: #0a0e18; background: #fff; border-color: #fff; }
   body { margin: 0; min-height: 100%; overflow-x: hidden; color: var(--ink); font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; background: #ebe8e2; }
   /* Screen 1: the card pack. */
   .hero { position: relative; height: 100vh; height: 100svh; overflow: hidden;
@@ -36,7 +50,7 @@
   header.dark .gh, header.dark .lang summary { color: #fff; border-color: rgb(255 255 255 / .28); background: rgb(10 14 24 / .45); }
   header .gh { pointer-events: auto; font-size: 13px; color: inherit; text-decoration: none; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: rgb(255 255 255 / .7); }
   /* Language menu, after EchoBird's site: a globe button with a short list. */
-  .lang { pointer-events: auto; position: relative; margin-left: auto; }
+  .lang { pointer-events: auto; position: relative; }
   .lang summary { list-style: none; display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 13px; padding: 6px 10px; border-radius: 999px; border: 1px solid var(--line); background: rgb(255 255 255 / .7); }
   .lang summary::-webkit-details-marker { display: none; }
   .lang .opts { position: absolute; right: 0; top: calc(100% + 8px); display: grid; gap: 2px; min-width: 150px; padding: 6px; border: 1px solid var(--line); border-radius: 12px; background: #fff; box-shadow: 0 10px 28px rgb(0 0 0 / .12); }
@@ -83,14 +97,43 @@
   .shot .note { display: block; margin-top: 10px; font-size: 13px; color: rgb(233 238 248 / .58); }
   .shot a { pointer-events: auto; display: inline-block; margin-top: 14px; font-size: 14px; color: #fff; text-decoration: none; border-bottom: 1px solid rgb(255 255 255 / .4); }
   .shot a:hover { border-bottom-color: #fff; }
-  @media (prefers-reduced-motion: reduce) { .pack, .pack i, .more { animation: none; } }
+  /* Screen 3: the sandbox's finished harbour, a recorded loop, with a HUD. */
+  .night { position: relative; height: 100vh; height: 100svh; overflow: hidden; background: #04060b; color: #dfe7f5; }
+  .night video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .night::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(90deg, rgb(3 5 10 / .82) 0%, rgb(3 5 10 / .45) 30%, rgb(3 5 10 / 0) 46%); }
+  .hud { position: absolute; z-index: 1; left: clamp(20px, 5vw, 72px); top: 50%; transform: translateY(-50%); width: min(440px, 38vw);
+    font: 600 13px/2 ui-monospace, "SF Mono", Menlo, Consolas, monospace; letter-spacing: .22em; text-transform: uppercase; color: rgb(223 231 245 / .85); text-shadow: 0 1px 6px rgb(0 0 0 / .8); }
+  .hud .mark { display: block; width: 100%; height: auto; fill: #eef3ff; filter: drop-shadow(0 0 12px rgb(150 190 255 / .45)) drop-shadow(0 2px 4px rgb(0 0 0 / .6)); }
+  .hud .sub { margin: 16px 0 26px; display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; letter-spacing: .45em; color: #a9cbff; }
+  .hud .rows { display: grid; gap: 2px; border-left: 2px solid rgb(159 195 255 / .5); padding-left: 14px; }
+  .hud .rows div { display: flex; justify-content: space-between; gap: 16px; }
+  .hud .rows b { font-weight: 700; color: #eef3ff; }
+  .hud .rows .warn b { color: #f0a050; }
+  .hud .glyphs { display: flex; align-items: center; gap: 18px; margin-top: 26px; color: #9fc3ff; }
+  .hud .glyphs svg { flex: none; }
+  .hud .spin { animation: spin 14s linear infinite; transform-origin: center; }
+  .hud .bars { display: flex; gap: 3px; align-items: flex-end; height: 22px; }
+  .hud .bars i { width: 3px; background: #9fc3ff; opacity: .7; animation: level 1.4s ease-in-out infinite; }
+  .hud .blink { animation: blink 1.2s steps(1) infinite; }
+  .hud .code { margin-top: 18px; font-size: 11px; letter-spacing: .3em; color: rgb(223 231 245 / .55); }
+  .corner { position: absolute; z-index: 1; width: 26px; height: 26px; border: 1px solid rgb(159 195 255 / .5); pointer-events: none; }
+  .corner.tl { top: 72px; left: 20px; border-right: 0; border-bottom: 0; } .corner.tr { top: 72px; right: 20px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 20px; left: 20px; border-right: 0; border-top: 0; } .corner.br { bottom: 20px; right: 20px; border-left: 0; border-top: 0; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes level { 50% { transform: scaleY(.35); } }
+  @keyframes blink { 50% { opacity: 0; } }
+  @media (max-width: 720px) { .hud { width: auto; right: 20px; top: auto; bottom: 28px; transform: none; } .night::after { background: linear-gradient(to top, rgb(3 5 10 / .85), rgb(3 5 10 / 0) 60%); } }
+  @media (prefers-reduced-motion: reduce) { .pack, .pack i, .more, .hud .spin, .hud .bars i, .hud .blink { animation: none; } }
 </style>
 </head>
 <body>
 <header><img src="art/logo.svg" alt=""><b>Playmand</b>
-  <details class="lang"><summary aria-label="Language / 语言"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a17 17 0 0 1 0 18 17 17 0 0 1 0-18Z"/></svg><span id="langLabel">中文</span></summary>
+  <button class="sound" id="sound" type="button" aria-pressed="false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4Z"/><path class="wave" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/><path class="mute" d="m17 9 5 6m0-6-5 6"/></svg><span id="soundLabel">Sound on</span></button>
+  <details class="lang"><summary aria-label="Language / 语言"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a17 17 0 0 1 0 18 17 17 0 0 1 0-18Z"/></svg><span>Language</span></summary>
     <div class="opts"><a href="./" lang="en" hreflang="en">English</a><a href="zh/" lang="zh-CN" hreflang="zh-CN" aria-current="true">简体中文</a></div></details>
   <a class="gh" href="https://github.com/edison7009/Playmand">GitHub</a></header>
+<nav class="dots" id="dots" aria-label="Screens"><button type="button" data-to="top" aria-label="1">01</button><button type="button" data-to="shot" aria-label="2">02</button><button type="button" data-to="night" aria-label="3">03</button></nav>
 <section class="hero" id="top">
 <div class="loading" id="loading"><div><div class="pack"><i></i></div><span data-t="loading">加载中…</span></div></div>
 <canvas id="cards" tabindex="0" aria-label="卡包"></canvas>
@@ -109,6 +152,31 @@
   <p data-t="body">机甲和港口是生图软件生成的两张静态图。Rust + WebAssembly 用 WebGL2 在它们周围实时绘制天气：三层雨、来回扫的探照灯、闪烁的起重机信号灯、雾、海面波纹、闪电，以及从装甲上流下的水。每一帧都是时间的函数，所以同一份代码也能直接录成视频。代码仅 32 KB。</p>
   <span class="note" data-t="note">这是一张动态海报，不是角色动画：机甲本身不做动作，动的是光线和天气。</span>
   <a href="https://github.com/edison7009/Playmand/blob/main/docs/zh-CN/playmand/references/art-direction.md" data-t="how">看看是怎么做的 →</a>
+</div>
+</section>
+
+<section class="night" id="night" aria-label="A rainy night harbour, recorded from the Playmand sandbox">
+<video id="nightVideo" muted loop playsinline preload="none" poster="art/harbor-night.webp"></video>
+<span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+<div class="hud" aria-hidden="true">
+  <svg class="mark" viewBox="0 0 592 24" role="img" aria-label="Playmand"><g transform="translate(0 0)"><rect width="60" height="6"/><rect x="54" width="6" height="15"/><rect x="9" y="9" width="51" height="6"/><rect y="9" width="6" height="15"/></g><g transform="translate(76 0)"><rect width="6" height="24"/><rect y="18" width="56" height="6"/></g><g transform="translate(152 0)"><path d="M26 0h8l26 24h-8.5L30 6.5 8.5 24H0Z"/><rect x="20" y="14.5" width="20" height="4"/></g><g transform="translate(228 0)"><path d="M0 0h8.5L30 10 51.5 0H60L33 12.8V24h-6V12.8Z"/></g><g transform="translate(304 0)"><rect width="6" height="24"/><rect x="54" width="6" height="24"/><path d="M9 0h8l13 9 13-9h8L30 15.5Z"/></g><g transform="translate(380 0)"><path d="M26 0h8l26 24h-8.5L30 6.5 8.5 24H0Z"/><rect x="20" y="14.5" width="20" height="4"/></g><g transform="translate(456 0)"><rect width="6" height="24"/><rect x="54" width="6" height="24"/><path d="M9 0h8l34 17v7Z"/></g><g transform="translate(532 0)"><rect width="6" height="24"/><path d="M9 0h40l11 7v10l-11 7H9v-6h37.5l7.5-4.4v-5.2L46.5 6H9Z"/></g></svg>
+  <div class="sub"><span>Sector 07</span><span>Night</span><span>Harbour</span></div>
+  <div class="rows">
+    <div><span>Unit</span><b>PM-130 Titan</b></div>
+    <div><span>Height</span><b>130.0 m</b></div>
+    <div><span>Position</span><b>00.0 / −250.0</b></div>
+    <div><span>Rain</span><b>100 %</b></div>
+    <div><span>Visibility</span><b>0.7 km</b></div>
+    <div><span>Core</span><b>Online <span class="blink">●</span></b></div>
+    <div class="warn"><span>Storm</span><b>Lightning ▲</b></div>
+  </div>
+  <div class="glyphs">
+    <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.6"><g class="spin"><circle cx="22" cy="22" r="20" stroke-dasharray="6 4"/></g><circle cx="22" cy="22" r="12"/><path d="M22 0v8M22 36v8M0 22h8M36 22h8"/><circle cx="22" cy="22" r="2" fill="currentColor"/></svg>
+    <svg width="40" height="44" viewBox="0 0 40 44" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 2 38 12v20L20 42 2 32V12Z"/><path d="M20 12 29 17v10l-9 5-9-5V17Z" fill="currentColor" fill-opacity=".25"/></svg>
+    <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 40 22 6l18 34Z"/><path d="M22 18v12M22 34v2"/></svg>
+    <div class="bars"><i style="height:40%"></i><i style="height:90%;animation-delay:-.3s"></i><i style="height:60%;animation-delay:-.7s"></i><i style="height:100%;animation-delay:-.1s"></i><i style="height:50%;animation-delay:-.9s"></i><i style="height:75%;animation-delay:-.5s"></i></div>
+  </div>
+  <div class="code">// RUST · BEVY · REC 1920×1080 · LOOP 14.0 S</div>
 </div>
 </section>
 
@@ -246,6 +314,55 @@ const headerTone = () => header.classList.toggle('dark', shot.getBoundingClientR
 addEventListener('scroll', headerTone, { passive: true }); headerTone();
 
 window.playmandHarbor = () => harbor;
+</script>
+<script>
+// Screen 3: a recorded loop; fetched when the visitor comes near, played only on screen.
+(() => {
+  const s = document.getElementById('night'), v = document.getElementById('nightVideo');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fetchIt = () => { if (!v.getAttribute('src')) { v.src = 'art/harbor-night.mp4'; v.load(); } };
+  new IntersectionObserver(([e]) => { if (e.isIntersecting) fetchIt(); }, { rootMargin: '600px 0px' }).observe(s);
+  new IntersectionObserver(([e]) => {
+    if (!e.isIntersecting) return v.pause();
+    fetchIt();
+    if (!reduced) v.play().catch(() => {});
+  }).observe(s);
+})();
+</script>
+<script>
+// Background sound for screens 2 and 3, off until the visitor turns it on
+// (browsers only play sound after a click). The switcher follows the screen.
+(() => {
+  const zh = document.documentElement.lang.startsWith('zh');
+  const btn = document.getElementById('sound'), label = document.getElementById('soundLabel');
+  const dots = document.getElementById('dots'), header = document.querySelector('header');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ids = ['top', 'shot', 'night'];
+  const audio = new Audio(); audio.loop = true; audio.preload = 'none'; audio.volume = 0.7;
+  let on = false, screen = 0;
+  const sync = () => {
+    btn.setAttribute('aria-pressed', on);
+    label.textContent = on ? (zh ? '关闭音效' : 'Sound off') : (zh ? '打开音效' : 'Sound on');
+    if (on && screen > 0) { if (!audio.src) audio.src = 'art/harbor-sound.mp3'; audio.play().catch(() => {}); } else audio.pause();
+  };
+  btn.onclick = () => { on = !on; sync(); };
+  const mark = () => {
+    dots.querySelectorAll('button').forEach((b, i) => b.setAttribute('aria-current', i === screen));
+    dots.classList.toggle('dark', screen > 0);
+    sync();
+  };
+  dots.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) document.getElementById(b.dataset.to).scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' }); });
+  // The screen most in view is the current one.
+  const seen = new Map();
+  const io = new IntersectionObserver((es) => {
+    for (const e of es) seen.set(e.target.id, e.intersectionRatio);
+    const best = ids.reduce((a, id, i) => ((seen.get(id) || 0) > (seen.get(ids[a]) || 0) ? i : a), 0);
+    if (best !== screen) { screen = best; mark(); }
+  }, { threshold: [0, 0.25, 0.5, 0.75, 1] });
+  ids.forEach((id) => io.observe(document.getElementById(id)));
+  document.addEventListener('visibilitychange', () => { if (document.hidden) audio.pause(); else sync(); });
+  mark();
+})();
 </script>
 </body>
 </html>

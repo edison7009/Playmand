@@ -33,7 +33,6 @@ SWAPS = [
     ('<meta property="og:title" content="Playmand · A card pack built in Rust">', '<meta property="og:title" content="Playmand · 用 Rust 构建的抽卡系统">'),
     ('<meta property="og:description" content="Tear a foil pack and five holographic cards turn face up. Built in Rust and WebAssembly, 66 KB of code.">',
      '<meta property="og:description" content="撕开铝箔卡包，五张全息卡片依次翻面。Rust + WebAssembly 构建，代码仅 66 KB。">'),
-    ('<span id="langLabel">EN</span>', '<span id="langLabel">中文</span>'),
     ('<a href="./" lang="en" hreflang="en" aria-current="true">English</a><a href="zh/" lang="zh-CN" hreflang="zh-CN">简体中文</a>',
      '<a href="./" lang="en" hreflang="en">English</a><a href="zh/" lang="zh-CN" hreflang="zh-CN" aria-current="true">简体中文</a>'),
     ('aria-label="Card pack"', 'aria-label="卡包"'),

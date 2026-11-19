@@ -14,3 +14,11 @@ cargo run -- --char sprout --layer body --bg black --out frames/sprout-body-blac
 cargo run -- --char sprout --layer body --bg white --out frames/sprout-body-white.png
 python3 matte.py frames layers   # pairs every *-black.png with its *-white.png
 ```
+
+## Rainy night harbour (screen 3)
+
+`harbor-night.mp4` and its still `harbor-night.webp` are a 14-second loop
+recorded from the Playmand sandbox's finished harbour world at 1920×1080
+(`playmand-sandbox timelapse worlds/harbour.ron out --start 40 --seconds 14`).
+`harbor-sound.mp3` is the background sound for screens 2 and 3, supplied by
+the project owner.
