@@ -24,6 +24,7 @@ Bevy 是默认，但不是唯一选择。按用户要做的东西来选；用户
 | 动图或循环动画 | Bevy 固定时钟录制，再编码 | [演示动画与视频录制](references/video.md) |
 | 现有网页或 Tauri/React 窗口里的特效 | Rust → WebAssembly + WebGL2，不用引擎 | [Rust → WebAssembly 网页特效](references/web-wasm.md) |
 | 模型、材质、骨骼、动画片段 | 通过 MCP 驱动 Blender，导出 GLB | [Blender 与 MCP](references/blender-mcp.md) |
+| 让已有应用的界面更好看（卡片、列表、侧边栏） | 先做独立预览页，再用应用自己的技术栈（React、CSS……）实现；不会改用 Rust | [App 界面升级](references/app-ui.md) |
 
 表里没有的工具还没有经过验证的资料：按用户的选择来，查该 crate 对应版本的官方文档，并说明本技能对它没有测试过的指引。即将加入的内容见[路线图](https://github.com/edison7009/Playmand/blob/main/docs/zh-CN/roadmap.md)。
 
@@ -33,7 +34,8 @@ Bevy 是默认，但不是唯一选择。按用户要做的东西来选；用户
 
 | 作品类型 | 自己做 | 需要用户提供 |
 | --- | --- | --- |
-| 平面设计：海报、扁平插画、PPT、社交配图、界面 | 版式、文字、扁平或矢量美术、简单的生成图片（[平面设计](references/graphic-design.md)） | 风格或示例图、文案、品牌包 |
+| 平面设计：海报、扁平插画、PPT、社交配图 | 版式、文字、扁平或矢量美术、简单的生成图片（[平面设计](references/graphic-design.md)） | 风格或示例图、文案、品牌包 |
+| 已有应用的界面：卡片、列表、侧边栏 | 先在预览页里设计，再改应用自己的代码（[App 界面升级](references/app-ui.md)） | 一张喜欢的界面截图、应用代码的访问权限 |
 | 特效：网页特效、粒子、着色器、标题动画、动态图形 | 全部，用代码做 | 风格参考、文案 |
 | 视频 | 平面动态图形、标题、图表和特效 | 视频类型（产品演示、讲解、宣传片、社交短视频……），以及需要的实拍素材、产品图、logo、音乐或配音 |
 | 游戏 | 代码、玩法、特效、光影、动作、界面、简单的风格化美术 | 精美的 3D 模型、角色和场景素材：这些在这里生成不到可用的质量，要由用户、艺术家、素材商店或用户自己运行的生成工具提供 |
@@ -81,6 +83,7 @@ python scripts/inspect_bevy.py --manifest-path /absolute/game/Cargo.toml
 | 2D/3D 相机、灯光、UI、黑屏、预览、多 pass、帧率 | [渲染、UI 与性能](references/rendering.md) |
 | 先拿到目标效果图、给用户生图软件的提示词、风格设定、素材提示词、抠图，以及每样素材该由谁来做（代码还是生成工具） | [美术方向](references/art-direction.md) |
 | 海报、传单、社交配图、链接分享图和图片形式的幻灯片：带出血和安全区的画幅、字体与版式、对比度和字号检查、印刷导出 | [平面设计](references/graphic-design.md) |
+| 升级已有应用的界面：先读懂应用、用它的主题和图标做预览页、多版并排、从图标取品牌色、彩色卡片的可读性、堆叠目录卡片、不改行为地移植、交付补丁 | [App 界面升级](references/app-ui.md) |
 | 获取素材（用户文件、授权清晰的素材库、生成工具）、授权与素材清单、检查模型/图片/音频、在 Blender 里修整模型、接入 Bevy | [素材流程](references/asset-pipeline.md) |
 | 让代码做出的 3D 看起来真实：建模工具箱、损伤、烤入磨损、贴花、湿润材质、光、合成声音、审查接口 | [程序化写实](references/procedural-realism.md) |
 | 规划视频：分镜、品牌包、节奏、16:9 / 9:16 / 1:1 安全区、字幕、音轨、导出检查 | [动态图形与视频制作](references/motion-graphics.md) |
@@ -130,6 +133,15 @@ cargo test --locked
 cd examples/poster-design
 cargo test --locked              # 每种画幅的版式和检查
 cargo run --release -- out       # 输出 PNG 和总览图
+```
+
+## 可执行的 App 界面预览
+
+[预览套件](../../../skills/playmand/examples/app-ui-preview/index.html)在深色和浅色下展示一组卡片和一叠侧边卡片，每张卡片的颜色由 [`brand.js`](../../../skills/playmand/examples/app-ui-preview/brand.js) 从它自己的图标里取。换成应用的主题变量、图标和名称，在这里迭代好再动应用。[`scripts/brand_colour.py`](../../../skills/playmand/scripts/brand_colour.py) 在命令行里给出同样的颜色（PNG 和 SVG，仅用标准库）。
+
+```sh
+cd examples/app-ui-preview && python3 -m http.server 8000   # 打开 http://localhost:8000
+python ../../scripts/brand_colour.py icons/ember.svg icons/leaf.svg
 ```
 
 ## 可执行的视频示例

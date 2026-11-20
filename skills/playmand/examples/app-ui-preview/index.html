@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>App UI preview kit</title>
+<!--
+  A preview page for an app UI upgrade (see references/app-ui.md).
+  Replace the theme variables with the app's own, the icons with the app's
+  own icon files, and the sample rows with real names. Serve the folder
+  (python3 -m http.server) so the icons can be read for their colour.
+-->
+<style>
+  /* The app's theme variables: copy them from its stylesheet. */
+  .theme-dark { --accent-rgb: 217 119 87; --bg-base-rgb: 33 31 28; --bg-surface-rgb: 42 39 35; --border-rgb: 59 54 47; --text-primary-rgb: 232 226 213; --text-secondary-rgb: 178 172 158; --text-muted-rgb: 130 124 112; --tint: 65%; --mark: .2; --pill: 0 0 0 / .2; }
+  .theme-light { --accent-rgb: 201 100 66; --bg-base-rgb: 255 255 255; --bg-surface-rgb: 242 242 242; --border-rgb: 222 222 222; --text-primary-rgb: 38 38 38; --text-secondary-rgb: 89 89 89; --text-muted-rgb: 140 140 140; --tint: 44%; --mark: .24; --pill: 255 255 255 / .55; }
+  html { font-size: 15px; }
+  body { margin: 0; padding: 20px; background: #111; color: #ddd; font: 13px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; display: grid; gap: 14px; }
+  h3 { margin: 0; font-size: 13px; color: #aaa; font-weight: 600; }
+  .page { display: flex; border-radius: 10px; overflow: hidden; max-width: 1180px; background: rgb(var(--bg-base-rgb)); color: rgb(var(--text-primary-rgb)); }
+  .main { flex: 1; padding: 16px; display: grid; gap: 1rem; grid-template-columns: repeat(3, minmax(14rem, 1fr)); align-content: start; }
+  .side { width: 300px; flex: none; padding: 8px; box-sizing: border-box; border-left: 1px solid rgb(var(--border-rgb) / .6); }
+  .ink { filter: brightness(0) invert(1); } .theme-light .ink { filter: brightness(0); }
+
+  /* Middle: the brand colour runs across the card, light top-left to deep bottom-right. */
+  .card { position: relative; isolation: isolate; overflow: hidden; height: 10rem; padding: .85rem 1rem .9rem; box-sizing: border-box; border-radius: 12px; display: flex; flex-direction: column;
+    background: linear-gradient(135deg, color-mix(in srgb, var(--brand) 16%, rgb(var(--bg-surface-rgb))) 0%, color-mix(in srgb, var(--brand) var(--tint), rgb(var(--bg-surface-rgb))) 100%);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / .04); transition: box-shadow .25s ease, filter .25s ease; }
+  .card:hover { filter: brightness(1.06); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--brand) 55%, transparent), 0 8px 20px -10px color-mix(in srgb, var(--brand) 70%, transparent); }
+  .card .mark { position: absolute; right: -1.4rem; bottom: -1.9rem; z-index: -1; width: 8.5rem; height: 8.5rem; opacity: var(--mark); transform: rotate(-10deg); transition: transform .45s cubic-bezier(.2, .8, .3, 1); }
+  .card:hover .mark { transform: rotate(0deg) scale(1.06); }
+  .card .head { display: flex; align-items: center; gap: 8px; }
+  .card .head img { width: 20px; height: 20px; }
+  .card .head b { flex: 1; font-size: 1.07rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .actions { display: flex; padding: 2px; border-radius: 9px; background: rgb(var(--pill)); }
+  .actions button { width: 26px; height: 26px; display: grid; place-items: center; border: 0; border-radius: 7px; background: transparent; color: rgb(var(--text-secondary-rgb)); }
+  .actions button:hover { background: rgb(var(--text-primary-rgb) / .12); color: rgb(var(--text-primary-rgb)); }
+  .actions button.danger:hover { background: rgb(239 68 68 / .16); color: #ef4444; }
+  .row { display: flex; gap: 6px; align-items: baseline; margin-top: 3px; font-size: 12px; color: rgb(var(--text-secondary-rgb)); }
+  .row:first-of-type { margin-top: .7rem; }
+  .row .label { width: 4.5em; flex: none; font-size: 11px; opacity: .75; }
+  .row .value { color: rgb(var(--text-primary-rgb)); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .quota { margin-top: auto; }
+  .quota .top { display: flex; gap: 8px; font-size: 12px; align-items: baseline; }
+  .quota .top span { flex: 1; color: rgb(var(--text-secondary-rgb)); }
+  /* The number stays in the text colour on any brand; the bar carries the colour. */
+  .quota .top b { color: rgb(var(--text-primary-rgb)); }
+  .quota .top b.critical { color: #fff; background: #dc2626; padding: 0 6px; border-radius: 999px; font-size: 11px; }
+  .quota .bar { margin-top: 4px; height: 6px; border-radius: 999px; background: rgb(var(--text-primary-rgb) / .1); overflow: hidden; }
+  .quota .bar i { display: block; height: 100%; border-radius: inherit; background: currentColor; box-shadow: 0 0 8px currentColor; }
+  .good { color: #22c55e; } .low { color: #eab308; } .bad { color: #ef4444; }
+  .add-slot { height: 10rem; border-radius: 12px; display: grid; place-content: center; justify-items: center; gap: 8px; box-sizing: border-box;
+    color: rgb(var(--accent-rgb)); background: rgb(var(--accent-rgb) / .06); border: 1.5px dashed rgb(var(--accent-rgb) / .5); font-weight: 700; }
+  .add-slot i { width: 38px; height: 38px; border-radius: 999px; display: grid; place-items: center; color: #fff; background: rgb(var(--accent-rgb)); font-style: normal; font-size: 22px; }
+
+  /* Right: a deck. Each card tucks its foot under the next; hover lifts a little. */
+  .deck { display: flex; flex-direction: column; }
+  .deck > .deck-card + .deck-card { margin-top: -7px; }
+  .deck > .deck-card:last-child { height: 37px; padding-bottom: 0; }
+  .deck-card { position: relative; display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 8px 7px 7px; box-sizing: border-box; border-radius: 10px; color: #fff;
+    background: linear-gradient(180deg, var(--from), var(--to)); box-shadow: inset 0 1px 0 rgb(255 255 255 / .2), 0 -3px 8px rgb(0 0 0 / .32);
+    transition: transform .26s cubic-bezier(.2, .8, .3, 1), filter .2s ease; }
+  .deck-card:hover { transform: translateY(-3px); filter: brightness(1.08); }
+  .deck-card img { width: 26px; height: 26px; }
+  .deck-card img.glyph { filter: brightness(0) invert(1); }
+  .deck-card span { flex: 1; font-weight: 700; text-shadow: 0 1px 1px rgb(0 0 0 / .18); }
+  .deck-card.add { --from: #fbf7f1; --to: #ece4d8; color: #3b2c22; }
+  .deck-card.add span { text-shadow: none; }
+  .deck-card.add i { width: 24px; height: 24px; border-radius: 999px; display: grid; place-items: center; background: rgb(var(--accent-rgb)); color: #fff; font-style: normal; font-weight: 700; }
+  .deck-card.off { filter: grayscale(.85) brightness(.8); }
+  .deck-card small { font-size: 10.5px; font-weight: 700; padding: 0 7px; border-radius: 999px; background: rgb(0 0 0 / .25); }
+</style>
+</head>
+<body>
+<h3>Dark</h3><div class="page theme-dark" data-page></div>
+<h3>Light</h3><div class="page theme-light" data-page></div>
+<script type="module">
+import { brandColour } from './brand.js';
+
+// Sample rows; use the app's real names, icons and states.
+const items = [
+  { name: 'Ember', icon: 'icons/ember.svg', id: 'ember-large-2', source: 'api.ember.example', quota: 72 },
+  { name: 'Tide', icon: 'icons/tide.svg', id: 'tide-pro', source: 'api.tide.example', quota: 24 },
+  { name: 'Leaf', icon: 'icons/leaf.svg', id: 'leaf-mini', source: 'leaf.example', quota: 8 },
+  { name: 'Prism', icon: 'icons/prism.svg', id: 'prism-3', source: 'prism.example', quota: 55 },
+  { name: 'Mono', icon: 'icons/mono.svg', id: 'mono-1', source: 'mono.example', quota: 91 },
+  { name: 'Sun', icon: 'icons/sun.svg', id: 'sun-flash', source: 'sun.example', quota: 40, off: true },
+];
+const colours = await Promise.all(items.map((it) => brandColour(it.icon)));
+const tone = (n) => (n > 30 ? 'good' : n > 10 ? 'low' : 'bad');
+const pencil = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>';
+const trash = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>';
+
+const card = (it, i) => {
+  const [from, , neutral] = colours[i];
+  const ink = neutral ? ' class="ink"' : '';
+  return `<div class="card" style="--brand:${from}"><img class="mark${neutral ? ' ink' : ''}" src="${it.icon}" alt="">
+    <div class="head"><img${ink} src="${it.icon}" alt=""><b>${it.name}</b><span class="actions"><button aria-label="Edit">${pencil}</button><button class="danger" aria-label="Delete">${trash}</button></span></div>
+    <div class="row"><span class="label">Model</span><span class="value">${it.id}</span></div>
+    <div class="row"><span class="label">Source</span><span class="value">${it.source}</span></div>
+    <div class="quota ${tone(it.quota)}"><div class="top"><span>Remaining</span><b class="${it.quota <= 10 ? 'critical' : ''}">${it.quota}%</b></div><div class="bar"><i style="width:${it.quota}%"></i></div></div></div>`;
+};
+const deck = (it, i) => {
+  const [from, to, , glyph] = colours[i];
+  return `<div class="deck-card${it.off ? ' off' : ''}" style="--from:${from};--to:${to}"><img${glyph ? ' class="glyph"' : ''} src="${it.icon}" alt=""><span>${it.name}</span>${it.off ? '<small>Not installed</small>' : ''}</div>`;
+};
+const html = `<div class="main">${items.slice(0, 5).map(card).join('')}<div class="add-slot"><i>+</i>Add</div></div>
+  <div class="side"><div class="deck"><div class="deck-card add"><i>+</i><span>Add</span></div>${items.map(deck).join('')}</div></div>`;
+for (const page of document.querySelectorAll('[data-page]')) page.innerHTML = html;
+</script>
+</body>
+</html>
