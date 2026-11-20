@@ -19,7 +19,7 @@ Before new visual work, ask in one short message what kind of work it is, which 
 | Kind of work | Make it yourself | Ask the user for |
 | --- | --- | --- |
 | Graphic design: posters, flat illustration, slides, social images | Layout, type, flat or vector art, simple generated images ([graphic design](references/graphic-design.md)) | The style or an example, the copy, the brand kit |
-| An existing app's interface: cards, lists, side panels | The design in a preview page, then the change in the app's own code ([app UI](references/app-ui.md)) | A screenshot of a look they like, access to the app's code |
+| An existing app's interface: cards, lists, side panels, tabs, buttons | The design in a preview page, then the change in the app's own code ([app UI](references/app-ui.md)) | A screenshot of a look they like, access to the app's code |
 | Effects: web effects, particles, shaders, titles, motion graphics | All of it, in code | A style reference, the copy |
 | Video | Flat motion graphics, titles, charts and effects | The kind of video (product demo, explainer, promo, social short...), and the footage, product shots, logo, music or voice it needs |
 | Games | Code, gameplay, effects, light, motion, UI, simple stylised art | Polished 3D models, characters and scene assets: these cannot be generated at quality here, so they come from the user, an artist, an asset store or a generator the user runs |
@@ -87,7 +87,7 @@ Before the first build of a project (or after a toolchain, dependency or feature
 | 2D/3D cameras, lighting, UI, black screens, previews, multiple passes, frame rate | [Rendering, UI and performance](references/rendering.md) |
 | Getting a picture of the target first, prompts for the user's image app, style sheet, asset prompts, cut-outs, and who makes each asset (code or a generator) | [Art direction](references/art-direction.md) |
 | Posters, flyers, social images, link previews and slides as images: formats with bleed and safe areas, type and layout, contrast and size checks, print export | [Graphic design](references/graphic-design.md) |
-| Upgrading an existing app's screens: reading the app first, a preview page with its theme and icons, versions side by side, brand colours from icons, readable coloured cards, stacked directory cards, porting without changing behaviour, delivering a patch | [App UI](references/app-ui.md) |
+| Upgrading an existing app's screens: reading the app first, a preview page with its theme and icons, versions side by side, brand colours from icons, readable coloured cards, selection and hover that do not flicker or shift, concentric corners, stacked directory cards, porting without changing behaviour (as a patch or in the app's own repository), checking real components in a browser with the backend mocked | [App UI](references/app-ui.md) |
 | Getting assets (user files, open-licence libraries, generators), licences and the manifest, checking models, images and audio, fixing models in Blender, bringing them into Bevy | [Asset pipeline](references/asset-pipeline.md) |
 | Making code-built 3D look real: modelling kit, damage, baked wear, decals, wet materials, light, synthesized sound, review hooks | [Procedural realism](references/procedural-realism.md) |
 | Planning a video: shot list, brand kit, timing, 16:9 / 9:16 / 1:1 safe areas, captions, soundtrack, export checks | [Motion graphics and video production](references/motion-graphics.md) |
@@ -141,7 +141,7 @@ cargo run --release -- out       # PNGs and a contact sheet
 
 ## Runnable app UI preview
 
-The [preview kit](examples/app-ui-preview/index.html) shows a card grid and a stacked side deck in dark and light, each card coloured from its own icon by [`brand.js`](examples/app-ui-preview/brand.js). Swap in the app's theme variables, icons and names, and iterate there before touching the app. [`scripts/brand_colour.py`](scripts/brand_colour.py) gives the same colours from the command line (PNG and SVG, standard library only).
+The [preview kit](examples/app-ui-preview/index.html) shows a card grid and a stacked side deck in dark and light, each card coloured from its own icon by [`brand.js`](examples/app-ui-preview/brand.js). [states.html](examples/app-ui-preview/states.html) compares three selection styles and two corner treatments under three accent colours. Swap in the app's theme variables, icons and names, and iterate there before touching the app. [`scripts/brand_colour.py`](scripts/brand_colour.py) gives the same colours from the command line (PNG and SVG, standard library only).
 
 ```sh
 cd examples/app-ui-preview && python3 -m http.server 8000   # open http://localhost:8000

@@ -35,7 +35,7 @@ Bevy 是默认，但不是唯一选择。按用户要做的东西来选；用户
 | 作品类型 | 自己做 | 需要用户提供 |
 | --- | --- | --- |
 | 平面设计：海报、扁平插画、PPT、社交配图 | 版式、文字、扁平或矢量美术、简单的生成图片（[平面设计](references/graphic-design.md)） | 风格或示例图、文案、品牌包 |
-| 已有应用的界面：卡片、列表、侧边栏 | 先在预览页里设计，再改应用自己的代码（[App 界面升级](references/app-ui.md)） | 一张喜欢的界面截图、应用代码的访问权限 |
+| 已有应用的界面：卡片、列表、侧边栏、tab、按钮 | 先在预览页里设计，再改应用自己的代码（[App 界面升级](references/app-ui.md)） | 一张喜欢的界面截图、应用代码的访问权限 |
 | 特效：网页特效、粒子、着色器、标题动画、动态图形 | 全部，用代码做 | 风格参考、文案 |
 | 视频 | 平面动态图形、标题、图表和特效 | 视频类型（产品演示、讲解、宣传片、社交短视频……），以及需要的实拍素材、产品图、logo、音乐或配音 |
 | 游戏 | 代码、玩法、特效、光影、动作、界面、简单的风格化美术 | 精美的 3D 模型、角色和场景素材：这些在这里生成不到可用的质量，要由用户、艺术家、素材商店或用户自己运行的生成工具提供 |
@@ -83,7 +83,7 @@ python scripts/inspect_bevy.py --manifest-path /absolute/game/Cargo.toml
 | 2D/3D 相机、灯光、UI、黑屏、预览、多 pass、帧率 | [渲染、UI 与性能](references/rendering.md) |
 | 先拿到目标效果图、给用户生图软件的提示词、风格设定、素材提示词、抠图，以及每样素材该由谁来做（代码还是生成工具） | [美术方向](references/art-direction.md) |
 | 海报、传单、社交配图、链接分享图和图片形式的幻灯片：带出血和安全区的画幅、字体与版式、对比度和字号检查、印刷导出 | [平面设计](references/graphic-design.md) |
-| 升级已有应用的界面：先读懂应用、用它的主题和图标做预览页、多版并排、从图标取品牌色、彩色卡片的可读性、堆叠目录卡片、不改行为地移植、交付补丁 | [App 界面升级](references/app-ui.md) |
+| 升级已有应用的界面：先读懂应用、用它的主题和图标做预览页、多版并排、从图标取品牌色、彩色卡片的可读性、选中和悬停不闪不位移、同心圆角、堆叠目录卡片、不改行为地移植（出补丁或直接在应用仓库提交）、在浏览器里模拟后端检查真实组件 | [App 界面升级](references/app-ui.md) |
 | 获取素材（用户文件、授权清晰的素材库、生成工具）、授权与素材清单、检查模型/图片/音频、在 Blender 里修整模型、接入 Bevy | [素材流程](references/asset-pipeline.md) |
 | 让代码做出的 3D 看起来真实：建模工具箱、损伤、烤入磨损、贴花、湿润材质、光、合成声音、审查接口 | [程序化写实](references/procedural-realism.md) |
 | 规划视频：分镜、品牌包、节奏、16:9 / 9:16 / 1:1 安全区、字幕、音轨、导出检查 | [动态图形与视频制作](references/motion-graphics.md) |
@@ -137,7 +137,7 @@ cargo run --release -- out       # 输出 PNG 和总览图
 
 ## 可执行的 App 界面预览
 
-[预览套件](../../../skills/playmand/examples/app-ui-preview/index.html)在深色和浅色下展示一组卡片和一叠侧边卡片，每张卡片的颜色由 [`brand.js`](../../../skills/playmand/examples/app-ui-preview/brand.js) 从它自己的图标里取。换成应用的主题变量、图标和名称，在这里迭代好再动应用。[`scripts/brand_colour.py`](../../../skills/playmand/scripts/brand_colour.py) 在命令行里给出同样的颜色（PNG 和 SVG，仅用标准库）。
+[预览套件](../../../skills/playmand/examples/app-ui-preview/index.html)在深色和浅色下展示一组卡片和一叠侧边卡片，每张卡片的颜色由 [`brand.js`](../../../skills/playmand/examples/app-ui-preview/brand.js) 从它自己的图标里取。[states.html](../../../skills/playmand/examples/app-ui-preview/states.html) 在三种主题色下对比三种选中样式和两种圆角处理。换成应用的主题变量、图标和名称，在这里迭代好再动应用。[`scripts/brand_colour.py`](../../../skills/playmand/scripts/brand_colour.py) 在命令行里给出同样的颜色（PNG 和 SVG，仅用标准库）。
 
 ```sh
 cd examples/app-ui-preview && python3 -m http.server 8000   # 打开 http://localhost:8000

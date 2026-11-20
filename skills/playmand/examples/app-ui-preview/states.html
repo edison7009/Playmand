@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>App UI preview kit: selection and corners</title>
+<!--
+  A comparison page for two questions that come up in every app UI upgrade
+  (see references/app-ui.md): how a chosen row looks, and how nested corners
+  meet. Each version is shown under three accent colours in dark and light,
+  because a choice that works on one accent can fail on another. Hover the
+  rows: hover only washes the colour, nothing moves.
+-->
+<style>
+  .theme-dark { --bg-base-rgb: 33 31 28; --bg-surface-rgb: 42 39 35; --well-rgb: 24 22 20; --text-primary-rgb: 232 226 213; --text-muted-rgb: 150 144 132; --tint: 20%; --picked: 46%; }
+  .theme-light { --bg-base-rgb: 255 255 255; --bg-surface-rgb: 242 242 242; --well-rgb: 228 228 228; --text-primary-rgb: 38 38 38; --text-muted-rgb: 120 120 120; --tint: 12%; --picked: 30%; }
+  .orange { --accent-rgb: 217 119 87; } .green { --accent-rgb: 52 168 100; } .blue { --accent-rgb: 74 132 230; }
+  body { margin: 0; padding: 20px; background: #111; color: #ddd; font: 13px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; }
+  h2 { margin: 26px 0 2px; font-size: 15px; color: #eee; } h2:first-child { margin-top: 0; }
+  p.note { margin: 0 0 10px; color: #999; font-size: 12px; }
+  .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; max-width: 1180px; }
+  .panel { padding: 12px; border-radius: 10px; background: rgb(var(--bg-base-rgb)); color: rgb(var(--text-primary-rgb)); display: grid; gap: 6px; align-content: start; }
+  .panel > small { color: rgb(var(--text-muted-rgb)); font-size: 11px; }
+  .row { --brand: rgb(var(--accent-rgb)); display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 10px; border-radius: 8px; border: 1px solid transparent; background-origin: border-box;
+    background-color: rgb(var(--bg-surface-rgb)); cursor: default; transition: box-shadow .2s ease; }
+  .row i { width: 16px; height: 16px; border-radius: 5px; background: var(--brand); flex: none; }
+  .row span { flex: 1; font-weight: 600; } .row em { font-style: normal; font-size: 11px; color: rgb(var(--text-muted-rgb)); }
+  /* Hover: a wash over whatever the row is, never a size, border or filter change. */
+  .row:hover { box-shadow: inset 0 0 0 999px rgb(255 255 255 / .04); }
+  .theme-light .row:hover { box-shadow: inset 0 0 0 999px rgb(0 0 0 / .03); }
+
+  /* A: accent outline (the habit to avoid). */
+  .a .row.on { border-color: rgb(var(--accent-rgb)); box-shadow: 0 0 0 2px rgb(var(--accent-rgb) / .25); }
+  /* B: tinted rows; the chosen one is a stronger, even tint and no outline. */
+  .b .row { background-image: linear-gradient(100deg, color-mix(in srgb, var(--brand) var(--tint), rgb(var(--bg-surface-rgb))), color-mix(in srgb, var(--brand) 5%, rgb(var(--bg-surface-rgb))) 78%); }
+  .b .row.on { background-image: linear-gradient(100deg, color-mix(in srgb, var(--brand) var(--picked), rgb(var(--bg-surface-rgb))), color-mix(in srgb, var(--brand) calc(var(--picked) - 12%), rgb(var(--bg-surface-rgb)))); }
+  /* C: neutral rows; the chosen one takes a soft light from its top edge and a slight lift. */
+  .c .row.on { background-image: radial-gradient(120% 90% at 50% 0%, rgb(255 255 255 / .24), transparent 70%), linear-gradient(rgb(255 255 255 / .08), rgb(255 255 255 / .08));
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / .2), inset 0 -1px 0 rgb(255 255 255 / .08), 0 6px 14px -8px rgb(0 0 0 / .8); }
+  /* On light the light alone barely shows: the chosen row also sits a step darker. */
+  .theme-light.c .row.on { background-image: radial-gradient(120% 70% at 50% 0%, rgb(255 255 255 / .6), transparent 70%), linear-gradient(rgb(0 0 0 / .11), rgb(0 0 0 / .11));
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / .8), inset 0 -1px 0 rgb(0 0 0 / .08), 0 6px 14px -10px rgb(0 0 0 / .3); }
+
+  /* Corners: a key sliding in a well. */
+  .well { --outer: 16px; --gap: 6px; display: inline-flex; padding: var(--gap); gap: 2px; border-radius: var(--outer); background: rgb(var(--well-rgb)); box-shadow: inset 0 1px 3px rgb(0 0 0 / .35); width: max-content; }
+  .well b { padding: 9px 16px; font-weight: 600; font-size: 13px; color: rgb(var(--text-muted-rgb)); border-radius: var(--inner); }
+  .well b.on { color: #26221d; background: linear-gradient(180deg, #fbf8f3, #e9e4db); box-shadow: 0 1px 2px rgb(0 0 0 / .35); }
+  .same .well { --inner: var(--outer); }
+  /* Concentric: inner radius = outer radius - gap, so both curves share a centre. */
+  .concentric .well { --inner: calc(var(--outer) - var(--gap)); }
+</style>
+</head>
+<body>
+<h2>Selection: A, accent outline</h2>
+<p class="note">The common habit. Each chosen row draws its own accent ring; with several chosen, the column of rings is the loudest thing on the page.</p>
+<div class="grid" data-version="a"></div>
+<h2>Selection: B, a stronger tint</h2>
+<p class="note">For rows that already carry a colour. The chosen row is a clearly stronger, even tint, and has no outline.</p>
+<div class="grid" data-version="b"></div>
+<h2>Selection: C, light from the top</h2>
+<p class="note">For neutral rows and pills. A soft light from the top edge and a slight lift; on light themes, also a step darker.</p>
+<div class="grid" data-version="c"></div>
+<h2>Corners: same radius inside and out</h2>
+<p class="note">Key and well both 16px (drawn large so the difference shows). The gap between them is thicker at the corners than along the sides.</p>
+<div class="grid" data-version="same"></div>
+<h2>Corners: concentric</h2>
+<p class="note">Key = well 16px − gap 6px = 10px (in the app: 9px − 3px = 6px). The gap stays even all the way round.</p>
+<div class="grid" data-version="concentric"></div>
+<script>
+const accents = [['orange', 'Orange'], ['green', 'Green'], ['blue', 'Blue']];
+const rows = () => ['Ember', 'Tide', 'Leaf', 'Prism'].map((name, i) =>
+  `<div class="row${i === 1 || i === 2 ? ' on' : ''}"><i></i><span>${name}</span><em>${i === 1 || i === 2 ? 'chosen' : ''}</em></div>`).join('');
+const keys = () => '<div class="well"><b>Mine</b><b class="on">Store</b><b>System</b></div>';
+for (const grid of document.querySelectorAll('[data-version]')) {
+  const version = grid.dataset.version;
+  const body = version === 'same' || version === 'concentric' ? keys : rows;
+  grid.innerHTML = ['theme-dark', 'theme-light'].flatMap((theme) => accents.map(([accent, label]) =>
+    `<div class="panel ${theme} ${accent} ${version}"><small>${label} · ${theme === 'theme-dark' ? 'dark' : 'light'}</small>${body()}</div>`)).join('');
+}
+</script>
+</body>
+</html>
